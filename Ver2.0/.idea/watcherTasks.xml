@@ -2,6 +2,25 @@
 <project version="4">
   <component name="ProjectTasksOptions">
     <TaskOptions isEnabled="true">
+      <option name="arguments" value="compile path/to/project $FileName$" />
+      <option name="checkSyntaxErrors" value="true" />
+      <option name="description" value="Compiles .scss files into .css files using compass" />
+      <option name="exitCodeBehavior" value="ERROR" />
+      <option name="fileExtension" value="scss" />
+      <option name="immediateSync" value="true" />
+      <option name="name" value="Compass SCSS" />
+      <option name="output" value="" />
+      <option name="outputFilters">
+        <array />
+      </option>
+      <option name="outputFromStdout" value="false" />
+      <option name="program" value="/usr/local/bin/scss" />
+      <option name="scopeName" value="Project Files" />
+      <option name="trackOnlyRoot" value="true" />
+      <option name="workingDir" value="$FileDir$" />
+      <envs />
+    </TaskOptions>
+    <TaskOptions isEnabled="true">
       <option name="arguments" value="--source-maps --out-file $FileNameWithoutExtension$-compiled.js $FilePath$" />
       <option name="checkSyntaxErrors" value="true" />
       <option name="description" value="Transpiles ECMAScript 6 code to ECMAScript 5" />
@@ -14,7 +33,7 @@
         <array />
       </option>
       <option name="outputFromStdout" value="false" />
-      <option name="program" value=" Hastingss-Air:Ver2.0 hastings$ /usr/local/lib/node_modules/babel-cli/bin/babel" />
+      <option name="program" value="/usr/local/bin/babel" />
       <option name="scopeName" value="Project Files" />
       <option name="trackOnlyRoot" value="true" />
       <option name="workingDir" value="$FileDir$" />

@@ -5,9 +5,27 @@
     <title>Title</title>
 </head>
 <link rel="stylesheet" href="./css/canvas.css">
+<script>
+    if (navigator.userAgent.indexOf("Firefox") > 0)
+        alert("You're using Firefox browser, please go to 'about:config' and set <dom.webcomponents.enabled> to true for plugin use!")
+</script>
+<link rel="import" href="./templates/block.html" type="text/html">
 <body>
 <div class="side_menu">
+    <div class="title">
+        Planimation
+    </div>
+    <div class="preload">
 
+    </div>
+    <div class="extensive">
+        <div class="btn compose">Compose Element</div>
+        <div class="btn animation">Compose Animation</div>
+        <div class="template_upload">
+
+            <input class="upload_button" type="file" />
+        </div>
+    </div>
 </div>
 <div class="canvas_area">
 
