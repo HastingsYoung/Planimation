@@ -6,8 +6,15 @@ $screen-maximum: 1201px;
 
 body {
   background-color: #fafafa;
-  //background-image: linear-gradient(to bottom, #315481, #918e82 100%);
   background-attachment: fixed;
+}
+
+@mixin trans($time: 0.8s) {
+  -webkit-transition: all $time;
+  -moz-transition: all $time;
+  -ms-transition: all $time;
+  -o-transition: all $time;
+  transition: all $time;
 }
 
 .side_menu {
@@ -19,23 +26,53 @@ body {
   border-right: 5px solid white;
   float: left;
   display: inline-block;
-  .title{
+  .title {
+    cursor: default;
     background-color: #212121;
     color: #fff;
     text-align: center;
-    text-transform:uppercase;
+    vertical-align: middle;
+    text-transform: uppercase;
     display: inline-block;
     position: relative;
-    font-size: 15px;
-    font-family:"Adobe Gothic Std";
+    font-size: 18px;
+    font-family: "Adobe Gothic Std";
     top: 0;
     left: 0;
     width: 100%;
     height: 5%;
+    padding-bottom: 10px;
   }
-  .title:first-letter{
-    font-size: 20px;
+  .title:first-letter {
+    font-size: 25px;
   }
+  .tabs {
+    position: relative;
+    width: 100%;
+    display: inline-flex;
+    flex-flow: row;
+    align-items: stretch;
+    justify-content: center;
+    .tab {
+      position: relative;
+      width: 100%;
+      font-size: 20px;
+      font-family: "Gill Sans MT";
+      font-weight: 300;
+      background-color: #3e2723;
+      color: #fff;
+      text-align: center;
+      border-bottom-left-radius: 6px;
+      border-bottom-right-radius: 6px;
+      @include trans();
+      &:hover {
+        font-weight:400;
+        @include trans();
+        background-color: #5d4037;
+      }
+    }
+  }
+
   .preload {
     display: inline-block;
     position: relative;
@@ -44,6 +81,7 @@ body {
     width: 100%;
     height: 65%;
     overflow: scroll;
+
     .template {
       position: relative;
       display: inline-block;
@@ -52,6 +90,10 @@ body {
       -webkit-border-radius: 5px;
       -moz-border-radius: 5px;
       border-radius: 5px;
+      &:hover{
+        border: 3px dashed #00cfbd;
+        opacity:0.9;
+      }
     }
   }
   .extensive {
@@ -74,7 +116,7 @@ body {
         height: 100%;
       }
     }
-    .btn{
+    .btn {
       margin: 10px auto 10px auto;
       position: relative;
       text-align: center;
@@ -84,19 +126,20 @@ body {
       font-weight: bolder;
       -moz-user-select: none;
       -webkit-user-select: none;
-      cursor:pointer;
+      cursor: pointer;
+      padding-top: 10px;
     }
-    .btn:hover{
-      opacity: 0.7;
+    .btn:hover {
+      opacity: 0.85;
     }
-    .compose{
+    .compose {
       border: 3px solid #b71c1c;
-      color:#ff1744;
+      color: #ff1744;
       background-color: #ffcdd2;
     }
-    .animation{
+    .animation {
       border: 3px solid #0d47a1;
-      color:#2979ff;
+      color: #2979ff;
       background-color: #bbdefb;
     }
   }
