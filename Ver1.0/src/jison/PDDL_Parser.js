@@ -633,8 +633,8 @@ var PDDL_Parser = (function () {
     var types = [];
     var parameters = [];
 
-    /*list of constants followed by a list of types followed by where in the list
-     of constants the type was denoted (so I can attach types to constants at a
+    /*list of constants followed by a list of preconditions followed by where in the list
+     of constants the type was denoted (so I can attach preconditions to constants at a
      later stage )*/
 
     function Constant(names, types, typeIndex) {

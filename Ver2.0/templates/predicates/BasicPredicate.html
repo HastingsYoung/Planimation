@@ -1,0 +1,43 @@
+<div class="template" draggable="true">
+    <div class="header" style='
+      text-transform:uppercase;
+      text-align: center;
+      font-family: "Century Gothic";
+      font-size: 12px;
+      text-shadow: 0 0 5px #fff;'>
+        Predicate
+    </div>
+    <div class="description">
+        Description
+    </div>
+    <input type="hidden" value='{
+  "type": "predicate",
+  "data": {
+    "rules": [
+      {
+        "state": "ontable",
+        "operators": [
+          "x"
+        ],
+        "default": true,
+        "description": "object on table"
+      },
+      {
+        "state": "clear",
+        "operators": [
+          "x"
+        ],
+        "default": true,
+        "description": "object clear"
+      },
+      {
+        "state": "handempty",
+        "operators": [],
+        "default": true,
+        "description": "hand is empty"
+      }
+    ]
+  }
+}
+' class="template-data">
+</div>

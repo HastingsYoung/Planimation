@@ -1,0 +1,71 @@
+<div class="template" draggable="true">
+    <div class="header" style='
+      text-transform:uppercase;
+      text-align: center;
+      font-family: "Century Gothic";
+      font-size: 12px;
+      text-shadow: 0 0 5px #fff;'>
+        Action
+    </div>
+    <div class="description">
+        Description
+    </div>
+    <input type="hidden" value='{
+  "type": "action",
+  "data": {
+    "name": "pick-up",
+    "parameters": [
+      "x"
+    ],
+    "preconditions": [
+      {
+        "state": "ontable",
+        "operators": [
+          "x"
+        ],
+        "predicate": true
+      },
+      {
+        "state": "clear",
+        "operators": [
+          "x"
+        ],
+        "predicate": true
+      },
+      {
+        "state": "handempty",
+        "operators": [],
+        "predicate": true
+      }
+    ],
+    "effects": [
+      {
+        "state": "ontable",
+        "operators": [
+          "x"
+        ],
+        "predicate": false
+      },
+      {
+        "state": "clear",
+        "operators": [
+          "x"
+        ],
+        "predicate": false
+      },
+      {
+        "state": "handempty",
+        "operators": [],
+        "predicate": false
+      },
+      {
+        "state": "holding",
+        "operators": [
+          "x"
+        ],
+        "predicate": false
+      }
+    ]
+  }
+}' class="template-data">
+</div>

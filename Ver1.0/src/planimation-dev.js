@@ -30,7 +30,7 @@ var objects;
  * @global
  */
 var constants;
-/**Global store of parsed types
+/**Global store of parsed preconditions
  * @global
  */
 var types;
@@ -74,7 +74,7 @@ function readFile(file, callback) {
 |----------------------------------------------------------------------------*/
 
 /**Parses the loaded plan and returns a list of actions
- *@param {array} domain - Objects from parsed domain file. [types, constants, predicates, actionList]
+ *@param {array} domain - Objects from parsed domain file. [preconditions, constants, predicates, actionList]
  *@param {array} problem - Objects from the parsed problem file. [objects, startPredicates]
  *@param {function} callback - the function that will run on the parsed files.
  */
@@ -99,7 +99,7 @@ I think the parser misses the EOF token when this is the case, adding a
 whitespace character at the end seems to fix it. Could be some weird
 CRLF v LF based bug, but I've consciously covered both line endings in
 the parser
-  *@param {array} domain - Objects from parsed domain file. [types, constants, predicates, actionList]
+  *@param {array} domain - Objects from parsed domain file. [preconditions, constants, predicates, actionList]
   *@param {function} callback - the function that will run on the parsed files.
   */
 function parseProblem(domain, callback) {
@@ -118,7 +118,7 @@ function parseProblem(domain, callback) {
 }
 
 /**Parses the loaded domain file and returns lists of objects in the form
-[types, constants, predicates, actionList]
+[preconditions, constants, predicates, actionList]
  *@param {function} callback - the function that will run on the parsed files.
  */
 function parseDomain(callback) {
@@ -151,7 +151,7 @@ function parseInputFiles() {
  This function is passed as a callbasck to
  parseDomain becasue FileReader runs ASYNC and I need to ensure files are parsed
  before the rest of the script is exectured
- *@param {array} domain - Objects from parsed domain file. [types, constants, predicates, actionList]
+ *@param {array} domain - Objects from parsed domain file. [preconditions, constants, predicates, actionList]
  *@param {array} problem - Objects from the parsed problem file. [objects, startPredicates]
  *@param {array} plan - Objects from parsed plan file. [actions]
  */
@@ -222,7 +222,7 @@ function switchToInputWindow() {
 var globalOptions = new GlobalOption("%");
 
 /**
- * Used to store options specified on types as an assosciative array
+ * Used to store options specified on preconditions as an assosciative array
  * for fast lookup.
  * @global
  */
@@ -366,9 +366,9 @@ function createAnimationObjects() {
         }
     }
 
-    /*  Ditto for types AND constants/objects that will for the remainder of
+    /*  Ditto for preconditions AND constants/objects that will for the remainder of
         this program be referred to as objects(they 're treated identically)
-        It begins by applying the types to each object, which is necessary due
+        It begins by applying the preconditions to each object, which is necessary due
         to the formatting of the parser 's output, then populates the
         assosciative array
     */
@@ -431,7 +431,7 @@ function loadFileSelector() {
 }
 
 /**Populate the input selector with all available configurable entities such as
-constants, objects, prediucates, actions and types.*/
+constants, objects, prediucates, actions and preconditions.*/
 function createInputSelector() {
     var itemCell = "<td class=\"item\" tabindex=\"0\" onclick=\"selectInput(event);\"";
     var output = "";
@@ -519,7 +519,7 @@ function getObjectByName(name, collection) {
 /*----------------------------------------------------------------------------|
 #SECTION 2.1                Generate Input Form
 |----------------------------------------------------------------------------*/
-/**This is the function that runs when an item from the list of objects/types
+/**This is the function that runs when an item from the list of objects/preconditions
 is clicked. It loads the available options into the #inputOptions div*/
 function selectInput(e) {
     //get the name of the selected option
