@@ -189,8 +189,8 @@ class Model extends Component {
         for (var t in obj.data.domaintags) {
             tags += "<span>" + obj.data.domaintags[t] + "</span>";
         }
-        var nodeContent = "<div class='domain'>" +
-            "<header><h3 class='domainid'>Domain Id: " + obj.data.domainid +
+        var nodeContent = "<div class='model'>" +
+            "<header><h3 class='modelid'>Model Id: " + this.id +
             "</h3></header><div class='content'><div class='tags'>" + "<img src='" + obj.data.logo + "' alt='No Image Available'>" +
             "<div class='sub_header'><h5>Domain Type: </h5>" + "<span>" + obj.data.domaintype + "</span>" +
             "</div><div class='sub_header'><h5>Domain Tags: </h5>" + tags + "</div>" +
@@ -203,54 +203,80 @@ class Model extends Component {
 
     render() {
         this.bindClass("selected");
-        var _node = this.node;
         this.node.addEventListener("dragstart", function (event) {
             console.log("dragstart");
-            console.log(event);
             event.target.className += " dragging";
-            //event.preventDefault();
-            // record its location on canvas
-        },false);
+        }, false);
+
+        var obj = JSON.parse(this.node.querySelector("input").value);
+
+        const offSetWidth = document.querySelector(".side_menu").offsetWidth;
+        const offSetHeight = this.node.offsetHeight;
+
+        const _id = this.id;
+
+        // random generator
+        //console.log(randomGenerator());
 
         this.node.addEventListener("dragend", function (event) {
             console.log("dragend");
             var reg = new RegExp('(\\s|^)' + "dragging" + '(\\s|$)');
-            event.target.className = event.target.className.replace(reg,' ');
+            event.target.className = event.target.className.replace(reg, ' ');
 
-            // get its location on canvas
-            d3.select(".canvas > svg").append("image").attr("width", 40).attr("height", 40).attr("x", event.x-300).attr("y", event.y-50).attr("href", "imgs/block.png");
+            d3.select(".canvas > svg").append("image").attr("id", _id).classed("drag-ele", true).attr("width", 40).attr("height", 40).attr("href", obj.data.logo).attr("transform", function () {
+                return "translate(" + (event.x - offSetWidth) + "," + (event.y - offSetHeight) + ")";
+            }).attr("fill", "#eee");
+            d3.select("#" + _id).data([{x: event.x - offSetWidth, y: event.y - offSetHeight}]).call(drag);
             event.stopPropagation();
-        },false);
+        }, false);
 
         this.node.addEventListener("dragover", function (event) {
             console.log("dragover");
-        },false);
+        }, false);
     }
+}
+
+var drag = d3.drag().on("drag", function (d, i) {
+    d.x += d3.event.dx;
+    d.y += d3.event.dy;
+    d3.select(this).attr("transform", function (d, i) {
+        return "translate(" + d.x + "," + d.y + ")";
+    });
+});
+
+var randomGenerator = function () {
+    var timeStamp = Date.parse(new Date());
+    timeStamp = timeStamp / 1000;
+    // substr(2) can delete first two digit, which are numbers not needed
+    return Math.random().toString(26).substr(2) + timeStamp;
 }
 
 class Action extends Component {
     renderModal(parentNode) {
-        var obj = JSON.parse(this.node.querySelector("input").value);
         var parameters = "", preconditions = "", effects = "";
-        for (var t in obj.data.parameters) {
-            parameters += "<span>" + obj.data.parameters[t] + "</span>";
+        for (var t in this.data.parameters) {
+            parameters += "<span>" + this.data.parameters[t].name + "</span>";
         }
 
-        for (var t in obj.data.preconditions) {
-            preconditions += "<span>" + obj.data.preconditions[t].state + "(" + obj.data.preconditions[t].operators.join(",") + "): " +
-                obj.data.preconditions[t].predicate + "</span>";
-        }
+        //for (var t in obj.data.preconditions) {
+        //    preconditions += "<span>" + obj.data.preconditions[t].state + "(" + obj.data.preconditions[t].operators.join(",") + "): " +
+        //        obj.data.preconditions[t].predicate + "</span>";
+        //}
 
-        for (var t in obj.data.effects) {
-            effects += "<span>" + obj.data.effects[t].state + "(" + obj.data.effects[t].operators.join(",") + "): " +
-                obj.data.effects[t].predicate + "</span>";
+        for (var t in this.data.effects) {
+            let args = [];
+            for (var k in this.data.effects[t].parameters) {
+                args.push(this.data.effects[t].parameters[k].name);
+            }
+            effects += "<span>" + this.data.effects[t].name + "(" + args.join(",") + "): " +
+                this.data.effects[t].truthiness + "</span>";
         }
 
         var nodeContent = "<div class='action'>" +
-            "<header><h3 class='name'>Action Name: " + obj.data.name +
+            "<header><h3 class='name'>Action Name: " + this.data.name +
             "</h3></header><div class='content'><div class='tags'>" +
             "<div class='sub_header'><h5>Parameters: </h5>" + parameters +
-            "</div><div class='sub_header'><h5>Preconditions: </h5>" + preconditions + "</div>" +
+            "</div>"/*<div class='sub_header'><h5>Preconditions: </h5>" + preconditions + "</div>"*/ +
             "<div class='sub_header'><h5>Effects: </h5>" + effects + "</div>" +
             "</div><div class='description'><h5>Description: </h5><form action=''>" + "</form></div></div></div>";
         if (parentNode)
@@ -263,17 +289,17 @@ class Action extends Component {
 
 class Predicate extends Component {
     renderModal(parentNode) {
-        var obj = JSON.parse(this.node.querySelector("input").value);
-        var rules = "";
+        var args = []
 
-        for (var t in obj.data.rules) {
-            rules += "<span>" + obj.data.rules[t].state + "(" + obj.data.rules[t].operators.join(",") + "): [default]" +
-                obj.data.rules[t].default + "</span>";
+        for (var t in this.data.parameters) {
+            args.push(this.data.parameters[t].name);
         }
 
-        var nodeContent = "<div class='predicate'>" +
-            "<div class='content'><div class='tags'>" +
-            "<div class='sub_header'><h5>Rules: </h5>" + rules + "</div>" +
+        var predicates = "(" + args.join(",") + ")";
+
+        var nodeContent = "<div class='predicate'>" + "<header><h3 class='name'>Predicate Name: " + this.data.name +
+            "</h3></header>" + "<div class='content'><div class='tags'>" +
+            "<div class='sub_header'><h5>Predicates: </h5>" + predicates + "</div>" +
             "</div><div class='description'><h5>Description: </h5><form action=''>" + "</form></div></div></div>";
         if (parentNode)
             parentNode.appendChild(nodeContent);
@@ -413,11 +439,12 @@ var Renderer = (function () {
 var fct = TemplateFactory.getInstance({importSelector: "#basic_block"});
 var template = fct.newTemplate();
 var models = [];
-for (var i = 0; i < 30; i++) {
+for (var i = 0; i < problem[0].names.length; i++) {
     models.push(new Model({
         name: 'block',
         parentSelector: '.preload',
         modalSelector: '.modal > .modal_panel > .modal_content',
+        id: "block-" + problem[0].names[i],
         node: template.cloneNode(true)
     }));
 }
@@ -425,24 +452,26 @@ for (var i = 0; i < 30; i++) {
 fct.importSelector("#basic_action").setPrototype();
 template = fct.newTemplate();
 var actions = [];
-for (var i = 0; i < 20; i++) {
+for (var i in domain[3]) {
     actions.push(new Action({
         name: 'action',
         parentSelector: '.preload',
         modalSelector: '.modal > .modal_panel > .modal_content',
-        node: template.cloneNode(true)
+        node: template.cloneNode(true),
+        data: domain[3][i]
     }));
 }
 
 fct.importSelector("#basic_predicate").setPrototype();
 template = fct.newTemplate();
 var predicates = [];
-for (var i = 0; i < 20; i++) {
+for (var i in domain[2]) {
     predicates.push(new Predicate({
         name: 'predicate',
         parentSelector: '.preload',
         modalSelector: '.modal > .modal_panel > .modal_content',
-        node: template.cloneNode(true)
+        node: template.cloneNode(true),
+        data: domain[2][i]
     }));
 }
 
@@ -457,6 +486,220 @@ for (var i = 0; i < 20; i++) {
         node: template.cloneNode(true)
     }));
 }
+
+/**
+ *  @steps animation data
+ *  #example
+ *  steps = [{
+ *      id: "objId",
+ *      x: "objX",
+ *      y: "objY"
+ *  },{
+ *      id: "objId",
+ *      x: "objX",
+ *      y: "objY"
+ *  },[{
+ *      id: "objId",
+ *      x: "objX",
+ *      y: "objY"
+ *  },{
+ *      id: "objId",
+ *      x: "objX",
+ *      y: "objY"
+ *  }]]
+ * */
+var Animation = (function () {
+
+    var colors = ["red", "blue", "purple", "gray", "brown", "green", "skyblue", "black", "silver", "pink", "yellow", "darkgoldenrod"]
+
+    function _register(initials) {
+        if (!(initials.length > 0))
+            throw "Initial states not correct!";
+        else
+            d3.select(".canvas > svg").selectAll("circle").data(initials).enter().append("circle").attr("r", 10).attr("id", function (d, i) {
+                return d.id;
+            }).style("fill", function(d,i){
+                return colors[i];
+            }).attr("transform", function (d, i) {
+                return "translate(" + d.x + "," + d.y + ")";
+            });
+        return this;
+    }
+
+    function _play(steps) {
+        for (var s in steps) {
+            if (steps[s].length > 0) {
+                for (var o in steps[s]) {
+                    d3.select("#" + steps[s][o].id).transition().attr("transform", function (d, i) {
+                        return "translate(" + steps[s][o].x + "," + steps[s][o].y + ")";
+                    }).delay(s * 500);
+                }
+            } else {
+                d3.select("#" + steps[s].id).transition().attr("transform", function (d, i) {
+                    return "translate(" + steps[s].x + "," + steps[s].y + ")";
+                }).delay(s * 500);
+            }
+        }
+        return this;
+    }
+
+    return {
+        register: _register,
+        play: _play
+    }
+}());
+
+/**
+ *  transform raw data to animation objects
+ * */
+var Transformer = (function () {
+    var _initialStates = {};
+    var _predicates = [];    // inherently they are functions that map last state to next state
+    var _actions = {};
+    var _solutions = [];   // store actual solutions objects to represent what is the next pair of coordinates
+    var _dataArray = [];
+
+    /**
+     * @predicates domain[2].map((o)=>{
+     *      return {
+     *          name: o.name,
+     *          // get coordinates of id from o1 and o2
+     *          func: function(id,o1,o2){
+     *              return {
+     *                  id: id,
+     *                  x: o1.x + o2.x,
+     *                  y: o1.y - 10
+     *              }
+     *          }
+     *      }
+     * })
+     * @init var init = problem[1].map((o)=> {
+     *              if (o.parameters)
+     *                  return {
+     *                      name: o.name,
+     *                      args: o.parameters.map((p)=>{
+     *                          return p.value;
+     *                      })
+     *                  }
+     *          });
+     * @solutions solutions
+     * */
+    function _initiate(predicates, init, solutions, actions) {
+        if (!init || !solutions || !predicates || !actions) {
+            throw "Arguments Not Correct!"
+        }
+        for (var p in predicates) {
+            if (typeof predicates[p].func == "function")
+                _predicates[predicates[p].name] = predicates[p].func;
+            else
+                throw "Object in Array of Predicates is not Function";
+        }
+
+        for (var a in actions) {
+            _actions[actions[a].name] = {
+                name: actions[a].name,
+                effects: actions[a].effects
+            };
+        }
+
+        // base cases
+        for (var i in init) {
+            if (init[i].args.length == 1) {
+                _initialStates[init[i].args[0]] = {
+                    id: init[i].args[0],
+                    x: 200,
+                    y: 200
+                };
+            }
+        }
+        // derivative cases
+        var loopStack = [];
+        for (var i in init) {
+            if (init[i].args.length > 1) {
+                var b = true;
+                /** as the input order of arguments are now in dependent order, we don't need a loopStack to handle non-existence dependencies
+                 * but would be useful later ⤵
+                 */
+                for (var arg = 1; arg < init[i].args.length; arg++) {
+                    // if any dependent argument does not exist(the first one is variable to be calculated)
+                    if (!_initialStates[init[i].args[arg]]) {
+                        loopStack.push({
+                            args: init[i].args,
+                            name: init[i].name
+                        });
+                        b = false;
+                        break;
+                    }
+                }
+                // if every dependencies is able to be found, set a mapping between first argument and its dependencies
+                if (b)
+                    _initialStates[init[i].args[0]] = _predicates[init[i].name](init[i].args[0], ...(init[i].args.map((p, index)=> {
+                        return _initialStates[init[i].args[index]];
+                    })));
+            }
+        }
+        /** as the input order of arguments are now in dependent order, we don't need a loopStack to handle non-existence dependencies
+         * but would be useful later ⤵
+         */
+
+        //while (loopStack.length > 0) {
+        //    var obj = loopStack.pop();
+        //    var t = true;
+        //    for (var a = 1; a < obj.args.length; a++) {
+        //        if (!_initialStates[obj.args[a]]) {
+        //            loopStack.push({
+        //                args: obj.args,
+        //                name: obj.name
+        //            });
+        //            t = false;
+        //            break;
+        //        }
+        //    }
+        //    if (t)
+        //        _initialStates[args[0]] = _predicates[obj.name](obj.args[0], _initialStates[obj.args[1]]);
+        //}
+
+        for (var s in solutions) {
+            _solutions.push({
+                name: solutions[s].name,
+                args: solutions[s].parameters.map((pr)=> {
+                    return pr.value;
+                })
+            });
+        }
+        return this;
+    }
+
+    function _transform() {
+        // transform...
+        for (var s in _solutions) {
+            var effs = _actions[_solutions[s].name].effects;
+            var stack = [];
+            for (var e in effs) {
+                stack.push(_predicates[effs[e].name](_solutions[s].args[0], ...(_solutions[s].args.map((sol, index)=> {
+                    return _initialStates[_solutions[s].args[index]];
+                }))));
+            }
+            _dataArray.push(stack);
+        }
+        console.log(_dataArray);
+        return _dataArray;
+    }
+
+    function _getInitialStates() {
+        var array = [];
+        for (var i in _initialStates) {
+            array.push(_initialStates[i]);
+        }
+        return array;
+    }
+
+    return {
+        getInit: _getInitialStates,
+        initiate: _initiate,
+        transform: _transform
+    }
+}());
 
 var renderInfrastructure = (function () {
     function _renderTab() {
@@ -474,15 +717,141 @@ var renderInfrastructure = (function () {
     }
 
     function _renderCanvas() {
-        var svg = d3.select(".canvas").append("svg").attr("width", 900).attr("height", 900);
+        var svg = d3.select(".canvas").append("svg").attr("width", 1100).attr("height", 650);
+        document.querySelector(".canvas > svg").addEventListener("drop", function () {
+            console.log("drop");
+        }, false);
     }
 
     function _renderButtons() {
-        $(".btn").each(function () {
+        $(".btn.edit").each(function () {
             $(this).click(function () {
                 $(".modal").addClass("active");
                 document.querySelector(".modal > .modal_panel > .modal_content").innerHTML = "";
                 document.querySelector(".template.selected").component.renderModal();
+            });
+        });
+        $(".btn.start").each(function () {
+            $(this).click(function () {
+                //const initials = [{
+                //    id: "a-1",
+                //    x: 50,
+                //    y: 50
+                //}, {
+                //    id: "a-2",
+                //    x: 50,
+                //    y: 100
+                //}, {
+                //    id: "a-3",
+                //    x: 50,
+                //    y: 150
+                //}];
+                //
+                //const steps = [{
+                //    id: "a-1",
+                //    x: 100,
+                //    y: 50
+                //}, [{
+                //    id: "a-1",
+                //    x: 150,
+                //    y: 50
+                //}, {
+                //    id: "a-2",
+                //    x: 150,
+                //    y: 100
+                //}], [{
+                //    id: "a-1",
+                //    x: 200,
+                //    y: 50
+                //}, {
+                //    id: "a-2",
+                //    x: 200,
+                //    y: 100
+                //}, {
+                //    id: "a-3",
+                //    x: 200,
+                //    y: 150
+                //}]];
+                var init = [];
+                for (var p in problem[1]) {
+                    let o = problem[1][p];
+                    if (o.parameters)
+                        init.push({
+                            name: o.name,
+                            args: o.parameters.map((p)=> {
+                                return p.value;
+                            })
+                        });
+                }
+                const predicateMappings = [{
+                    name: "on",
+                    func: function (id, o1, o2) {
+                        try {
+                            return {
+                                id: id,
+                                x: o2.x,
+                                y: o2.y + 20
+                            }
+                        } catch (err) {
+                            throw err;
+                        }
+                    }
+                }, {
+                    name: "ontable",
+                    func: function (id, o1) {
+                        try {
+                            return {
+                                id: id,
+                                x: o1.x,
+                                y: o1.y - 100
+                            }
+                        } catch (err) {
+                            throw err;
+                        }
+                    }
+                }, {
+                    name: "clear",
+                    func: function (id, o1) {
+                        try {
+                            return {
+                                id: id,
+                                x: o1.x,
+                                y: o1.y
+                            }
+                        } catch (err) {
+                            throw err;
+                        }
+                    }
+                }, {
+                    name: "handempty",
+                    func: function (id, o1) {
+                        try {
+                            return {
+                                id: id,
+                                x: o1.x,
+                                y: o1.y
+                            }
+                        } catch (err) {
+                            throw err;
+                        }
+                    }
+                }, {
+                    name: "holding",
+                    func: function (id, o1) {
+                        try {
+                            return {
+                                id: id,
+                                x: o1.x,
+                                y: o1.y + 100
+                            }
+                        } catch (err) {
+                            throw err;
+                        }
+                    }
+                }];
+                let trans = Transformer.initiate(predicateMappings, init, solution, domain[3]);
+                let anime = Animation.register(trans.getInit());
+                anime.play(trans.transform());
             });
         });
     }

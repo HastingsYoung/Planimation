@@ -185,6 +185,9 @@ body {
     .side_menu .extensive .reset {
       color: whitesmoke;
       background-color: #0066CC; }
+    .side_menu .extensive .start {
+      color: whitesmoke;
+      background-color: #2e3032; }
 
 @media (min-width: 1201px) {
   .side_menu {
@@ -245,14 +248,14 @@ body {
   display: inline;
   position: relative; }
   .canvas_area .canvas {
-    display: inline-block;
     width: calc(100vw - 340px);
+    height: calc(100vh - 180px);
     background-color: white;
     position: relative;
-    margin-bottom: 20px; }
+    overflow: hidden; }
   .canvas_area .axis {
     background-color: #24313C;
-    height: 100px;
+    height: 120px;
     width: calc(100vw - 340px);
     position: relative;
     overflow: auto;
@@ -385,34 +388,34 @@ body {
       animation-duration: 2s;
       animation-timing-function: cubic-bezier(0.77, 0, 0.175, 1);
       animation-iteration-count: 1; }
-    .modal .modal_panel .domain, .modal .modal_panel .action, .modal .modal_panel .predicate, .modal .modal_panel .precondition {
+    .modal .modal_panel .model, .modal .modal_panel .action, .modal .modal_panel .predicate, .modal .modal_panel .precondition {
       display: flex;
       flex-flow: column;
       align-items: center;
       justify-content: center; }
-      .modal .modal_panel .domain .content, .modal .modal_panel .action .content, .modal .modal_panel .predicate .content, .modal .modal_panel .precondition .content {
+      .modal .modal_panel .model .content, .modal .modal_panel .action .content, .modal .modal_panel .predicate .content, .modal .modal_panel .precondition .content {
         display: flex;
         flex-flow: row;
         animation: delay_animation 1.5s; }
-        .modal .modal_panel .domain .content .tags, .modal .modal_panel .action .content .tags, .modal .modal_panel .predicate .content .tags, .modal .modal_panel .precondition .content .tags {
+        .modal .modal_panel .model .content .tags, .modal .modal_panel .action .content .tags, .modal .modal_panel .predicate .content .tags, .modal .modal_panel .precondition .content .tags {
           display: flex;
           flex-flow: column;
           align-items: center;
           justify-content: center; }
-          .modal .modal_panel .domain .content .tags img, .modal .modal_panel .action .content .tags img, .modal .modal_panel .predicate .content .tags img, .modal .modal_panel .precondition .content .tags img {
+          .modal .modal_panel .model .content .tags img, .modal .modal_panel .action .content .tags img, .modal .modal_panel .predicate .content .tags img, .modal .modal_panel .precondition .content .tags img {
             width: 100%;
             height: 100%;
             max-width: 100px;
             max-height: 100px; }
-          .modal .modal_panel .domain .content .tags .sub_header, .modal .modal_panel .action .content .tags .sub_header, .modal .modal_panel .predicate .content .tags .sub_header, .modal .modal_panel .precondition .content .tags .sub_header {
+          .modal .modal_panel .model .content .tags .sub_header, .modal .modal_panel .action .content .tags .sub_header, .modal .modal_panel .predicate .content .tags .sub_header, .modal .modal_panel .precondition .content .tags .sub_header {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             align-items: center; }
-            .modal .modal_panel .domain .content .tags .sub_header *, .modal .modal_panel .action .content .tags .sub_header *, .modal .modal_panel .predicate .content .tags .sub_header *, .modal .modal_panel .precondition .content .tags .sub_header * {
+            .modal .modal_panel .model .content .tags .sub_header *, .modal .modal_panel .action .content .tags .sub_header *, .modal .modal_panel .predicate .content .tags .sub_header *, .modal .modal_panel .precondition .content .tags .sub_header * {
               padding: 5px;
               margin: 5px; }
-            .modal .modal_panel .domain .content .tags .sub_header span, .modal .modal_panel .action .content .tags .sub_header span, .modal .modal_panel .predicate .content .tags .sub_header span, .modal .modal_panel .precondition .content .tags .sub_header span {
+            .modal .modal_panel .model .content .tags .sub_header span, .modal .modal_panel .action .content .tags .sub_header span, .modal .modal_panel .predicate .content .tags .sub_header span, .modal .modal_panel .precondition .content .tags .sub_header span {
               cursor: pointer;
               background-color: gainsboro;
               font-size: 10px;
@@ -422,7 +425,7 @@ body {
               -ms-transition: all 0.8s;
               -o-transition: all 0.8s;
               transition: all 0.8s; }
-              .modal .modal_panel .domain .content .tags .sub_header span:hover, .modal .modal_panel .action .content .tags .sub_header span:hover, .modal .modal_panel .predicate .content .tags .sub_header span:hover, .modal .modal_panel .precondition .content .tags .sub_header span:hover {
+              .modal .modal_panel .model .content .tags .sub_header span:hover, .modal .modal_panel .action .content .tags .sub_header span:hover, .modal .modal_panel .predicate .content .tags .sub_header span:hover, .modal .modal_panel .precondition .content .tags .sub_header span:hover {
                 background-color: #1B1C1D;
                 color: #fff;
                 -webkit-transition: all 0.8s;
@@ -430,13 +433,16 @@ body {
                 -ms-transition: all 0.8s;
                 -o-transition: all 0.8s;
                 transition: all 0.8s; }
-        .modal .modal_panel .domain .content .description, .modal .modal_panel .action .content .description, .modal .modal_panel .predicate .content .description, .modal .modal_panel .precondition .content .description {
+        .modal .modal_panel .model .content .description, .modal .modal_panel .action .content .description, .modal .modal_panel .predicate .content .description, .modal .modal_panel .precondition .content .description {
           position: relative;
           width: 120%; }
-          .modal .modal_panel .domain .content .description p, .modal .modal_panel .action .content .description p, .modal .modal_panel .predicate .content .description p, .modal .modal_panel .precondition .content .description p {
+          .modal .modal_panel .model .content .description p, .modal .modal_panel .action .content .description p, .modal .modal_panel .predicate .content .description p, .modal .modal_panel .precondition .content .description p {
             font-size: 12px;
             font-weight: 100;
             font-family: "Book Antiqua"; }
+
+.dragging {
+  box-shadow: 0 0 10px #1a69a4; }
 
 .modal.active {
   visibility: visible; }

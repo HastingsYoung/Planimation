@@ -4,7 +4,8 @@
 .__loader {
   position: relative;
   user-select: none;
-  cursor: pointer; }
+  cursor: pointer;
+  color: darkgoldenrod; }
 
 .__loader:hover .loader__mask {
   transform: translateX(0); }

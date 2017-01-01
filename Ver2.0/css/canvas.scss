@@ -119,7 +119,7 @@ body {
       }
       &.dragging {
         transform: rotate(30deg);
-        opacity:0.9;
+        opacity: 0.9;
       }
     }
   }
@@ -206,6 +206,10 @@ body {
     .reset {
       color: whitesmoke;
       background-color: #0066CC;
+    }
+    .start {
+      color: whitesmoke;
+      background-color: #2e3032;
     }
   }
 }
@@ -324,15 +328,15 @@ body {
   display: inline;
   position: relative;
   .canvas {
-    display: inline-block;
     width: calc(100vw - 340px);
+    height: calc(100vh - 180px);
     background-color: white;
     position: relative;
-    margin-bottom: 20px;
+    overflow: hidden;
   }
   .axis {
     background-color: #24313C;
-    height: 100px;
+    height: 120px;
     width: calc(100vw - 340px);
     position: relative;
     overflow: auto;
@@ -463,7 +467,7 @@ body {
         animation-iteration-count: 1;
       }
     }
-    .domain, .action, .predicate, .precondition {
+    .model, .action, .predicate, .precondition {
       display: flex;
       flex-flow: column;
       align-items: center;
@@ -518,6 +522,10 @@ body {
       }
     }
   }
+}
+
+.dragging {
+  box-shadow: 0 0 10px #1a69a4;
 }
 
 .modal.active {
