@@ -210,8 +210,8 @@ class Model extends Component {
 
         var obj = JSON.parse(this.node.querySelector("input").value);
 
-        const offSetWidth = document.querySelector(".side_menu").offsetWidth;
-        const offSetHeight = this.node.offsetHeight;
+        const offsetWidth = document.querySelector(".side_menu").offsetWidth;
+        const offsetHeight = this.node.offsetHeight;
 
         const _id = this.id;
 
@@ -224,9 +224,9 @@ class Model extends Component {
             event.target.className = event.target.className.replace(reg, ' ');
 
             d3.select(".canvas > svg").append("image").attr("id", _id).classed("drag-ele", true).attr("width", 40).attr("height", 40).attr("href", obj.data.logo).attr("transform", function () {
-                return "translate(" + (event.x - offSetWidth) + "," + (event.y - offSetHeight) + ")";
+                return "translate(" + (event.x - offsetWidth) + "," + (event.y - offsetHeight) + ")";
             }).attr("fill", "#eee");
-            d3.select("#" + _id).data([{x: event.x - offSetWidth, y: event.y - offSetHeight}]).call(drag);
+            d3.select("#" + _id).data([{x: event.x - offsetWidth, y: event.y - offsetHeight}]).call(drag);
             event.stopPropagation();
         }, false);
 
@@ -244,7 +244,7 @@ var drag = d3.drag().on("drag", function (d, i) {
     });
 });
 
-var randomGenerator = function () {
+const randomGenerator = function () {
     var timeStamp = Date.parse(new Date());
     timeStamp = timeStamp / 1000;
     // substr(2) can delete first two digit, which are numbers not needed
@@ -518,7 +518,7 @@ var Animation = (function () {
         else
             d3.select(".canvas > svg").selectAll("circle").data(initials).enter().append("circle").attr("r", 10).attr("id", function (d, i) {
                 return d.id;
-            }).style("fill", function(d,i){
+            }).style("fill", function (d, i) {
                 return colors[i];
             }).attr("transform", function (d, i) {
                 return "translate(" + d.x + "," + d.y + ")";
@@ -548,6 +548,11 @@ var Animation = (function () {
         play: _play
     }
 }());
+
+const ArgsToIndexMapper = (arg)=> {
+    const mapper = {"?x": 0, "?y": 1, "?z": 2};
+    return mapper[arg];
+}
 
 /**
  *  transform raw data to animation objects
@@ -589,6 +594,11 @@ var Transformer = (function () {
             throw "Arguments Not Correct!"
         }
         for (var p in predicates) {
+            // todo add true/false mapping here for func
+            // e.g. _predicates[predicates[p].name] = {
+            //      "true":func1
+            //      "false":func2
+            // }
             if (typeof predicates[p].func == "function")
                 _predicates[predicates[p].name] = predicates[p].func;
             else
@@ -676,7 +686,16 @@ var Transformer = (function () {
             var effs = _actions[_solutions[s].name].effects;
             var stack = [];
             for (var e in effs) {
+                // specify which parameter should be map to which argument(in index)
+                let indices = effs[e].parameters ? effs[e].parameters.map((prs)=>(ArgsToIndexMapper(prs.name))) : [];
+
+                // 1. map arguments in solution to function in initialStates
+                // 2. expand initialStates array as arguments from the 2nd to last at predicate function
+                // 3. the first argument of predicate function is object id/name
+                // todo: add true/false mapping for predicates here
                 stack.push(_predicates[effs[e].name](_solutions[s].args[0], ...(_solutions[s].args.map((sol, index)=> {
+                    if (indices.length > 0)
+                        return _initialStates[_solutions[s].args[indices[index]]];
                     return _initialStates[_solutions[s].args[index]];
                 }))));
             }
@@ -802,8 +821,8 @@ var renderInfrastructure = (function () {
                         try {
                             return {
                                 id: id,
-                                x: o1.x,
-                                y: o1.y - 100
+                                x: 300,
+                                y: 100
                             }
                         } catch (err) {
                             throw err;
@@ -815,7 +834,7 @@ var renderInfrastructure = (function () {
                         try {
                             return {
                                 id: id,
-                                x: o1.x,
+                                x: o1.x - 50,
                                 y: o1.y
                             }
                         } catch (err) {
@@ -841,8 +860,8 @@ var renderInfrastructure = (function () {
                         try {
                             return {
                                 id: id,
-                                x: o1.x,
-                                y: o1.y + 100
+                                x: 300,
+                                y: 200
                             }
                         } catch (err) {
                             throw err;
@@ -850,8 +869,11 @@ var renderInfrastructure = (function () {
                     }
                 }];
                 let trans = Transformer.initiate(predicateMappings, init, solution, domain[3]);
+                console.log(trans.getInit());
                 let anime = Animation.register(trans.getInit());
                 anime.play(trans.transform());
+                //let anime = Animation.register(initials);
+                //anime.play(steps);
             });
         });
     }

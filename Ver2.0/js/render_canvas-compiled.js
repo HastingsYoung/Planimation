@@ -237,8 +237,8 @@ var Model = function (_Component) {
 
             var obj = JSON.parse(this.node.querySelector("input").value);
 
-            var offSetWidth = document.querySelector(".side_menu").offsetWidth;
-            var offSetHeight = this.node.offsetHeight;
+            var offsetWidth = document.querySelector(".side_menu").offsetWidth;
+            var offsetHeight = this.node.offsetHeight;
 
             var _id = this.id;
 
@@ -251,9 +251,9 @@ var Model = function (_Component) {
                 event.target.className = event.target.className.replace(reg, ' ');
 
                 d3.select(".canvas > svg").append("image").attr("id", _id).classed("drag-ele", true).attr("width", 40).attr("height", 40).attr("href", obj.data.logo).attr("transform", function () {
-                    return "translate(" + (event.x - offSetWidth) + "," + (event.y - offSetHeight) + ")";
+                    return "translate(" + (event.x - offsetWidth) + "," + (event.y - offsetHeight) + ")";
                 }).attr("fill", "#eee");
-                d3.select("#" + _id).data([{ x: event.x - offSetWidth, y: event.y - offSetHeight }]).call(drag);
+                d3.select("#" + _id).data([{ x: event.x - offsetWidth, y: event.y - offsetHeight }]).call(drag);
                 event.stopPropagation();
             }, false);
 
@@ -599,6 +599,11 @@ var Animation = function () {
     };
 }();
 
+var ArgsToIndexMapper = function ArgsToIndexMapper(arg) {
+    var mapper = { "?x": 0, "?y": 1, "?z": 2 };
+    return mapper[arg];
+};
+
 /**
  *  transform raw data to animation objects
  * */
@@ -639,6 +644,11 @@ var Transformer = function () {
             throw "Arguments Not Correct!";
         }
         for (var p in predicates) {
+            // todo add true/false mapping here for func
+            // e.g. _predicates[predicates[p].name] = {
+            //      "true":func1
+            //      "false":func2
+            // }
             if (typeof predicates[p].func == "function") _predicates[predicates[p].name] = predicates[p].func;else throw "Object in Array of Predicates is not Function";
         }
 
@@ -721,10 +731,25 @@ var Transformer = function () {
         for (var s in _solutions) {
             var effs = _actions[_solutions[s].name].effects;
             var stack = [];
-            for (var e in effs) {
+
+            var _loop = function _loop() {
+                // specify which parameter should be map to which argument(in index)
+                var indices = effs[e].parameters ? effs[e].parameters.map(function (prs) {
+                    return ArgsToIndexMapper(prs.name);
+                }) : [];
+
+                // 1. map arguments in solution to function in initialStates
+                // 2. expand initialStates array as arguments from the 2nd to last at predicate function
+                // 3. the first argument of predicate function is object id/name
+                // todo: add true/false mapping for predicates here
                 stack.push(_predicates[effs[e].name].apply(_predicates, [_solutions[s].args[0]].concat(_toConsumableArray(_solutions[s].args.map(function (sol, index) {
+                    if (indices.length > 0) return _initialStates[_solutions[s].args[indices[index]]];
                     return _initialStates[_solutions[s].args[index]];
                 })))));
+            };
+
+            for (var e in effs) {
+                _loop();
             }
             _dataArray.push(stack);
         }
@@ -847,8 +872,8 @@ var renderInfrastructure = function () {
                         try {
                             return {
                                 id: id,
-                                x: o1.x,
-                                y: o1.y - 100
+                                x: 300,
+                                y: 100
                             };
                         } catch (err) {
                             throw err;
@@ -860,7 +885,7 @@ var renderInfrastructure = function () {
                         try {
                             return {
                                 id: id,
-                                x: o1.x,
+                                x: o1.x - 50,
                                 y: o1.y
                             };
                         } catch (err) {
@@ -886,8 +911,8 @@ var renderInfrastructure = function () {
                         try {
                             return {
                                 id: id,
-                                x: o1.x,
-                                y: o1.y + 100
+                                x: 300,
+                                y: 200
                             };
                         } catch (err) {
                             throw err;
@@ -895,8 +920,11 @@ var renderInfrastructure = function () {
                     }
                 }];
                 var trans = Transformer.initiate(predicateMappings, init, solution, domain[3]);
+                console.log(trans.getInit());
                 var anime = Animation.register(trans.getInit());
                 anime.play(trans.transform());
+                //let anime = Animation.register(initials);
+                //anime.play(steps);
             });
         });
     }
