@@ -155,10 +155,14 @@ class Component {
 
     bindClass(className) {
         if (!className)
-            throw new Error("No class name entered!");
-        var node = this.node;
+            throw new Error("No Class Name Entered Exception At bindClass Method of Component class!");
+        let node = this.node;
+        // use a component node to point back to component
         node.component = this;
+        // todo add customize content here
+        this.customizeContent(node, this.name);
         document.querySelector(this.parentSelector).appendChild(node);
+
         $(node).click(function () {
             if (!$(this).hasClass(className))
                 $(this).addClass(className);
@@ -168,14 +172,31 @@ class Component {
     }
 
     parseDom(str) {
-        var parser = new DOMParser();
+        let parser = new DOMParser();
         str = str.replace(/>\s+([^\s<]*)\s+</g, '>$1<').trim();
-        var domPrototype = parser.parseFromString(str, "text/html");
+        let domPrototype = parser.parseFromString(str, "text/html");
         return domPrototype.body.childNodes[0];
     }
 
+    customizeContent(node, titl, cont) {
+        let title = node.querySelector("p.template-title");
+        let content = node.querySelector("p.template-desc");
+        if (titl) {
+            title.innerHTML = titl;
+        } else {
+            if (title)
+                title.parentNode.removeChild(title);
+        }
+        if (cont) {
+            content.innerHTML = cont;
+        } else {
+            if (content)
+                content.parentNode.removeChild(content);
+        }
+    }
+
     getLogoLink() {
-        var obj = JSON.parse(this.node.querySelector("input").value);
+        let obj = JSON.parse(this.node.querySelector("input").value);
         return obj.data.logo;
     }
 }
@@ -213,11 +234,11 @@ class Model extends Component {
         const offsetWidth = document.querySelector(".side_menu").offsetWidth;
         const offsetHeight = this.node.offsetHeight;
 
-        const _id = this.id;
 
         // random generator
         //console.log(randomGenerator());
-
+        const _id = this.id;
+        // todo: delete id from manual input and generate one here
         this.node.addEventListener("dragend", function (event) {
             console.log("dragend");
             var reg = new RegExp('(\\s|^)' + "dragging" + '(\\s|$)');
@@ -441,7 +462,7 @@ var template = fct.newTemplate();
 var models = [];
 for (var i = 0; i < problem[0].names.length; i++) {
     models.push(new Model({
-        name: 'block',
+        name: problem[0].names[i],
         parentSelector: '.preload',
         modalSelector: '.modal > .modal_panel > .modal_content',
         id: "block-" + problem[0].names[i],
@@ -454,7 +475,7 @@ template = fct.newTemplate();
 var actions = [];
 for (var i in domain[3]) {
     actions.push(new Action({
-        name: 'action',
+        name: domain[3][i].name,
         parentSelector: '.preload',
         modalSelector: '.modal > .modal_panel > .modal_content',
         node: template.cloneNode(true),
@@ -467,7 +488,7 @@ template = fct.newTemplate();
 var predicates = [];
 for (var i in domain[2]) {
     predicates.push(new Predicate({
-        name: 'predicate',
+        name: domain[2][i].name,
         parentSelector: '.preload',
         modalSelector: '.modal > .modal_panel > .modal_content',
         node: template.cloneNode(true),
@@ -475,17 +496,17 @@ for (var i in domain[2]) {
     }));
 }
 
-fct.importSelector("#basic_precondition").setPrototype();
-template = fct.newTemplate();
-var preconditions = [];
-for (var i = 0; i < 20; i++) {
-    preconditions.push(new Precondition({
-        name: 'precondition',
-        parentSelector: '.preload',
-        modalSelector: '.modal > .modal_panel > .modal_content',
-        node: template.cloneNode(true)
-    }));
-}
+//fct.importSelector("#basic_precondition").setPrototype();
+//template = fct.newTemplate();
+//var preconditions = [];
+//for (var i = 0; i < 20; i++) {
+//    preconditions.push(new Precondition({
+//        name: ,
+//        parentSelector: '.preload',
+//        modalSelector: '.modal > .modal_panel > .modal_content',
+//        node: template.cloneNode(true)
+//    }));
+//}
 
 /**
  *  @steps animation data
@@ -599,8 +620,11 @@ var Transformer = (function () {
             //      "true":func1
             //      "false":func2
             // }
-            if (typeof predicates[p].func == "function")
-                _predicates[predicates[p].name] = predicates[p].func;
+            if (typeof predicates[p].true_func == "function" && typeof predicates[p].false_func == "function")
+                _predicates[predicates[p].name] = {
+                    "true": predicates[p].true_func,
+                    "false": predicates[p].false_func
+                };
             else
                 throw "Object in Array of Predicates is not Function";
         }
@@ -617,8 +641,8 @@ var Transformer = (function () {
             if (init[i].args.length == 1) {
                 _initialStates[init[i].args[0]] = {
                     id: init[i].args[0],
-                    x: 200,
-                    y: 200
+                    x: 500,
+                    y: 250
                 };
             }
         }
@@ -642,10 +666,17 @@ var Transformer = (function () {
                     }
                 }
                 // if every dependencies is able to be found, set a mapping between first argument and its dependencies
-                if (b)
-                    _initialStates[init[i].args[0]] = _predicates[init[i].name](init[i].args[0], ...(init[i].args.map((p, index)=> {
-                        return _initialStates[init[i].args[index]];
-                    })));
+                if (b) {
+                    console.log(_predicates[init[i].name]);
+                    if (init[i].truthiness == "true")
+                        _initialStates[init[i].args[0]] = _predicates[init[i].name].true(init[i].args[0], ...(init[i].args.map((p, index)=> {
+                            return _initialStates[init[i].args[index]];
+                        })));
+                    else
+                        _initialStates[init[i].args[0]] = _predicates[init[i].name].false(init[i].args[0], ...(init[i].args.map((p, index)=> {
+                            return _initialStates[init[i].args[index]];
+                        })));
+                }
             }
         }
         /** as the input order of arguments are now in dependent order, we don't need a loopStack to handle non-existence dependencies
@@ -693,11 +724,18 @@ var Transformer = (function () {
                 // 2. expand initialStates array as arguments from the 2nd to last at predicate function
                 // 3. the first argument of predicate function is object id/name
                 // todo: add true/false mapping for predicates here
-                stack.push(_predicates[effs[e].name](_solutions[s].args[0], ...(_solutions[s].args.map((sol, index)=> {
-                    if (indices.length > 0)
-                        return _initialStates[_solutions[s].args[indices[index]]];
-                    return _initialStates[_solutions[s].args[index]];
-                }))));
+                if (effs[e].truthiness == "true")
+                    stack.push(_predicates[effs[e].name].true(_solutions[s].args[0], ...(_solutions[s].args.map((sol, index)=> {
+                        if (indices.length > 0)
+                            return _initialStates[_solutions[s].args[indices[index]]];
+                        return _initialStates[_solutions[s].args[index]];
+                    }))));
+                else
+                    stack.push(_predicates[effs[e].name].false(_solutions[s].args[0], ...(_solutions[s].args.map((sol, index)=> {
+                        if (indices.length > 0)
+                            return _initialStates[_solutions[s].args[indices[index]]];
+                        return _initialStates[_solutions[s].args[index]];
+                    }))));
             }
             _dataArray.push(stack);
         }
@@ -799,12 +837,13 @@ var renderInfrastructure = (function () {
                             name: o.name,
                             args: o.parameters.map((p)=> {
                                 return p.value;
-                            })
+                            }),
+                            truthiness: o.truthiness
                         });
                 }
                 const predicateMappings = [{
                     name: "on",
-                    func: function (id, o1, o2) {
+                    true_func: function (id, o1, o2) {
                         try {
                             return {
                                 id: id,
@@ -814,15 +853,37 @@ var renderInfrastructure = (function () {
                         } catch (err) {
                             throw err;
                         }
+                    },
+                    false_func: function (id, o1, o2) {
+                        try {
+                            return {
+                                id: id,
+                                x: o2.x - 20,
+                                y: o2.y - 20
+                            }
+                        } catch (err) {
+                            throw err;
+                        }
                     }
                 }, {
                     name: "ontable",
-                    func: function (id, o1) {
+                    true_func: function (id, o1) {
                         try {
                             return {
                                 id: id,
                                 x: 300,
-                                y: 100
+                                y: 200
+                            }
+                        } catch (err) {
+                            throw err;
+                        }
+                    },
+                    false_func: function (id, o1) {
+                        try {
+                            return {
+                                id: id,
+                                x: 400,
+                                y: 200
                             }
                         } catch (err) {
                             throw err;
@@ -830,7 +891,7 @@ var renderInfrastructure = (function () {
                     }
                 }, {
                     name: "clear",
-                    func: function (id, o1) {
+                    true_func: function (id, o1) {
                         try {
                             return {
                                 id: id,
@@ -840,10 +901,32 @@ var renderInfrastructure = (function () {
                         } catch (err) {
                             throw err;
                         }
+                    },
+                    false_func: function (id, o1) {
+                        try {
+                            return {
+                                id: id,
+                                x: o1.x + 50,
+                                y: o1.y
+                            }
+                        } catch (err) {
+                            throw err;
+                        }
                     }
                 }, {
                     name: "handempty",
-                    func: function (id, o1) {
+                    true_func: function (id, o1) {
+                        try {
+                            return {
+                                id: id,
+                                x: o1.x,
+                                y: o1.y
+                            }
+                        } catch (err) {
+                            throw err;
+                        }
+                    },
+                    false_func: function (id, o1) {
                         try {
                             return {
                                 id: id,
@@ -856,7 +939,7 @@ var renderInfrastructure = (function () {
                     }
                 }, {
                     name: "holding",
-                    func: function (id, o1) {
+                    true_func: function (id, o1) {
                         try {
                             return {
                                 id: id,
@@ -866,10 +949,20 @@ var renderInfrastructure = (function () {
                         } catch (err) {
                             throw err;
                         }
+                    },
+                    false_func: function (id, o1) {
+                        try {
+                            return {
+                                id: id,
+                                x: 300,
+                                y: 100
+                            }
+                        } catch (err) {
+                            throw err;
+                        }
                     }
                 }];
                 let trans = Transformer.initiate(predicateMappings, init, solution, domain[3]);
-                console.log(trans.getInit());
                 let anime = Animation.register(trans.getInit());
                 anime.play(trans.transform());
                 //let anime = Animation.register(initials);
@@ -918,6 +1011,6 @@ var renderInfrastructure = (function () {
 renderInfrastructure.renderAll();
 
 // modules loading
-var maps = {"models": models, "actions": actions, "predicates": predicates, "preconditions": preconditions};
+var maps = {"models": models, "actions": actions, "predicates": predicates /*"preconditions": preconditions*/};
 var renderer = Renderer.getInstance(maps);
 renderer.init();
