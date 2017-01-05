@@ -260,10 +260,7 @@ var Model = function (_Component) {
             var offsetWidth = document.querySelector(".side_menu").offsetWidth;
             var offsetHeight = this.node.offsetHeight;
 
-            // random generator
-            //console.log(randomGenerator());
             var _id = this.id;
-            // todo: delete id from manual input and generate one here
             this.node.addEventListener("dragend", function (event) {
                 console.log("dragend");
                 var reg = new RegExp('(\\s|^)' + "dragging" + '(\\s|$)');
@@ -293,12 +290,12 @@ var drag = d3.drag().on("drag", function (d, i) {
     });
 });
 
-var randomGenerator = function randomGenerator() {
-    var timeStamp = Date.parse(new Date());
-    timeStamp = timeStamp / 1000;
-    // substr(2) can delete first two digit, which are numbers not needed
-    return Math.random().toString(26).substr(2) + timeStamp;
-};
+//const randomGenerator = function () {
+//    var timeStamp = Date.parse(new Date());
+//    timeStamp = timeStamp / 1000;
+//    // substr(2) can delete first two digit, which are numbers not needed
+//    return Math.random().toString(26).substr(2) + timeStamp;
+//}
 
 var Action = function (_Component2) {
     _inherits(Action, _Component2);
@@ -585,13 +582,25 @@ var Animation = function () {
     var colors = ["red", "blue", "purple", "gray", "brown", "green", "skyblue", "black", "silver", "pink", "yellow", "darkgoldenrod"];
 
     function _register(initials) {
-        if (!(initials.length > 0)) throw "Initial states not correct!";else d3.select(".canvas > svg").selectAll("circle").data(initials).enter().append("circle").attr("r", 10).attr("id", function (d, i) {
-            return d.id;
-        }).style("fill", function (d, i) {
-            return colors[i];
-        }).attr("transform", function (d, i) {
-            return "translate(" + d.x + "," + d.y + ")";
-        });
+        if (!(initials.length > 0)) throw "Initial states not correct!";else {
+            var group = d3.select(".canvas > svg").selectAll("g").data(initials).enter().append("g").attr("class", "group").attr("id", function (d, i) {
+                return d.id;
+            }).attr("transform", function (d, i) {
+                return "translate(" + d.x + "," + d.y + ")";
+            });
+            // todo adjust text and image setting here
+            group.append("image").attr("width", 40).attr("height", 40).attr("href", function (d, i) {
+                var obj = JSON.parse(models[i].node.querySelector("input").value);
+                return obj.data.logo;
+            });
+            group.append("text").attr("dx", function (d, i) {
+                return 0;
+            }).attr("dy", function (d, i) {
+                return 60;
+            }).text(function (d, i) {
+                return models[i].id;
+            });
+        }
         return this;
     }
 
@@ -601,14 +610,15 @@ var Animation = function () {
                 for (var o in steps[s]) {
                     d3.select("#" + steps[s][o].id).transition().attr("transform", function (d, i) {
                         return "translate(" + steps[s][o].x + "," + steps[s][o].y + ")";
-                    }).delay(s * 500);
+                    }).delay(s * 650);
                 }
             } else {
                 d3.select("#" + steps[s].id).transition().attr("transform", function (d, i) {
                     return "translate(" + steps[s].x + "," + steps[s].y + ")";
-                }).delay(s * 500);
+                }).delay(s * 650);
             }
         }
+        AxisPlayer.play(650);
         return this;
     }
 
@@ -687,7 +697,7 @@ var Transformer = function () {
                 _initialStates[init[i].args[0]] = {
                     id: init[i].args[0],
                     x: 500,
-                    y: 250
+                    y: 50
                 };
             }
         }
@@ -714,7 +724,6 @@ var Transformer = function () {
                 if (b) {
                     var _predicates$init$i$na, _predicates$init$i$na2;
 
-                    console.log(_predicates[init[i].name]);
                     if (init[i].truthiness == "true") _initialStates[init[i].args[0]] = (_predicates$init$i$na = _predicates[init[i].name]).true.apply(_predicates$init$i$na, [init[i].args[0]].concat(_toConsumableArray(init[i].args.map(function (p, index) {
                         return _initialStates[init[i].args[index]];
                     }))));else _initialStates[init[i].args[0]] = (_predicates$init$i$na2 = _predicates[init[i].name]).false.apply(_predicates$init$i$na2, [init[i].args[0]].concat(_toConsumableArray(init[i].args.map(function (p, index) {
@@ -772,7 +781,6 @@ var Transformer = function () {
                 // 1. map arguments in solution to function in initialStates
                 // 2. expand initialStates array as arguments from the 2nd to last at predicate function
                 // 3. the first argument of predicate function is object id/name
-                // todo: add true/false mapping for predicates here
                 if (effs[e].truthiness == "true") stack.push((_predicates$effs$e$na = _predicates[effs[e].name]).true.apply(_predicates$effs$e$na, [_solutions[s].args[0]].concat(_toConsumableArray(_solutions[s].args.map(function (sol, index) {
                     if (indices.length > 0) return _initialStates[_solutions[s].args[indices[index]]];
                     return _initialStates[_solutions[s].args[index]];
@@ -787,7 +795,6 @@ var Transformer = function () {
             }
             _dataArray.push(stack);
         }
-        console.log(_dataArray);
         return _dataArray;
     }
 
@@ -895,7 +902,7 @@ var renderInfrastructure = function () {
                             return {
                                 id: id,
                                 x: o2.x,
-                                y: o2.y + 20
+                                y: o2.y + 30
                             };
                         } catch (err) {
                             throw err;
@@ -905,8 +912,8 @@ var renderInfrastructure = function () {
                         try {
                             return {
                                 id: id,
-                                x: o2.x - 20,
-                                y: o2.y - 20
+                                x: o2.x - 30,
+                                y: o2.y - 30
                             };
                         } catch (err) {
                             throw err;
@@ -918,8 +925,8 @@ var renderInfrastructure = function () {
                         try {
                             return {
                                 id: id,
-                                x: 300,
-                                y: 200
+                                x: 250,
+                                y: 150
                             };
                         } catch (err) {
                             throw err;
@@ -929,8 +936,8 @@ var renderInfrastructure = function () {
                         try {
                             return {
                                 id: id,
-                                x: 400,
-                                y: 200
+                                x: 300,
+                                y: 150
                             };
                         } catch (err) {
                             throw err;
@@ -942,7 +949,7 @@ var renderInfrastructure = function () {
                         try {
                             return {
                                 id: id,
-                                x: o1.x - 50,
+                                x: o1.x - 80,
                                 y: o1.y
                             };
                         } catch (err) {
@@ -953,7 +960,7 @@ var renderInfrastructure = function () {
                         try {
                             return {
                                 id: id,
-                                x: o1.x + 50,
+                                x: o1.x + 80,
                                 y: o1.y
                             };
                         } catch (err) {
@@ -990,8 +997,8 @@ var renderInfrastructure = function () {
                         try {
                             return {
                                 id: id,
-                                x: 300,
-                                y: 200
+                                x: 200,
+                                y: 150
                             };
                         } catch (err) {
                             throw err;
@@ -1001,8 +1008,8 @@ var renderInfrastructure = function () {
                         try {
                             return {
                                 id: id,
-                                x: 300,
-                                y: 100
+                                x: 200,
+                                y: 50
                             };
                         } catch (err) {
                             throw err;
@@ -1052,6 +1059,26 @@ var renderInfrastructure = function () {
         renderButtons: _renderButtons,
         renderModal: _renderModal,
         renderAll: _renderAll
+    };
+}();
+
+var AxisPlayer = function () {
+    var _play = function _play() {
+        var speed = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 500;
+
+        $(".element").each(function (i, d) {
+            var _this = $(this);
+            setTimeout(function () {
+                _this.addClass("active");
+            }, speed * i);
+            setTimeout(function () {
+                _this.removeClass("active");
+            }, speed * (i + 1));
+        });
+    };
+
+    return {
+        play: _play
     };
 }();
 
