@@ -176,18 +176,33 @@ var Component = function () {
             this.bindClass("selected");
         }
     }, {
+        key: "initClass",
+        value: function initClass(className) {
+            if (className) {
+                $(this.node).removeClass(className);
+                $(this.node).off("click");
+                return;
+            }
+            $(this.node).removeClass("selected");
+            $(this.node).off("click");
+        }
+    }, {
         key: "bindClass",
         value: function bindClass(className) {
             if (!className) throw new Error("No Class Name Entered Exception At bindClass Method of Component class!");
             var node = this.node;
             // use a component node to point back to component
             node.component = this;
-            // todo add customize content here
             this.customizeContent(node, this.name);
             document.querySelector(this.parentSelector).appendChild(node);
 
             $(node).click(function () {
-                if (!$(this).hasClass(className)) $(this).addClass(className);else $(this).removeClass(className);
+                if (!$(this).hasClass(className)) {
+                    $(this).siblings().each(function () {
+                        $(this).removeClass(className);
+                    });
+                    $(this).addClass(className);
+                } else $(this).removeClass(className);
             });
         }
     }, {
@@ -357,7 +372,8 @@ var Predicate = function (_Component3) {
 
             var predicates = "(" + args.join(",") + ")";
 
-            var nodeContent = "<div class='predicate'>" + "<header><h3 class='name'>Predicate Name: " + this.data.name + "</h3></header>" + "<div class='content'><div class='tags'>" + "<div class='sub_header'><h5>Predicates: </h5>" + predicates + "</div>" + "</div><div class='description'><h5>Description: </h5><form action=''>" + "</form></div></div></div>";
+            var nodeContent = "<div class='predicate'>" + "<header><h3 class='name'>Predicate Name: " + this.data.name + "</h3></header>" + "<div class='content'><div class='tags'>" + "<div class='sub_header'><h5>Predicates: </h5>" + predicates + "</div>" + "<span>True Condition<input class='predicate-true' /></span>" + "<span>False Condition<input class='predicate-false' /></span>";
+            "</div><div class='description'><h5>Description: </h5><form action=''>" + "</form></div></div></div>";
             if (parentNode) parentNode.appendChild(nodeContent);else if (this.modalSelector) document.querySelector(this.modalSelector).appendChild(this.parseDom(nodeContent));
         }
     }]);
@@ -365,40 +381,35 @@ var Predicate = function (_Component3) {
     return Predicate;
 }(Component);
 
-var Precondition = function (_Component4) {
-    _inherits(Precondition, _Component4);
-
-    function Precondition() {
-        _classCallCheck(this, Precondition);
-
-        return _possibleConstructorReturn(this, (Precondition.__proto__ || Object.getPrototypeOf(Precondition)).apply(this, arguments));
-    }
-
-    _createClass(Precondition, [{
-        key: "renderModal",
-        value: function renderModal(parentNode) {
-            var obj = JSON.parse(this.node.querySelector("input").value);
-            var predicates = "";
-
-            /**
-             * temporarily use 0, should iterate through preconditions later
-             * */
-            for (var t in obj.data.preconditions[0].predicates) {
-                predicates += "<span>" + obj.data.preconditions[0].predicates[t].state + "(" + obj.data.preconditions[0].predicates[t].operators.join(",") + "): " + obj.data.preconditions[0].predicates[t].predicate + "</span>";
-            }
-
-            var models = "";
-            for (var t in obj.data.preconditions[0].models) {
-                models += "<span>" + obj.data.preconditions[0].models[t].model + "[" + obj.data.preconditions[0].models[t].location.join(",") + "]" + "</span>";
-            }
-
-            var nodeContent = "<div class='precondition'>" + "<header><h3 class='name'>Precondition " + "<div class='content'><div class='tags'>" + "<div class='sub_header'><h5>Predicates: </h5>" + predicates + "</div>" + "<div class='sub_header'><h5>Models: </h5>" + models + "</div>" + "</div><div class='description'><h5>Description: </h5><form action=''>" + "</form></div></div></div>";
-            if (parentNode) parentNode.appendChild(nodeContent);else if (this.modalSelector) document.querySelector(this.modalSelector).appendChild(this.parseDom(nodeContent));
-        }
-    }]);
-
-    return Precondition;
-}(Component);
+//class Precondition extends Component {
+//    renderModal(parentNode) {
+//        var obj = JSON.parse(this.node.querySelector("input").value);
+//        var predicates = "";
+//
+//        /**
+//         * temporarily use 0, should iterate through preconditions later
+//         * */
+//        for (var t in obj.data.preconditions[0].predicates) {
+//            predicates += "<span>" + obj.data.preconditions[0].predicates[t].state + "(" + obj.data.preconditions[0].predicates[t].operators.join(",") + "): " + obj.data.preconditions[0].predicates[t].predicate + "</span>";
+//        }
+//
+//        var models = "";
+//        for (var t in obj.data.preconditions[0].models) {
+//            models += "<span>" + obj.data.preconditions[0].models[t].model + "[" + obj.data.preconditions[0].models[t].location.join(",") + "]" + "</span>";
+//        }
+//
+//        var nodeContent = "<div class='precondition'>" +
+//            "<header><h3 class='name'>Precondition " +
+//            "<div class='content'><div class='tags'>" +
+//            "<div class='sub_header'><h5>Predicates: </h5>" + predicates + "</div>" +
+//            "<div class='sub_header'><h5>Models: </h5>" + models + "</div>" +
+//            "</div><div class='description'><h5>Description: </h5><form action=''>" + "</form></div></div></div>";
+//        if (parentNode)
+//            parentNode.appendChild(nodeContent);
+//        else if (this.modalSelector)
+//            document.querySelector(this.modalSelector).appendChild(this.parseDom(nodeContent));
+//    }
+//}
 
 /**
  *  Page Renderer.
@@ -465,6 +476,7 @@ var Renderer = function () {
                     for (var c in this.components[group]) {
                         var q = this.components[group][c].parentSelector;
                         if (q) document.querySelector(q).innerHTML = "";
+                        this.components[group][c].initClass();
                     }
                 }
                 return this;
@@ -667,17 +679,13 @@ var Transformer = function () {
      *                  }
      *          });
      * @solutions solutions
+     * @actions domain action definitions
      * */
     function _initiate(predicates, init, solutions, actions) {
         if (!init || !solutions || !predicates || !actions) {
             throw "Arguments Not Correct!";
         }
         for (var p in predicates) {
-            // todo add true/false mapping here for func
-            // e.g. _predicates[predicates[p].name] = {
-            //      "true":func1
-            //      "false":func2
-            // }
             if (typeof predicates[p].true_func == "function" && typeof predicates[p].false_func == "function") _predicates[predicates[p].name] = {
                 "true": predicates[p].true_func,
                 "false": predicates[p].false_func
@@ -813,6 +821,128 @@ var Transformer = function () {
     };
 }();
 
+var predicateMappings = [{
+    name: "on",
+    true_func: function true_func(id, o1, o2) {
+        try {
+            return {
+                id: id,
+                x: o2.x,
+                y: o2.y + 30
+            };
+        } catch (err) {
+            throw err;
+        }
+    },
+    false_func: function false_func(id, o1, o2) {
+        try {
+            return {
+                id: id,
+                x: o2.x - 30,
+                y: o2.y - 30
+            };
+        } catch (err) {
+            throw err;
+        }
+    }
+}, {
+    name: "ontable",
+    true_func: function true_func(id, o1) {
+        try {
+            return {
+                id: id,
+                x: 250,
+                y: 150
+            };
+        } catch (err) {
+            throw err;
+        }
+    },
+    false_func: function false_func(id, o1) {
+        try {
+            return {
+                id: id,
+                x: 300,
+                y: 150
+            };
+        } catch (err) {
+            throw err;
+        }
+    }
+}, {
+    name: "clear",
+    true_func: function true_func(id, o1) {
+        try {
+            return {
+                id: id,
+                x: o1.x - 80,
+                y: o1.y
+            };
+        } catch (err) {
+            throw err;
+        }
+    },
+    false_func: function false_func(id, o1) {
+        try {
+            return {
+                id: id,
+                x: o1.x + 80,
+                y: o1.y
+            };
+        } catch (err) {
+            throw err;
+        }
+    }
+}, {
+    name: "handempty",
+    true_func: function true_func(id, o1) {
+        try {
+            return {
+                id: id,
+                x: o1.x,
+                y: o1.y
+            };
+        } catch (err) {
+            throw err;
+        }
+    },
+    false_func: function false_func(id, o1) {
+        try {
+            return {
+                id: id,
+                x: o1.x,
+                y: o1.y
+            };
+        } catch (err) {
+            throw err;
+        }
+    }
+}, {
+    name: "holding",
+    true_func: function true_func(id, o1) {
+        try {
+            return {
+                id: id,
+                x: 200,
+                y: 150
+            };
+        } catch (err) {
+            throw err;
+        }
+    },
+    false_func: function false_func(id, o1) {
+        try {
+            return {
+                id: id,
+                x: 200,
+                y: 50
+            };
+        } catch (err) {
+            throw err;
+        }
+    }
+}];
+
 var renderInfrastructure = function () {
     function _renderTab() {
         $(".tab").each(function () {
@@ -895,127 +1025,6 @@ var renderInfrastructure = function () {
                         truthiness: o.truthiness
                     });
                 }
-                var predicateMappings = [{
-                    name: "on",
-                    true_func: function true_func(id, o1, o2) {
-                        try {
-                            return {
-                                id: id,
-                                x: o2.x,
-                                y: o2.y + 30
-                            };
-                        } catch (err) {
-                            throw err;
-                        }
-                    },
-                    false_func: function false_func(id, o1, o2) {
-                        try {
-                            return {
-                                id: id,
-                                x: o2.x - 30,
-                                y: o2.y - 30
-                            };
-                        } catch (err) {
-                            throw err;
-                        }
-                    }
-                }, {
-                    name: "ontable",
-                    true_func: function true_func(id, o1) {
-                        try {
-                            return {
-                                id: id,
-                                x: 250,
-                                y: 150
-                            };
-                        } catch (err) {
-                            throw err;
-                        }
-                    },
-                    false_func: function false_func(id, o1) {
-                        try {
-                            return {
-                                id: id,
-                                x: 300,
-                                y: 150
-                            };
-                        } catch (err) {
-                            throw err;
-                        }
-                    }
-                }, {
-                    name: "clear",
-                    true_func: function true_func(id, o1) {
-                        try {
-                            return {
-                                id: id,
-                                x: o1.x - 80,
-                                y: o1.y
-                            };
-                        } catch (err) {
-                            throw err;
-                        }
-                    },
-                    false_func: function false_func(id, o1) {
-                        try {
-                            return {
-                                id: id,
-                                x: o1.x + 80,
-                                y: o1.y
-                            };
-                        } catch (err) {
-                            throw err;
-                        }
-                    }
-                }, {
-                    name: "handempty",
-                    true_func: function true_func(id, o1) {
-                        try {
-                            return {
-                                id: id,
-                                x: o1.x,
-                                y: o1.y
-                            };
-                        } catch (err) {
-                            throw err;
-                        }
-                    },
-                    false_func: function false_func(id, o1) {
-                        try {
-                            return {
-                                id: id,
-                                x: o1.x,
-                                y: o1.y
-                            };
-                        } catch (err) {
-                            throw err;
-                        }
-                    }
-                }, {
-                    name: "holding",
-                    true_func: function true_func(id, o1) {
-                        try {
-                            return {
-                                id: id,
-                                x: 200,
-                                y: 150
-                            };
-                        } catch (err) {
-                            throw err;
-                        }
-                    },
-                    false_func: function false_func(id, o1) {
-                        try {
-                            return {
-                                id: id,
-                                x: 200,
-                                y: 50
-                            };
-                        } catch (err) {
-                            throw err;
-                        }
-                    }
-                }];
                 var trans = Transformer.initiate(predicateMappings, init, solution, domain[3]);
                 var anime = Animation.register(trans.getInit());
                 anime.play(trans.transform());
