@@ -383,43 +383,93 @@ body {
         color: #000; }
     .modal .modal_panel .btn__close:hover .fa {
       color: #1B1C1D;
-      -webkit-animation-name: rotate_animation;
-      -moz-animation-name: rotate_animation;
-      -o-animation-name: rotate_animation;
-      animation-name: rotate_animation;
-      animation-duration: 2s;
-      animation-timing-function: cubic-bezier(0.77, 0, 0.175, 1);
-      animation-iteration-count: 1; }
-    .modal .modal_panel .model, .modal .modal_panel .action, .modal .modal_panel .predicate, .modal .modal_panel .precondition {
+      -webkit-animation: rotate_animation 1s;
+      -moz-animation: rotate_animation 1s;
+      -o-animation: rotate_animation 1s;
+      animation: rotate_animation 1s; }
+    .modal .modal_panel .model, .modal .modal_panel .action, .modal .modal_panel .predicate {
       display: flex;
       flex-flow: column;
       align-items: center;
       justify-content: center; }
-      .modal .modal_panel .model .content, .modal .modal_panel .action .content, .modal .modal_panel .predicate .content, .modal .modal_panel .precondition .content {
+      .modal .modal_panel .model .content, .modal .modal_panel .action .content, .modal .modal_panel .predicate .content {
         display: flex;
         flex-flow: row;
-        animation: delay_animation 1.5s; }
-        .modal .modal_panel .model .content .tags, .modal .modal_panel .action .content .tags, .modal .modal_panel .predicate .content .tags, .modal .modal_panel .precondition .content .tags {
+        animation: delay_animation 1.5s;
+        position: relative; }
+        .modal .modal_panel .model .content .tags, .modal .modal_panel .action .content .tags, .modal .modal_panel .predicate .content .tags {
           display: flex;
+          flex: 3;
           flex-flow: column;
           align-items: center;
           justify-content: center; }
-          .modal .modal_panel .model .content .tags img, .modal .modal_panel .action .content .tags img, .modal .modal_panel .predicate .content .tags img, .modal .modal_panel .precondition .content .tags img {
+          .modal .modal_panel .model .content .tags img, .modal .modal_panel .action .content .tags img, .modal .modal_panel .predicate .content .tags img {
             width: 100%;
             height: 100%;
             max-width: 100px;
             max-height: 100px; }
-          .modal .modal_panel .model .content .tags .sub_header, .modal .modal_panel .action .content .tags .sub_header, .modal .modal_panel .predicate .content .tags .sub_header, .modal .modal_panel .precondition .content .tags .sub_header {
+          .modal .modal_panel .model .content .tags span, .modal .modal_panel .action .content .tags span, .modal .modal_panel .predicate .content .tags span {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            align-self: stretch;
+            margin: 5px 0;
+            position: relative;
+            border: 1px solid #E6E6E6;
+            border-radius: 15px; }
+            .modal .modal_panel .model .content .tags span *, .modal .modal_panel .action .content .tags span *, .modal .modal_panel .predicate .content .tags span * {
+              margin: 5px 5px; }
+            .modal .modal_panel .model .content .tags span label, .modal .modal_panel .action .content .tags span label, .modal .modal_panel .predicate .content .tags span label {
+              position: relative;
+              margin: auto 5px;
+              height: 100%; }
+            .modal .modal_panel .model .content .tags span input, .modal .modal_panel .action .content .tags span input, .modal .modal_panel .predicate .content .tags span input {
+              display: flex;
+              flex: 1;
+              padding: 0 5px;
+              font-family: "Adobe Ming Std";
+              font-size: 14px;
+              box-shadow: none;
+              border: none; }
+          .modal .modal_panel .model .content .tags span.modal-btns, .modal .modal_panel .action .content .tags span.modal-btns, .modal .modal_panel .predicate .content .tags span.modal-btns {
+            border: none;
+            border-radius: 0px; }
+            .modal .modal_panel .model .content .tags span.modal-btns *, .modal .modal_panel .action .content .tags span.modal-btns *, .modal .modal_panel .predicate .content .tags span.modal-btns * {
+              margin: 0px 5px; }
+            .modal .modal_panel .model .content .tags span.modal-btns button, .modal .modal_panel .action .content .tags span.modal-btns button, .modal .modal_panel .predicate .content .tags span.modal-btns button {
+              flex: 1;
+              box-shadow: none;
+              border: 1px solid #000000;
+              height: 100%;
+              cursor: pointer;
+              font-family: "Adobe Ming Std";
+              font-size: 14px;
+              border-radius: 10px;
+              background-color: #f5f5f5;
+              -webkit-transition: all 0.3s;
+              -moz-transition: all 0.3s;
+              -ms-transition: all 0.3s;
+              -o-transition: all 0.3s;
+              transition: all 0.3s; }
+              .modal .modal_panel .model .content .tags span.modal-btns button:hover, .modal .modal_panel .action .content .tags span.modal-btns button:hover, .modal .modal_panel .predicate .content .tags span.modal-btns button:hover {
+                background-color: #000000;
+                color: #ffffff;
+                -webkit-transition: all 0.3s;
+                -moz-transition: all 0.3s;
+                -ms-transition: all 0.3s;
+                -o-transition: all 0.3s;
+                transition: all 0.3s; }
+          .modal .modal_panel .model .content .tags .sub_header, .modal .modal_panel .action .content .tags .sub_header, .modal .modal_panel .predicate .content .tags .sub_header {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             align-items: center; }
-            .modal .modal_panel .model .content .tags .sub_header *, .modal .modal_panel .action .content .tags .sub_header *, .modal .modal_panel .predicate .content .tags .sub_header *, .modal .modal_panel .precondition .content .tags .sub_header * {
+            .modal .modal_panel .model .content .tags .sub_header *, .modal .modal_panel .action .content .tags .sub_header *, .modal .modal_panel .predicate .content .tags .sub_header * {
               padding: 5px;
               margin: 5px; }
-            .modal .modal_panel .model .content .tags .sub_header h5, .modal .modal_panel .action .content .tags .sub_header h5, .modal .modal_panel .predicate .content .tags .sub_header h5, .modal .modal_panel .precondition .content .tags .sub_header h5 {
+            .modal .modal_panel .model .content .tags .sub_header h5, .modal .modal_panel .action .content .tags .sub_header h5, .modal .modal_panel .predicate .content .tags .sub_header h5 {
               font-size: 15px; }
-            .modal .modal_panel .model .content .tags .sub_header span, .modal .modal_panel .action .content .tags .sub_header span, .modal .modal_panel .predicate .content .tags .sub_header span, .modal .modal_panel .precondition .content .tags .sub_header span {
+            .modal .modal_panel .model .content .tags .sub_header span, .modal .modal_panel .action .content .tags .sub_header span, .modal .modal_panel .predicate .content .tags .sub_header span {
               cursor: pointer;
               background-color: gainsboro;
               font-size: 13px;
@@ -429,7 +479,7 @@ body {
               -ms-transition: all 0.8s;
               -o-transition: all 0.8s;
               transition: all 0.8s; }
-              .modal .modal_panel .model .content .tags .sub_header span:hover, .modal .modal_panel .action .content .tags .sub_header span:hover, .modal .modal_panel .predicate .content .tags .sub_header span:hover, .modal .modal_panel .precondition .content .tags .sub_header span:hover {
+              .modal .modal_panel .model .content .tags .sub_header span:hover, .modal .modal_panel .action .content .tags .sub_header span:hover, .modal .modal_panel .predicate .content .tags .sub_header span:hover {
                 background-color: #1B1C1D;
                 color: #fff;
                 -webkit-transition: all 0.8s;
@@ -437,13 +487,34 @@ body {
                 -ms-transition: all 0.8s;
                 -o-transition: all 0.8s;
                 transition: all 0.8s; }
-        .modal .modal_panel .model .content .description, .modal .modal_panel .action .content .description, .modal .modal_panel .predicate .content .description, .modal .modal_panel .precondition .content .description {
+        .modal .modal_panel .model .content .description, .modal .modal_panel .action .content .description, .modal .modal_panel .predicate .content .description {
+          display: flex;
+          flex: 1;
           position: relative;
-          width: 120%; }
-          .modal .modal_panel .model .content .description p, .modal .modal_panel .action .content .description p, .modal .modal_panel .predicate .content .description p, .modal .modal_panel .precondition .content .description p {
-            font-size: 12px;
+          flex-flow: column;
+          align-items: center;
+          justify-content: flex-start;
+          width: 100%;
+          margin: 0 0px;
+          font-size: 15px; }
+          .modal .modal_panel .model .content .description h4, .modal .modal_panel .action .content .description h4, .modal .modal_panel .predicate .content .description h4 {
+            margin: 5px;
+            padding: 5px; }
+          .modal .modal_panel .model .content .description p, .modal .modal_panel .action .content .description p, .modal .modal_panel .predicate .content .description p {
+            font-size: 15px;
             font-weight: 100;
-            font-family: "Book Antiqua"; }
+            font-family: "Adobe Ming Std";
+            white-space: nowrap; }
+        .modal .modal_panel .model .content .modal-divider, .modal .modal_panel .action .content .modal-divider, .modal .modal_panel .predicate .content .modal-divider {
+          display: flex;
+          flex: 1;
+          flex-flow: column;
+          position: relative;
+          margin: 0 30px;
+          content: "";
+          width: 2px;
+          border-radius: 3px;
+          background-color: #e3e3e3; }
 
 .dragging {
   box-shadow: 0 0 10px #1a69a4; }

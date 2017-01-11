@@ -481,16 +481,13 @@ body {
     .btn__close:hover {
       .fa {
         color: #1B1C1D;
-        -webkit-animation-name: rotate_animation;
-        -moz-animation-name: rotate_animation;
-        -o-animation-name: rotate_animation;
-        animation-name: rotate_animation;
-        animation-duration: 2s;
-        animation-timing-function: cubic-bezier(0.77, 0, 0.175, 1);
-        animation-iteration-count: 1;
+        -webkit-animation: rotate_animation 1s;
+        -moz-animation: rotate_animation 1s;
+        -o-animation: rotate_animation 1s;
+        animation: rotate_animation 1s;
       }
     }
-    .model, .action, .predicate, .precondition {
+    .model, .action, .predicate {
       display: flex;
       flex-flow: column;
       align-items: center;
@@ -499,8 +496,10 @@ body {
         display: flex;
         flex-flow: row;
         animation: delay_animation 1.5s;
+        position: relative;
         .tags {
           display: flex;
+          flex: 3;
           flex-flow: column;
           align-items: center;
           justify-content: center;
@@ -509,6 +508,57 @@ body {
             height: 100%;
             max-width: 100px;
             max-height: 100px;
+          }
+          span {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            align-self: stretch;
+            margin: 5px 0;
+            * {
+              margin: 5px 5px;
+            }
+            position: relative;
+            label {
+              position: relative;
+              margin: auto 5px;
+              height: 100%;
+            }
+            input {
+              display: flex;
+              flex: 1;
+              padding: 0 5px;
+              font-family: "Adobe Ming Std";
+              font-size: 14px;
+              box-shadow: none;
+              border: none;
+            }
+            border: 1px solid #E6E6E6;
+            border-radius: 15px;
+          }
+          span.modal-btns {
+            border: none;
+            border-radius: 0px;
+            * {
+              margin: 0px 5px;
+            }
+            button {
+              flex: 1;
+              box-shadow: none;
+              border: 1px solid #000000;
+              height: 100%;
+              cursor: pointer;
+              font-family: "Adobe Ming Std";
+              font-size: 14px;
+              border-radius: 10px;
+              background-color: #f5f5f5;
+              @include trans(0.3s);
+              &:hover {
+                background-color: #000000;
+                color: #ffffff;
+                @include trans(0.3s);
+              }
+            }
           }
           .sub_header {
             display: flex;
@@ -537,13 +587,36 @@ body {
           }
         }
         .description {
+          display: flex;
+          flex: 1;
           position: relative;
-          width: 120%;
-          p {
-            font-size: 12px;
-            font-weight: 100;
-            font-family: "Book Antiqua";
+          flex-flow: column;
+          align-items: center;
+          justify-content: flex-start;
+          width: 100%;
+          margin: 0 0px;
+          font-size: 15px;
+          h4 {
+            margin: 5px;
+            padding: 5px;
           }
+          p {
+            font-size: 15px;
+            font-weight: 100;
+            font-family: "Adobe Ming Std";
+            white-space: nowrap;
+          }
+        }
+        .modal-divider {
+          display: flex;
+          flex: 1;
+          flex-flow: column;
+          position: relative;
+          margin: 0 30px;
+          content: "";
+          width: 2px;
+          border-radius: 3px;
+          background-color: #e3e3e3;
         }
       }
     }

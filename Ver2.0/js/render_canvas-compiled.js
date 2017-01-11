@@ -24,6 +24,130 @@ console.log(problem);
 var solution = Plan_Parser.parse(array[2]);
 console.log(solution);
 
+var animationFuncs = [];
+
+var initialMappings = [{
+    name: "on",
+    true_func: function true_func(id, o1, o2) {
+        try {
+            return {
+                id: id,
+                x: o2.x,
+                y: o2.y + 30
+            };
+        } catch (err) {
+            throw err;
+        }
+    },
+    false_func: function false_func(id, o1, o2) {
+        try {
+            return {
+                id: id,
+                x: o2.x - 30,
+                y: o2.y - 30
+            };
+        } catch (err) {
+            throw err;
+        }
+    }
+}, {
+    name: "ontable",
+    true_func: function true_func(id, o1) {
+        try {
+            return {
+                id: id,
+                x: 250,
+                y: 150
+            };
+        } catch (err) {
+            throw err;
+        }
+    },
+    false_func: function false_func(id, o1) {
+        try {
+            return {
+                id: id,
+                x: 300,
+                y: 150
+            };
+        } catch (err) {
+            throw err;
+        }
+    }
+}, {
+    name: "clear",
+    true_func: function true_func(id, o1) {
+        try {
+            return {
+                id: id,
+                x: o1.x - 80,
+                y: o1.y
+            };
+        } catch (err) {
+            throw err;
+        }
+    },
+    false_func: function false_func(id, o1) {
+        try {
+            return {
+                id: id,
+                x: o1.x + 80,
+                y: o1.y
+            };
+        } catch (err) {
+            throw err;
+        }
+    }
+}, {
+    name: "handempty",
+    true_func: function true_func(id, o1) {
+        try {
+            return {
+                id: id,
+                x: o1.x,
+                y: o1.y
+            };
+        } catch (err) {
+            throw err;
+        }
+    },
+    false_func: function false_func(id, o1) {
+        try {
+            return {
+                id: id,
+                x: o1.x,
+                y: o1.y
+            };
+        } catch (err) {
+            throw err;
+        }
+    }
+}, {
+    name: "holding",
+    true_func: function true_func(id, o1) {
+        try {
+            return {
+                id: id,
+                x: 200,
+                y: 150
+            };
+        } catch (err) {
+            throw err;
+        }
+    },
+    false_func: function false_func(id, o1) {
+        try {
+            return {
+                id: id,
+                x: 200,
+                y: 50
+            };
+        } catch (err) {
+            throw err;
+        }
+    }
+}];
+
 /**
  *  A Singleton Factory responsible for generating template files.
  *  1. Promise Style.
@@ -372,9 +496,28 @@ var Predicate = function (_Component3) {
 
             var predicates = "(" + args.join(",") + ")";
 
-            var nodeContent = "<div class='predicate'>" + "<header><h3 class='name'>Predicate Name: " + this.data.name + "</h3></header>" + "<div class='content'><div class='tags'>" + "<div class='sub_header'><h5>Predicates: </h5>" + predicates + "</div>" + "<span>True Condition<input class='predicate-true' /></span>" + "<span>False Condition<input class='predicate-false' /></span>";
-            "</div><div class='description'><h5>Description: </h5><form action=''>" + "</form></div></div></div>";
+            var nodeContent = "<div class='predicate'>" + "<header><h3 class='name'>Predicate Name: " + this.data.name + "</h3></header>" + "<div class='content'><div class='tags'>" + "<div class='sub_header'><h5>Predicates: </h5>" + predicates + "</div>" + "<span><label><i class='fa fa-plus-square fa-2x' aria-hidden='true'></i></label><input class='predicate-true' placeholder='True Condition'/></span>" + "<span><label><i class='fa fa-minus-square fa-2x' aria-hidden='true'></i></label><input class='predicate-false' placeholder='False Condition' /></span><span class='modal-btns'>" + "<button class='btn-confirm'>Confirm</button><button class='btn-cancel'>Cancel</button></span>" + "</div><div class='modal-divider'></div><div class='description'><h4>Example</h4>" + "<p>x:x.x+y.x+10;y:x.y*10-y.y</p></div></div></div>";
             if (parentNode) parentNode.appendChild(nodeContent);else if (this.modalSelector) document.querySelector(this.modalSelector).appendChild(this.parseDom(nodeContent));
+            var _this = this;
+            $(".btn-confirm").click(function () {
+                var tValue = $(".predicate-true").val();
+                var fValue = $(".predicate-false").val();
+                var arrT = tValue.trim().split(";");
+                var arrF = fValue.trim().split(";");
+                var arrXT = arrT[0].split(":");
+                var arrYT = arrT[1].split(":");
+                var arrXF = arrF[0].split(":");
+                var arrYF = arrF[1].split(":");
+                var funcBodyT = "(function(id," + args.join(",").replace(/\?/g, "") + "){return {id:id,'x':" + arrXT[1] + ",'y':" + arrYT[1] + "}})";
+                var funcBodyF = "(function(id," + args.join(",").replace(/\?/g, "") + "){return {id:id,'x':" + arrXF[1] + ",'y':" + arrYF[1] + "}})";
+                animationFuncs.push({
+                    name: _this.data.name,
+                    true_func: eval(funcBodyT),
+                    false_func: eval(funcBodyF)
+                });
+                console.log(animationFuncs);
+                $(".modal").removeClass("active");
+            });
         }
     }]);
 
@@ -821,127 +964,20 @@ var Transformer = function () {
     };
 }();
 
-var predicateMappings = [{
-    name: "on",
-    true_func: function true_func(id, o1, o2) {
-        try {
-            return {
-                id: id,
-                x: o2.x,
-                y: o2.y + 30
-            };
-        } catch (err) {
-            throw err;
-        }
-    },
-    false_func: function false_func(id, o1, o2) {
-        try {
-            return {
-                id: id,
-                x: o2.x - 30,
-                y: o2.y - 30
-            };
-        } catch (err) {
-            throw err;
+var predicateMappings = function predicateMappings(mappings) {
+    if (!mappings) {
+        return initialMappings;
+    }
+    var imap = initialMappings;
+    for (var _i = 0; _i < imap.length; _i++) {
+        for (var j in mappings) {
+            if (mappings[j].name == imap[_i].name) {
+                imap[_i] = mappings[j];
+            }
         }
     }
-}, {
-    name: "ontable",
-    true_func: function true_func(id, o1) {
-        try {
-            return {
-                id: id,
-                x: 250,
-                y: 150
-            };
-        } catch (err) {
-            throw err;
-        }
-    },
-    false_func: function false_func(id, o1) {
-        try {
-            return {
-                id: id,
-                x: 300,
-                y: 150
-            };
-        } catch (err) {
-            throw err;
-        }
-    }
-}, {
-    name: "clear",
-    true_func: function true_func(id, o1) {
-        try {
-            return {
-                id: id,
-                x: o1.x - 80,
-                y: o1.y
-            };
-        } catch (err) {
-            throw err;
-        }
-    },
-    false_func: function false_func(id, o1) {
-        try {
-            return {
-                id: id,
-                x: o1.x + 80,
-                y: o1.y
-            };
-        } catch (err) {
-            throw err;
-        }
-    }
-}, {
-    name: "handempty",
-    true_func: function true_func(id, o1) {
-        try {
-            return {
-                id: id,
-                x: o1.x,
-                y: o1.y
-            };
-        } catch (err) {
-            throw err;
-        }
-    },
-    false_func: function false_func(id, o1) {
-        try {
-            return {
-                id: id,
-                x: o1.x,
-                y: o1.y
-            };
-        } catch (err) {
-            throw err;
-        }
-    }
-}, {
-    name: "holding",
-    true_func: function true_func(id, o1) {
-        try {
-            return {
-                id: id,
-                x: 200,
-                y: 150
-            };
-        } catch (err) {
-            throw err;
-        }
-    },
-    false_func: function false_func(id, o1) {
-        try {
-            return {
-                id: id,
-                x: 200,
-                y: 50
-            };
-        } catch (err) {
-            throw err;
-        }
-    }
-}];
+    return imap;
+};
 
 var renderInfrastructure = function () {
     function _renderTab() {
@@ -1025,7 +1061,7 @@ var renderInfrastructure = function () {
                         truthiness: o.truthiness
                     });
                 }
-                var trans = Transformer.initiate(predicateMappings, init, solution, domain[3]);
+                var trans = Transformer.initiate(predicateMappings(animationFuncs), init, solution, domain[3]);
                 var anime = Animation.register(trans.getInit());
                 anime.play(trans.transform());
                 //let anime = Animation.register(initials);
