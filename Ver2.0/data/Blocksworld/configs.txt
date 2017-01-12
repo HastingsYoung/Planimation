@@ -1,0 +1,81 @@
+const initialMappings = [{
+    name: "on",
+    true_func: function (id, o1, o2) {
+        return {
+            id: id,
+            x: o2.x,
+            y: o2.y + 30
+        }
+    },
+    false_func: function (id, o1, o2) {
+        return {
+            id: id,
+            x: o2.x - 30,
+            y: o2.y - 30
+        }
+    }
+}, {
+    name: "ontable",
+    true_func: function (id, o1) {
+        return {
+            id: id,
+            x: 250,
+            y: 150
+        }
+    },
+    false_func: function (id, o1) {
+        return {
+            id: id,
+            x: 300,
+            y: 150
+        }
+    }
+}, {
+    name: "clear",
+    true_func: function (id, o1) {
+        return {
+            id: id,
+            x: o1.x - 80,
+            y: o1.y
+        }
+    },
+    false_func: function (id, o1) {
+        return {
+            id: id,
+            x: o1.x + 80,
+            y: o1.y
+        }
+    }
+}, {
+    name: "handempty",
+    true_func: function (id, o1) {
+        return {
+            id: id,
+            x: o1.x,
+            y: o1.y
+        }
+    },
+    false_func: function (id, o1) {
+        return {
+            id: id,
+            x: o1.x,
+            y: o1.y
+        }
+    }
+}, {
+    name: "holding",
+    true_func: function (id, o1) {
+        return {
+            id: id,
+            x: 200,
+            y: 150
+        }
+    },
+    false_func: function (id, o1) {
+        return {
+            id: id,
+            x: 200,
+            y: 50
+        }
+    }
+}];

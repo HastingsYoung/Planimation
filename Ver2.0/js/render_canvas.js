@@ -17,121 +17,81 @@ let animationFuncs = [];
 const initialMappings = [{
     name: "on",
     true_func: function (id, o1, o2) {
-        try {
-            return {
-                id: id,
-                x: o2.x,
-                y: o2.y + 30
-            }
-        } catch (err) {
-            throw err;
+        return {
+            id: id,
+            x: o2.x,
+            y: o2.y + 30
         }
     },
     false_func: function (id, o1, o2) {
-        try {
-            return {
-                id: id,
-                x: o2.x - 30,
-                y: o2.y - 30
-            }
-        } catch (err) {
-            throw err;
+        return {
+            id: id,
+            x: o2.x - 30,
+            y: o2.y - 30
         }
     }
 }, {
     name: "ontable",
     true_func: function (id, o1) {
-        try {
-            return {
-                id: id,
-                x: 250,
-                y: 150
-            }
-        } catch (err) {
-            throw err;
+        return {
+            id: id,
+            x: 250,
+            y: 150
         }
     },
     false_func: function (id, o1) {
-        try {
-            return {
-                id: id,
-                x: 300,
-                y: 150
-            }
-        } catch (err) {
-            throw err;
+        return {
+            id: id,
+            x: 300,
+            y: 150
         }
     }
 }, {
     name: "clear",
     true_func: function (id, o1) {
-        try {
-            return {
-                id: id,
-                x: o1.x - 80,
-                y: o1.y
-            }
-        } catch (err) {
-            throw err;
+        return {
+            id: id,
+            x: o1.x - 80,
+            y: o1.y
         }
     },
     false_func: function (id, o1) {
-        try {
-            return {
-                id: id,
-                x: o1.x + 80,
-                y: o1.y
-            }
-        } catch (err) {
-            throw err;
+        return {
+            id: id,
+            x: o1.x + 80,
+            y: o1.y
         }
     }
 }, {
     name: "handempty",
     true_func: function (id, o1) {
-        try {
-            return {
-                id: id,
-                x: o1.x,
-                y: o1.y
-            }
-        } catch (err) {
-            throw err;
+        return {
+            id: id,
+            x: o1.x,
+            y: o1.y
         }
     },
     false_func: function (id, o1) {
-        try {
-            return {
-                id: id,
-                x: o1.x,
-                y: o1.y
-            }
-        } catch (err) {
-            throw err;
+        return {
+            id: id,
+            x: o1.x,
+            y: o1.y
         }
     }
 }, {
     name: "holding",
     true_func: function (id, o1) {
-        try {
-            return {
-                id: id,
-                x: 200,
-                y: 150
-            }
-        } catch (err) {
-            throw err;
+        return {
+            id: id,
+            x: 200,
+            y: 150
         }
     },
     false_func: function (id, o1) {
-        try {
-            return {
-                id: id,
-                x: 200,
-                y: 50
-            }
-        } catch (err) {
-            throw err;
+        return {
+            id: id,
+            x: 200,
+            y: 50
         }
     }
 }];
@@ -278,7 +238,7 @@ class Component {
         this.bindClass("selected");
     }
 
-    initClass(className) {
+    resetClass(className) {
         if (className) {
             $(this.node).removeClass(className);
             $(this.node).off("click");
@@ -290,7 +250,7 @@ class Component {
 
     bindClass(className) {
         if (!className)
-            throw new Error("No Class Name Entered Exception At bindClass Method of Component class!");
+            throw new Error("No Class Name Entered Exception At 'bindClass' Method of Component class!");
         let node = this.node;
         // use a component node to point back to component
         node.component = this;
@@ -304,8 +264,9 @@ class Component {
                 });
                 $(this).addClass(className);
             }
-            else
-                $(this).removeClass(className);
+            // do not allow removing click
+            //else
+            //    $(this).removeClass(className);
         });
     }
 
@@ -441,7 +402,6 @@ class Action extends Component {
     }
 }
 
-
 class Predicate extends Component {
     renderModal(parentNode) {
         var args = []
@@ -484,36 +444,6 @@ class Predicate extends Component {
         });
     }
 }
-
-//class Precondition extends Component {
-//    renderModal(parentNode) {
-//        var obj = JSON.parse(this.node.querySelector("input").value);
-//        var predicates = "";
-//
-//        /**
-//         * temporarily use 0, should iterate through preconditions later
-//         * */
-//        for (var t in obj.data.preconditions[0].predicates) {
-//            predicates += "<span>" + obj.data.preconditions[0].predicates[t].state + "(" + obj.data.preconditions[0].predicates[t].operators.join(",") + "): " + obj.data.preconditions[0].predicates[t].predicate + "</span>";
-//        }
-//
-//        var models = "";
-//        for (var t in obj.data.preconditions[0].models) {
-//            models += "<span>" + obj.data.preconditions[0].models[t].model + "[" + obj.data.preconditions[0].models[t].location.join(",") + "]" + "</span>";
-//        }
-//
-//        var nodeContent = "<div class='precondition'>" +
-//            "<header><h3 class='name'>Precondition " +
-//            "<div class='content'><div class='tags'>" +
-//            "<div class='sub_header'><h5>Predicates: </h5>" + predicates + "</div>" +
-//            "<div class='sub_header'><h5>Models: </h5>" + models + "</div>" +
-//            "</div><div class='description'><h5>Description: </h5><form action=''>" + "</form></div></div></div>";
-//        if (parentNode)
-//            parentNode.appendChild(nodeContent);
-//        else if (this.modalSelector)
-//            document.querySelector(this.modalSelector).appendChild(this.parseDom(nodeContent));
-//    }
-//}
 
 /**
  *  Page Renderer.
@@ -577,7 +507,7 @@ var Renderer = (function () {
                     var q = this.components[group][c].parentSelector;
                     if (q)
                         document.querySelector(q).innerHTML = "";
-                    this.components[group][c].initClass();
+                    this.components[group][c].resetClass();
                 }
             }
             return this;
@@ -653,18 +583,6 @@ for (var i in domain[2]) {
     }));
 }
 
-//fct.importSelector("#basic_precondition").setPrototype();
-//template = fct.newTemplate();
-//var preconditions = [];
-//for (var i = 0; i < 20; i++) {
-//    preconditions.push(new Precondition({
-//        name: ,
-//        parentSelector: '.preload',
-//        modalSelector: '.modal > .modal_panel > .modal_content',
-//        node: template.cloneNode(true)
-//    }));
-//}
-
 /**
  *  @steps animation data
  *  #example
@@ -688,54 +606,101 @@ for (var i in domain[2]) {
  * */
 var Animation = (function () {
 
-    var colors = ["red", "blue", "purple", "gray", "brown", "green", "skyblue", "black", "silver", "pink", "yellow", "darkgoldenrod"]
+    let colors = ["red", "blue", "purple", "gray", "brown", "green", "skyblue", "black", "silver", "pink", "yellow", "darkgoldenrod"]
+    let _settings = {
+        "LARGE": 100,
+        "MEDIUM": 50,
+        "SMALL": 30,
+        "RED": 0,
+        "BLUE": 1,
+        "PURPLE": 2,
+        "GRAY": 3,
+        "BROWN": 4,
+        "GREEN": 5,
+        "SKYBLUE": 6,
+        "BLACK": 7,
+        "SILVER": 8,
+        "PINK": 9,
+        "YELLOW": 10,
+        "DARKGOLDENROD": 11,
+        "10COLORSCHEMA": 10,
+        "FONT_LARGE": "40px",
+        "FONT_MEDIUM": "25px",
+        "FONT_SMALL": "15px",
+        "PLAY_FAST": 200,
+        "PLAY_MEDIUM": 500,
+        "PLAY_SLOW": 800
+    };
 
-    function _register(initials) {
+    function _applySettings(options) {
+        let sts = {
+            width: _settings.MEDIUM,
+            height: _settings.MEDIUM,
+            fontSize: "15px",
+            dx: 0,
+            dy: _settings.MEDIUM + 20,
+            speed: _settings.PLAY_FAST
+        }
+        if (options) {
+            sts = Object.assign({}, sts, options);
+        }
+        return sts;
+    }
+
+    function _register(initials, options) {
         if (!(initials.length > 0))
             throw "Initial states not correct!";
         else {
+            let sts = _applySettings(options);
             let group = d3.select(".canvas > svg").selectAll("g").data(initials).enter().append("g").attr("class", "group").attr("id", function (d, i) {
                 return d.id;
             }).attr("transform", function (d, i) {
                 return "translate(" + d.x + "," + d.y + ")";
             });
-            // todo adjust text and image setting here
-            group.append("image").attr("width", 40).attr("height", 40).attr("href", function (d, i) {
+            group.append("image").attr("width", sts.width).attr("height", sts.height).attr("href", function (d, i) {
                 var obj = JSON.parse(models[i].node.querySelector("input").value);
                 return obj.data.logo;
             });
             group.append("text").attr("dx", function (d, i) {
-                return 0;
+                return sts.dx;
             }).attr("dy", function (d, i) {
-                return 60;
-            }).text(function (d, i) {
+                return sts.dy;
+            }).attr("font-size", sts.fontSize).text(function (d, i) {
                 return models[i].id
             });
         }
         return this;
     }
 
-    function _play(steps) {
+    function _clear() {
+        let canvas = $(".canvas > svg");
+        canvas.empty();
+    }
+
+    function _play(steps, options) {
+        let sts = _applySettings(options);
         for (var s in steps) {
             if (steps[s].length > 0) {
                 for (var o in steps[s]) {
                     d3.select("#" + steps[s][o].id).transition().attr("transform", function (d, i) {
                         return "translate(" + steps[s][o].x + "," + steps[s][o].y + ")";
-                    }).delay(s * 650);
+                    }).delay(s * sts.speed);
                 }
             } else {
                 d3.select("#" + steps[s].id).transition().attr("transform", function (d, i) {
                     return "translate(" + steps[s].x + "," + steps[s].y + ")";
-                }).delay(s * 650);
+                }).delay(s * sts.speed);
             }
         }
-        AxisPlayer.play(650);
+        AxisPlayer.play(sts.speed);
         return this;
     }
 
     return {
         register: _register,
-        play: _play
+        play: _play,
+        clear: _clear,
+        settings: _settings
     }
 }());
 
@@ -781,6 +746,7 @@ var Transformer = (function () {
      * @actions domain action definitions
      * */
     function _initiate(predicates, init, solutions, actions) {
+        _clear();
         if (!init || !solutions || !predicates || !actions) {
             throw "Arguments Not Correct!"
         }
@@ -875,6 +841,14 @@ var Transformer = (function () {
         return this;
     }
 
+    function _clear() {
+        _initialStates = {};
+        _predicates = [];    // inherently they are functions that map last state to next state
+        _actions = {};
+        _solutions = [];   // store actual solutions objects to represent what is the next pair of coordinates
+        _dataArray = [];
+    }
+
     function _transform() {
         // transform...
         for (var s in _solutions) {
@@ -926,8 +900,8 @@ const predicateMappings = (mappings)=> {
     }
     let imap = initialMappings;
     for (let i = 0; i < imap.length; i++) {
-        for(var j in mappings){
-            if(mappings[j].name==imap[i].name){
+        for (var j in mappings) {
+            if (mappings[j].name == imap[i].name) {
                 imap[i] = mappings[j];
             }
         }
@@ -951,7 +925,7 @@ var renderInfrastructure = (function () {
     }
 
     function _renderCanvas() {
-        var svg = d3.select(".canvas").append("svg").attr("width", 1100).attr("height", 650);
+        var svg = d3.select(".canvas").append("svg").attr("width", "100%").attr("height", "100%");
         document.querySelector(".canvas > svg").addEventListener("drop", function () {
             console.log("drop");
         }, false);
@@ -960,54 +934,20 @@ var renderInfrastructure = (function () {
     function _renderButtons() {
         $(".btn.edit").each(function () {
             $(this).click(function () {
-                $(".modal").addClass("active");
-                document.querySelector(".modal > .modal_panel > .modal_content").innerHTML = "";
-                document.querySelector(".template.selected").component.renderModal();
+                if (document.querySelector(".template.selected")) {
+                    $(".modal").addClass("active");
+                    document.querySelector(".modal > .modal_panel > .modal_content").innerHTML = "";
+                    document.querySelector(".template.selected").component.renderModal();
+                }
+                else {
+                    alert("Please select a component to view.");
+                }
             });
         });
         $(".btn.start").each(function () {
             $(this).click(function () {
-                //const initials = [{
-                //    id: "a-1",
-                //    x: 50,
-                //    y: 50
-                //}, {
-                //    id: "a-2",
-                //    x: 50,
-                //    y: 100
-                //}, {
-                //    id: "a-3",
-                //    x: 50,
-                //    y: 150
-                //}];
-                //
-                //const steps = [{
-                //    id: "a-1",
-                //    x: 100,
-                //    y: 50
-                //}, [{
-                //    id: "a-1",
-                //    x: 150,
-                //    y: 50
-                //}, {
-                //    id: "a-2",
-                //    x: 150,
-                //    y: 100
-                //}], [{
-                //    id: "a-1",
-                //    x: 200,
-                //    y: 50
-                //}, {
-                //    id: "a-2",
-                //    x: 200,
-                //    y: 100
-                //}, {
-                //    id: "a-3",
-                //    x: 200,
-                //    y: 150
-                //}]];
-                var init = [];
-                for (var p in problem[1]) {
+                let init = [];
+                for (let p in problem[1]) {
                     let o = problem[1][p];
                     if (o.parameters)
                         init.push({
@@ -1019,10 +959,15 @@ var renderInfrastructure = (function () {
                         });
                 }
                 let trans = Transformer.initiate(predicateMappings(animationFuncs), init, solution, domain[3]);
+                // enter initial condition
                 let anime = Animation.register(trans.getInit());
+                // play steps
                 anime.play(trans.transform());
-                //let anime = Animation.register(initials);
-                //anime.play(steps);
+            });
+        });
+        $(".btn.reset").each(function () {
+            $(this).click(function () {
+                Animation.clear();
             });
         });
     }

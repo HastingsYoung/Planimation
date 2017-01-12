@@ -1,7 +1,3 @@
-* {
-  box-sizing: border-box;
-}
-
 .__loader {
   position: relative ;
   user-select: none ;
@@ -19,7 +15,7 @@
 .loader__mask {
   position: absolute;
   overflow: hidden;
-  transform: translateX(-100%);
+  transform: translateX(-50%);
   transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1);
   pointer-events: none;
 }

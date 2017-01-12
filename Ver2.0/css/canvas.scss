@@ -8,23 +8,25 @@ body {
   background-color: #fafafa;
   background-attachment: fixed;
   display: flex;
-  overflow-x: hidden;
+  flex: 1;
+  overflow: hidden;
+  height: 100%;
 }
 
-@mixin trans($time: 0.8s) {
-  -webkit-transition: all $time;
-  -moz-transition: all $time;
-  -ms-transition: all $time;
-  -o-transition: all $time;
-  transition: all $time;
+@mixin trans($time: 0.8s, $delay: 0s) {
+  -webkit-transition: all $time $delay;
+  -moz-transition: all $time $delay;
+  -ms-transition: all $time $delay;
+  -o-transition: all $time $delay;
+  transition: all $time $delay;
 }
 
-@mixin trans-cubit-bezier($time: 1s, $curve:cubic-bezier(.25, .1, .25, 1)) {
-  -webkit-transition: all $time $curve;
-  -moz-transition: all $time $curve;
-  -ms-transition: all $time $curve;
-  -o-transition: all $time $curve;
-  transition: all $time $curve;
+@mixin trans-cubit-bezier($time: 1s, $curve:cubic-bezier(.25, .1, .25, 1),$delay: 0s) {
+  -webkit-transition: all $time $curve $delay;
+  -moz-transition: all $time $curve $delay;
+  -ms-transition: all $time $curve $delay;
+  -o-transition: all $time $curve $delay;
+  transition: all $time $curve $delay;
 }
 
 .side_menu {
@@ -33,11 +35,12 @@ body {
   box-shadow: 0 0 5px white;
   border-right: 5px solid white;
   display: flex;
-  flex: 3;
+  flex: 10;
   flex-flow: column;
   align-items: stretch;
+  height: 100vh;
   .title {
-    flex: 3;
+    flex: 2;
     cursor: default;
     background-color: #212121;
     color: #fff;
@@ -95,10 +98,12 @@ body {
 
   .preload {
     display: flex;
-    flex: 8;
+    flex: 16;
     flex-flow: row;
     flex-wrap: wrap;
     position: relative;
+    align-self: stretch;
+    height: 100%;
     top: 0;
     left: 0;
     padding: 15px 15px;
@@ -138,6 +143,8 @@ body {
     }
   }
   .divider {
+    display: flex;
+    position: relative;
     content: "";
     height: 1px;
     background-color: darkgray;
@@ -146,7 +153,7 @@ body {
   }
   .extensive {
     display: flex;
-    flex: 3;
+    flex: 8;
     position: relative;
     flex-flow: column;
     width: 100%;
@@ -169,34 +176,34 @@ body {
       position: relative;
       text-align: center;
       width: 160px;
-      height: 30px;
+      height: 35px;
       border-radius: 8px;
       font-weight: bolder;
       -moz-user-select: none;
       -webkit-user-select: none;
       cursor: pointer;
-      padding-top: 10px;
-
+      display: flex;
+      flex-flow: row;
       &:hover {
         span {
-          left: -72%;
+          transform: translateX(-100%);
           opacity: 0;
         }
-
         i {
-          width: 100%;
-          font-size: 20px;
+          font-size: 25px;
+          padding-right: 40%;
         }
       }
       span, i {
-        display: block;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         height: 100%;
         text-align: center;
-        position: absolute;
-        top: 25%;
+        position: relative;
       }
       span {
-        width: 72%;
+        flex: 7;
         text-transform: uppercase;
         left: 0;
         @include trans-cubit-bezier();
@@ -206,12 +213,12 @@ body {
           width: 2px;
           height: 70%;
           position: absolute;
-          left: 85%;
-          top: -5%;
+          left: 100%;
+          top: 15%;
         }
       }
       i {
-        width: 28%;
+        flex: 3;
         right: 0;
         @include trans-cubit-bezier();
         .fa {
@@ -235,115 +242,115 @@ body {
   }
 }
 
-@media (min-width: $screen-maximum) {
-  .side_menu {
-    width: 300px;
-    height: 100%;
-    .extensive {
-      .template_upload {
-        input {
-          height: 50px;
-        }
-      }
-    }
-    .preload {
-      //max-height: 500px;
-    }
-  }
-  .canvas_area {
-    .canvas {
-      height: 650px;
-    }
-  }
-}
+//@media (min-width: $screen-maximum) {
+//  .side_menu {
+//    width: 300px;
+//    height: 100%;
+//    .extensive {
+//      .template_upload {
+//        input {
+//          height: 50px;
+//        }
+//      }
+//    }
+//    .preload {
+//max-height: 500px;
+//  }
+//}
+//.canvas_area {
+//  .canvas {
+//    height: 650px;
+//  }
+//}
+//}
 
-@media (max-width: $screen-huge) {
-  .side_menu {
-    width: 260px;
-    height: 100%;
-    .extensive {
-      .template_upload {
-        input {
-          height: 40px;
-        }
-      }
-    }
-    .preload {
-      //max-height: 450px;
-    }
-  }
-  .canvas_area {
-    .canvas {
-      height: 600px;
-    }
-  }
-}
+//@media (max-width: $screen-huge) {
+//  .side_menu {
+//    width: 260px;
+//    height: 100%;
+//    .extensive {
+//      .template_upload {
+//        input {
+//          height: 40px;
+//        }
+//      }
+//    }
+//    .preload {
+//max-height: 450px;
+//  }
+//}
+//.canvas_area {
+//  .canvas {
+//    height: 600px;
+//  }
+//}
+//}
 
-@media (max-width: $screen-large) {
-  .side_menu {
-    width: 200px;
-    height: 100%;
-    .extensive {
-      .template_upload {
-        input {
-          height: 30px;
-        }
-      }
-    }
-    .preload {
-      //max-height: 400px;
-    }
-  }
-  .canvas_area {
-    .canvas {
-      height: 450px;
-    }
-  }
-}
+//@media (max-width: $screen-large) {
+//  .side_menu {
+//    width: 200px;
+//    height: 100%;
+//    .extensive {
+//      .template_upload {
+//        input {
+//          height: 30px;
+//        }
+//      }
+//    }
+//    .preload {
+//max-height: 400px;
+//  }
+//}
+//.canvas_area {
+//  .canvas {
+//    height: 450px;
+//  }
+//}
+//}
 
-@media (max-width: $screen-medium) {
-  .side_menu {
-    width: 150px;
-    height: 100%;
-    .extensive {
-      .template_upload {
-        input {
-          height: 25px;
-        }
-      }
-    }
-    .preload {
-      //max-height: 300px;
-    }
-  }
-  .canvas_area {
-    .canvas {
-      height: 350px;
-    }
-  }
-}
+//@media (max-width: $screen-medium) {
+//  .side_menu {
+//    width: 150px;
+//    height: 100%;
+//    .extensive {
+//      .template_upload {
+//        input {
+//          height: 25px;
+//        }
+//      }
+//    }
+//    .preload {
+//max-height: 300px;
+//  }
+//}
+//.canvas_area {
+//  .canvas {
+//    height: 350px;
+//  }
+//}
+//}
 
-@media (max-width: $screen-small) {
-  .side_menu {
-    width: 110px;
-    height: 100%;
-    .extensive {
-      .template_upload {
-        input {
-          height: 25px;
-        }
-      }
-    }
-    .preload {
-      //max-height: 250px;
-    }
-  }
-  .canvas_area {
-    .canvas {
-      height: 300px;
-    }
-  }
-}
+//@media (max-width: $screen-small) {
+//  .side_menu {
+//    width: 110px;
+//    height: 100%;
+//    .extensive {
+//      .template_upload {
+//        input {
+//          height: 25px;
+//        }
+//      }
+//    }
+//    .preload {
+//      //max-height: 250px;
+//    }
+//  }
+//  //.canvas_area {
+//  //  .canvas {
+//  //    height: 300px;
+//  //  }
+//  //}
+//}
 
 .canvas_area {
   display: flex;
@@ -352,15 +359,16 @@ body {
   position: relative;
   .canvas {
     width: calc(100vw - 340px);
-    height: calc(100vh - 180px);
+    height: 100%;
+    //height: calc(100vh - 180px);
     background-color: white;
     position: relative;
     overflow: hidden;
   }
   .axis {
     background-color: #24313C;
-    height: 120px;
-    width: calc(100vw - 340px);
+    height: 160px;
+    width: 100%;
     position: relative;
     overflow: auto;
     align-items: center;
@@ -445,42 +453,43 @@ body {
     background: transparent;
     filter: blur(3px);
     opacity: 0;
-    @include trans(1.5s);
+    @include trans(0.5s);
   }
   .modal_panel {
     background-color: white;
     position: absolute;
     left: 25%;
     top: 25%;
-    width: 5%;
-    height: 5%;
-    -webkit-border-radius: 3%;
-    -moz-border-radius: 3%;
-    border-radius: 3%;
+    width: 50%;
+    height: 50%;
+    transform: translateY(-100%);
     text-align: center;
     position: absolute;
     float: left;
     z-index: 1001;
+    opacity: 0;
+    box-shadow: 0 0 3px darkgray inset, 0 0 5px darkgray inset, 0 0 10px darkgray inset, 0 0 5px darkgray inset;
     * {
       opacity: 0;
     }
-    @include trans-cubit-bezier(1.2s);
+    @include trans-cubit-bezier(0.3s);
     .btn__close {
       float: right;
-      margin-left: 10px;
-      margin-right: 10px;
+      position: absolute;
+      right: 0;
+      margin: 5px;
       -webkit-user-select: none;
       -moz-user-select: none;
       -ms-user-select: none;
       user-select: none;
       cursor: pointer;
       .fa {
-        color: #000;
+        color: #ffffff;
       }
     }
     .btn__close:hover {
       .fa {
-        color: #1B1C1D;
+        color: #f3f3f3;
         -webkit-animation: rotate_animation 1s;
         -moz-animation: rotate_animation 1s;
         -o-animation: rotate_animation 1s;
@@ -492,17 +501,35 @@ body {
       flex-flow: column;
       align-items: center;
       justify-content: center;
+      width: 100%;
+      height: 100%;
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        background-color: #000000;
+        color: #ffffff;
+        font-size: 16px;
+        flex: 1;
+        cursor: default;
+        h3 {
+          margin: 5px 0;
+        }
+      }
       .content {
         display: flex;
         flex-flow: row;
         animation: delay_animation 1.5s;
         position: relative;
+        padding: 20px 10px 0 10px;
+        flex: 10;
         .tags {
           display: flex;
           flex: 3;
           flex-flow: column;
           align-items: center;
-          justify-content: center;
+          justify-content: flex-start;
           img {
             width: 100%;
             height: 100%;
@@ -588,7 +615,7 @@ body {
         }
         .description {
           display: flex;
-          flex: 1;
+          flex: 2;
           position: relative;
           flex-flow: column;
           align-items: center;
@@ -601,15 +628,13 @@ body {
             padding: 5px;
           }
           p {
-            font-size: 15px;
+            font-size: 12px;
             font-weight: 100;
             font-family: "Adobe Ming Std";
-            white-space: nowrap;
           }
         }
         .modal-divider {
           display: flex;
-          flex: 1;
           flex-flow: column;
           position: relative;
           margin: 0 30px;
@@ -629,14 +654,14 @@ body {
 
 .modal.active {
   visibility: visible;
+  @include trans();
   .modal_overlay {
     background: black;
     opacity: 0.7;
-    @include trans(1.5s);
   }
   .modal_panel {
-    width: 50%;
-    height: 50%;
+    transform: translateY(0%);
+    opacity: 1;
     * {
       opacity: 1;
     }

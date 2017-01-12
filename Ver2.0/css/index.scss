@@ -4,17 +4,13 @@ $large-size: 900;
 $medium-size: 600;
 $small-size: 400;
 
-html {
-  color: #FFF2F2;
-}
-
 html, body {
   background-color: black;
   width: 100%;
   height: 100%;
 }
 
-@mixin trans($time: 0.8s) {
+@mixin trans($time: 0.6s) {
   -webkit-transition: all $time;
   -moz-transition: all $time;
   -ms-transition: all $time;
@@ -27,7 +23,7 @@ html, body {
     position: relative;
     margin-top: $font-size/3;
     margin-bottom: $font-size/3;
-    text-shadow: 0px 0px $font-size/2 silver;
+    text-shadow: 0px 0px $font-size/5 silver;
     text-transform: uppercase;
     font-size: $font-size;
     text-align: center;
@@ -41,12 +37,10 @@ html, body {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    @include trans();
+    color: #ffffff;
   }
   .btn__start:hover {
-    @include trans();
-    font-size: $font-size * 1.2;
-    text-shadow: 0px 0px $font-size/3 silver;
+    transform: scale(1.15, 1.15);
   }
 }
 
@@ -87,7 +81,7 @@ html, body {
           position: absolute;
           right: 10px;
           bottom: 10px;
-          color: lawngreen;
+          color: limegreen;
           cursor: default;
         }
         .fa.fa-check-circle-o.invisible {
@@ -117,18 +111,27 @@ html, body {
 }
 
 body {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Vollkorn', serif;
+  //'Playfair Display', serif;
   font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
 
-  // add google box-flex in the future
   .column__flow {
+    display: flex;
     flex-flow: column;
-    @include btn__start(4em, 20em);
+    justify-content: center;
+    align-items: center;
+    @include btn__start(40px,20px);
     .__loader {
       font-size: 6rem;
+    }
+    .sub__header{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
     }
   }
 }
@@ -141,12 +144,12 @@ body {
   top: 0;
   left: 0;
   background-color: #2A1538;
-  padding:0;
+  padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   ul {
-    padding:0;
+    padding: 0;
     position: relative;
     width: 100%;
     height: 100%;
@@ -156,20 +159,26 @@ body {
     justify-content: center;
     margin-bottom: 20px;
     li {
-      height:100%;
+      height: 100%;
       text-align: center;
-      font-weight: 300;
-      font-size: large;
       margin-right: 20px;
       margin-left: 20px;
-      padding:10px;
+      padding: 0 10px;
       cursor: pointer;
-      color: white;
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      a {
+        text-align: center;
+        color: white;
+        font-weight: 300;
+        font-size: large;
+        color: white;
+        font-weight: 300;
+        text-decoration: none;
+      }
       @include trans(0.4s);
-      &:hover{
+      &:hover {
         @include trans(0.4s);
         background-color: #4a148c;
         border-radius: 5px;
@@ -203,7 +212,7 @@ body {
       -moz-animation-name: rotate_animation;
       -o-animation-name: rotate_animation;
       animation-name: rotate_animation;
-      animation-duration: 0.5s;
+      animation-duration: 0.3s;
       animation-timing-function: cubic-bezier(0.77, 0, 0.175, 1);
       animation-iteration-count: 1;
     }

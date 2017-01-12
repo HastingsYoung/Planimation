@@ -2,7 +2,9 @@ body {
   background-color: #fafafa;
   background-attachment: fixed;
   display: flex;
-  overflow-x: hidden; }
+  flex: 1;
+  overflow: hidden;
+  height: 100%; }
 
 .side_menu {
   position: relative;
@@ -10,11 +12,12 @@ body {
   box-shadow: 0 0 5px white;
   border-right: 5px solid white;
   display: flex;
-  flex: 3;
+  flex: 10;
   flex-flow: column;
-  align-items: stretch; }
+  align-items: stretch;
+  height: 100vh; }
   .side_menu .title {
-    flex: 3;
+    flex: 2;
     cursor: default;
     background-color: #212121;
     color: #fff;
@@ -53,34 +56,36 @@ body {
       border-bottom-right-radius: 6px;
       padding-left: 4px;
       padding-right: 4px;
-      -webkit-transition: all 0.8s;
-      -moz-transition: all 0.8s;
-      -ms-transition: all 0.8s;
-      -o-transition: all 0.8s;
-      transition: all 0.8s; }
+      -webkit-transition: all 0.8s 0s;
+      -moz-transition: all 0.8s 0s;
+      -ms-transition: all 0.8s 0s;
+      -o-transition: all 0.8s 0s;
+      transition: all 0.8s 0s; }
       .side_menu .tabs .tab:hover {
         font-weight: 400;
-        -webkit-transition: all 0.8s;
-        -moz-transition: all 0.8s;
-        -ms-transition: all 0.8s;
-        -o-transition: all 0.8s;
-        transition: all 0.8s;
+        -webkit-transition: all 0.8s 0s;
+        -moz-transition: all 0.8s 0s;
+        -ms-transition: all 0.8s 0s;
+        -o-transition: all 0.8s 0s;
+        transition: all 0.8s 0s;
         background-color: #5d4037; }
     .side_menu .tabs .tab.active {
       background-color: transparent;
       color: black;
       text-shadow: 0 0 10px rgba(240, 240, 240, 0.8);
-      -webkit-transition: all 0.8s;
-      -moz-transition: all 0.8s;
-      -ms-transition: all 0.8s;
-      -o-transition: all 0.8s;
-      transition: all 0.8s; }
+      -webkit-transition: all 0.8s 0s;
+      -moz-transition: all 0.8s 0s;
+      -ms-transition: all 0.8s 0s;
+      -o-transition: all 0.8s 0s;
+      transition: all 0.8s 0s; }
   .side_menu .preload {
     display: flex;
-    flex: 8;
+    flex: 16;
     flex-flow: row;
     flex-wrap: wrap;
     position: relative;
+    align-self: stretch;
+    height: 100%;
     top: 0;
     left: 0;
     padding: 15px 15px; }
@@ -111,6 +116,8 @@ body {
         transform: rotate(30deg);
         opacity: 0.9; }
   .side_menu .divider {
+    display: flex;
+    position: relative;
     content: "";
     height: 1px;
     background-color: darkgray;
@@ -118,7 +125,7 @@ body {
     margin: 5% 10%; }
   .side_menu .extensive {
     display: flex;
-    flex: 3;
+    flex: 8;
     position: relative;
     flex-flow: column;
     width: 100%; }
@@ -139,56 +146,58 @@ body {
       position: relative;
       text-align: center;
       width: 160px;
-      height: 30px;
+      height: 35px;
       border-radius: 8px;
       font-weight: bolder;
       -moz-user-select: none;
       -webkit-user-select: none;
       cursor: pointer;
-      padding-top: 10px; }
+      display: flex;
+      flex-flow: row; }
       .side_menu .extensive .btn:hover span {
-        left: -72%;
+        transform: translateX(-100%);
         opacity: 0; }
       .side_menu .extensive .btn:hover i {
-        width: 100%;
-        font-size: 20px; }
+        font-size: 25px;
+        padding-right: 40%; }
       .side_menu .extensive .btn span, .side_menu .extensive .btn i {
-        display: block;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         height: 100%;
         text-align: center;
-        position: absolute;
-        top: 25%; }
+        position: relative; }
       .side_menu .extensive .btn span {
-        width: 72%;
+        flex: 7;
         text-transform: uppercase;
         left: 0;
-        -webkit-transition: all 1s cubic-bezier(0.25, 0.1, 0.25, 1);
-        -moz-transition: all 1s cubic-bezier(0.25, 0.1, 0.25, 1);
-        -ms-transition: all 1s cubic-bezier(0.25, 0.1, 0.25, 1);
-        -o-transition: all 1s cubic-bezier(0.25, 0.1, 0.25, 1);
-        transition: all 1s cubic-bezier(0.25, 0.1, 0.25, 1); }
+        -webkit-transition: all 1s cubic-bezier(0.25, 0.1, 0.25, 1) 0s;
+        -moz-transition: all 1s cubic-bezier(0.25, 0.1, 0.25, 1) 0s;
+        -ms-transition: all 1s cubic-bezier(0.25, 0.1, 0.25, 1) 0s;
+        -o-transition: all 1s cubic-bezier(0.25, 0.1, 0.25, 1) 0s;
+        transition: all 1s cubic-bezier(0.25, 0.1, 0.25, 1) 0s; }
         .side_menu .extensive .btn span::after {
           content: '';
           background-color: rgba(255, 255, 255, 0.75);
           width: 2px;
           height: 70%;
           position: absolute;
-          left: 85%;
-          top: -5%; }
+          left: 100%;
+          top: 15%; }
       .side_menu .extensive .btn i {
-        width: 28%;
+        flex: 3;
         right: 0;
-        -webkit-transition: all 1s cubic-bezier(0.25, 0.1, 0.25, 1);
-        -moz-transition: all 1s cubic-bezier(0.25, 0.1, 0.25, 1);
-        -ms-transition: all 1s cubic-bezier(0.25, 0.1, 0.25, 1);
-        -o-transition: all 1s cubic-bezier(0.25, 0.1, 0.25, 1);
-        transition: all 1s cubic-bezier(0.25, 0.1, 0.25, 1); }
+        -webkit-transition: all 1s cubic-bezier(0.25, 0.1, 0.25, 1) 0s;
+        -moz-transition: all 1s cubic-bezier(0.25, 0.1, 0.25, 1) 0s;
+        -ms-transition: all 1s cubic-bezier(0.25, 0.1, 0.25, 1) 0s;
+        -o-transition: all 1s cubic-bezier(0.25, 0.1, 0.25, 1) 0s;
+        transition: all 1s cubic-bezier(0.25, 0.1, 0.25, 1) 0s; }
         .side_menu .extensive .btn i .fa {
-          -webkit-transition: all 1s cubic-bezier(0.25, 0.1, 0.25, 1);
-          -moz-transition: all 1s cubic-bezier(0.25, 0.1, 0.25, 1);
-          -ms-transition: all 1s cubic-bezier(0.25, 0.1, 0.25, 1);
-          -o-transition: all 1s cubic-bezier(0.25, 0.1, 0.25, 1);
-          transition: all 1s cubic-bezier(0.25, 0.1, 0.25, 1); }
+          -webkit-transition: all 1s cubic-bezier(0.25, 0.1, 0.25, 1) 0s;
+          -moz-transition: all 1s cubic-bezier(0.25, 0.1, 0.25, 1) 0s;
+          -ms-transition: all 1s cubic-bezier(0.25, 0.1, 0.25, 1) 0s;
+          -o-transition: all 1s cubic-bezier(0.25, 0.1, 0.25, 1) 0s;
+          transition: all 1s cubic-bezier(0.25, 0.1, 0.25, 1) 0s; }
     .side_menu .extensive .edit {
       color: whitesmoke;
       background-color: #006699; }
@@ -199,51 +208,6 @@ body {
       color: whitesmoke;
       background-color: #2e3032; }
 
-@media (min-width: 1201px) {
-  .side_menu {
-    width: 300px;
-    height: 100%; }
-    .side_menu .extensive .template_upload input {
-      height: 50px; }
-
-  .canvas_area .canvas {
-    height: 650px; } }
-@media (max-width: 1200px) {
-  .side_menu {
-    width: 260px;
-    height: 100%; }
-    .side_menu .extensive .template_upload input {
-      height: 40px; }
-
-  .canvas_area .canvas {
-    height: 600px; } }
-@media (max-width: 900px) {
-  .side_menu {
-    width: 200px;
-    height: 100%; }
-    .side_menu .extensive .template_upload input {
-      height: 30px; }
-
-  .canvas_area .canvas {
-    height: 450px; } }
-@media (max-width: 600px) {
-  .side_menu {
-    width: 150px;
-    height: 100%; }
-    .side_menu .extensive .template_upload input {
-      height: 25px; }
-
-  .canvas_area .canvas {
-    height: 350px; } }
-@media (max-width: 400px) {
-  .side_menu {
-    width: 110px;
-    height: 100%; }
-    .side_menu .extensive .template_upload input {
-      height: 25px; }
-
-  .canvas_area .canvas {
-    height: 300px; } }
 .canvas_area {
   display: flex;
   flex: 9;
@@ -251,14 +215,14 @@ body {
   position: relative; }
   .canvas_area .canvas {
     width: calc(100vw - 340px);
-    height: calc(100vh - 180px);
+    height: 100%;
     background-color: white;
     position: relative;
     overflow: hidden; }
   .canvas_area .axis {
     background-color: #24313C;
-    height: 120px;
-    width: calc(100vw - 340px);
+    height: 160px;
+    width: 100%;
     position: relative;
     overflow: auto;
     align-items: center;
@@ -272,25 +236,25 @@ body {
       width: 50px;
       padding: 15px;
       display: inline-block;
-      -webkit-transition: all 0.8s;
-      -moz-transition: all 0.8s;
-      -ms-transition: all 0.8s;
-      -o-transition: all 0.8s;
-      transition: all 0.8s; }
+      -webkit-transition: all 0.8s 0s;
+      -moz-transition: all 0.8s 0s;
+      -ms-transition: all 0.8s 0s;
+      -o-transition: all 0.8s 0s;
+      transition: all 0.8s 0s; }
       .canvas_area .axis .element:hover, .canvas_area .axis .element.active {
         background: #9fbfdf; }
       .canvas_area .axis .element:hover {
-        -webkit-transition: all 0.8s;
-        -moz-transition: all 0.8s;
-        -ms-transition: all 0.8s;
-        -o-transition: all 0.8s;
-        transition: all 0.8s; }
+        -webkit-transition: all 0.8s 0s;
+        -moz-transition: all 0.8s 0s;
+        -ms-transition: all 0.8s 0s;
+        -o-transition: all 0.8s 0s;
+        transition: all 0.8s 0s; }
       .canvas_area .axis .element.active {
-        -webkit-transition: all 0.8s;
-        -moz-transition: all 0.8s;
-        -ms-transition: all 0.8s;
-        -o-transition: all 0.8s;
-        transition: all 0.8s;
+        -webkit-transition: all 0.8s 0s;
+        -moz-transition: all 0.8s 0s;
+        -ms-transition: all 0.8s 0s;
+        -o-transition: all 0.8s 0s;
+        transition: all 0.8s 0s;
         z-index: 10; }
         .canvas_area .axis .element.active::after {
           content: '';
@@ -344,45 +308,46 @@ body {
     background: transparent;
     filter: blur(3px);
     opacity: 0;
-    -webkit-transition: all 1.5s;
-    -moz-transition: all 1.5s;
-    -ms-transition: all 1.5s;
-    -o-transition: all 1.5s;
-    transition: all 1.5s; }
+    -webkit-transition: all 0.5s 0s;
+    -moz-transition: all 0.5s 0s;
+    -ms-transition: all 0.5s 0s;
+    -o-transition: all 0.5s 0s;
+    transition: all 0.5s 0s; }
   .modal .modal_panel {
     background-color: white;
     position: absolute;
     left: 25%;
     top: 25%;
-    width: 5%;
-    height: 5%;
-    -webkit-border-radius: 3%;
-    -moz-border-radius: 3%;
-    border-radius: 3%;
+    width: 50%;
+    height: 50%;
+    transform: translateY(-100%);
     text-align: center;
     position: absolute;
     float: left;
     z-index: 1001;
-    -webkit-transition: all 1.2s cubic-bezier(0.25, 0.1, 0.25, 1);
-    -moz-transition: all 1.2s cubic-bezier(0.25, 0.1, 0.25, 1);
-    -ms-transition: all 1.2s cubic-bezier(0.25, 0.1, 0.25, 1);
-    -o-transition: all 1.2s cubic-bezier(0.25, 0.1, 0.25, 1);
-    transition: all 1.2s cubic-bezier(0.25, 0.1, 0.25, 1); }
+    opacity: 0;
+    box-shadow: 0 0 3px darkgray inset, 0 0 5px darkgray inset, 0 0 10px darkgray inset, 0 0 5px darkgray inset;
+    -webkit-transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1) 0s;
+    -moz-transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1) 0s;
+    -ms-transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1) 0s;
+    -o-transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1) 0s;
+    transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1) 0s; }
     .modal .modal_panel * {
       opacity: 0; }
     .modal .modal_panel .btn__close {
       float: right;
-      margin-left: 10px;
-      margin-right: 10px;
+      position: absolute;
+      right: 0;
+      margin: 5px;
       -webkit-user-select: none;
       -moz-user-select: none;
       -ms-user-select: none;
       user-select: none;
       cursor: pointer; }
       .modal .modal_panel .btn__close .fa {
-        color: #000; }
+        color: #ffffff; }
     .modal .modal_panel .btn__close:hover .fa {
-      color: #1B1C1D;
+      color: #f3f3f3;
       -webkit-animation: rotate_animation 1s;
       -moz-animation: rotate_animation 1s;
       -o-animation: rotate_animation 1s;
@@ -391,18 +356,34 @@ body {
       display: flex;
       flex-flow: column;
       align-items: center;
-      justify-content: center; }
+      justify-content: center;
+      width: 100%;
+      height: 100%; }
+      .modal .modal_panel .model header, .modal .modal_panel .action header, .modal .modal_panel .predicate header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        background-color: #000000;
+        color: #ffffff;
+        font-size: 16px;
+        flex: 1;
+        cursor: default; }
+        .modal .modal_panel .model header h3, .modal .modal_panel .action header h3, .modal .modal_panel .predicate header h3 {
+          margin: 5px 0; }
       .modal .modal_panel .model .content, .modal .modal_panel .action .content, .modal .modal_panel .predicate .content {
         display: flex;
         flex-flow: row;
         animation: delay_animation 1.5s;
-        position: relative; }
+        position: relative;
+        padding: 20px 10px 0 10px;
+        flex: 10; }
         .modal .modal_panel .model .content .tags, .modal .modal_panel .action .content .tags, .modal .modal_panel .predicate .content .tags {
           display: flex;
           flex: 3;
           flex-flow: column;
           align-items: center;
-          justify-content: center; }
+          justify-content: flex-start; }
           .modal .modal_panel .model .content .tags img, .modal .modal_panel .action .content .tags img, .modal .modal_panel .predicate .content .tags img {
             width: 100%;
             height: 100%;
@@ -446,19 +427,19 @@ body {
               font-size: 14px;
               border-radius: 10px;
               background-color: #f5f5f5;
-              -webkit-transition: all 0.3s;
-              -moz-transition: all 0.3s;
-              -ms-transition: all 0.3s;
-              -o-transition: all 0.3s;
-              transition: all 0.3s; }
+              -webkit-transition: all 0.3s 0s;
+              -moz-transition: all 0.3s 0s;
+              -ms-transition: all 0.3s 0s;
+              -o-transition: all 0.3s 0s;
+              transition: all 0.3s 0s; }
               .modal .modal_panel .model .content .tags span.modal-btns button:hover, .modal .modal_panel .action .content .tags span.modal-btns button:hover, .modal .modal_panel .predicate .content .tags span.modal-btns button:hover {
                 background-color: #000000;
                 color: #ffffff;
-                -webkit-transition: all 0.3s;
-                -moz-transition: all 0.3s;
-                -ms-transition: all 0.3s;
-                -o-transition: all 0.3s;
-                transition: all 0.3s; }
+                -webkit-transition: all 0.3s 0s;
+                -moz-transition: all 0.3s 0s;
+                -ms-transition: all 0.3s 0s;
+                -o-transition: all 0.3s 0s;
+                transition: all 0.3s 0s; }
           .modal .modal_panel .model .content .tags .sub_header, .modal .modal_panel .action .content .tags .sub_header, .modal .modal_panel .predicate .content .tags .sub_header {
             display: flex;
             flex-wrap: wrap;
@@ -474,22 +455,22 @@ body {
               background-color: gainsboro;
               font-size: 13px;
               border-radius: 3px;
-              -webkit-transition: all 0.8s;
-              -moz-transition: all 0.8s;
-              -ms-transition: all 0.8s;
-              -o-transition: all 0.8s;
-              transition: all 0.8s; }
+              -webkit-transition: all 0.8s 0s;
+              -moz-transition: all 0.8s 0s;
+              -ms-transition: all 0.8s 0s;
+              -o-transition: all 0.8s 0s;
+              transition: all 0.8s 0s; }
               .modal .modal_panel .model .content .tags .sub_header span:hover, .modal .modal_panel .action .content .tags .sub_header span:hover, .modal .modal_panel .predicate .content .tags .sub_header span:hover {
                 background-color: #1B1C1D;
                 color: #fff;
-                -webkit-transition: all 0.8s;
-                -moz-transition: all 0.8s;
-                -ms-transition: all 0.8s;
-                -o-transition: all 0.8s;
-                transition: all 0.8s; }
+                -webkit-transition: all 0.8s 0s;
+                -moz-transition: all 0.8s 0s;
+                -ms-transition: all 0.8s 0s;
+                -o-transition: all 0.8s 0s;
+                transition: all 0.8s 0s; }
         .modal .modal_panel .model .content .description, .modal .modal_panel .action .content .description, .modal .modal_panel .predicate .content .description {
           display: flex;
-          flex: 1;
+          flex: 2;
           position: relative;
           flex-flow: column;
           align-items: center;
@@ -501,13 +482,11 @@ body {
             margin: 5px;
             padding: 5px; }
           .modal .modal_panel .model .content .description p, .modal .modal_panel .action .content .description p, .modal .modal_panel .predicate .content .description p {
-            font-size: 15px;
+            font-size: 12px;
             font-weight: 100;
-            font-family: "Adobe Ming Std";
-            white-space: nowrap; }
+            font-family: "Adobe Ming Std"; }
         .modal .modal_panel .model .content .modal-divider, .modal .modal_panel .action .content .modal-divider, .modal .modal_panel .predicate .content .modal-divider {
           display: flex;
-          flex: 1;
           flex-flow: column;
           position: relative;
           margin: 0 30px;
@@ -520,23 +499,23 @@ body {
   box-shadow: 0 0 10px #1a69a4; }
 
 .modal.active {
-  visibility: visible; }
+  visibility: visible;
+  -webkit-transition: all 0.8s 0s;
+  -moz-transition: all 0.8s 0s;
+  -ms-transition: all 0.8s 0s;
+  -o-transition: all 0.8s 0s;
+  transition: all 0.8s 0s; }
   .modal.active .modal_overlay {
     background: black;
-    opacity: 0.7;
-    -webkit-transition: all 1.5s;
-    -moz-transition: all 1.5s;
-    -ms-transition: all 1.5s;
-    -o-transition: all 1.5s;
-    transition: all 1.5s; }
+    opacity: 0.7; }
   .modal.active .modal_panel {
-    width: 50%;
-    height: 50%;
-    -webkit-transition: all 0.8s;
-    -moz-transition: all 0.8s;
-    -ms-transition: all 0.8s;
-    -o-transition: all 0.8s;
-    transition: all 0.8s; }
+    transform: translateY(0%);
+    opacity: 1;
+    -webkit-transition: all 0.8s 0s;
+    -moz-transition: all 0.8s 0s;
+    -ms-transition: all 0.8s 0s;
+    -o-transition: all 0.8s 0s;
+    transition: all 0.8s 0s; }
     .modal.active .modal_panel * {
       opacity: 1; }
 

@@ -1,11 +1,7 @@
-* {
-  box-sizing: border-box; }
-
 .__loader {
   position: relative;
   user-select: none;
-  cursor: pointer;
-  color: darkgoldenrod; }
+  cursor: pointer; }
 
 .__loader:hover .loader__mask {
   transform: translateX(0); }
@@ -16,7 +12,7 @@
 .loader__mask {
   position: absolute;
   overflow: hidden;
-  transform: translateX(-100%);
+  transform: translateX(-50%);
   transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1);
   pointer-events: none; }
 

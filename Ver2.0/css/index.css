@@ -1,26 +1,26 @@
-html {
-  color: #FFF2F2; }
-
 html, body {
   background-color: black;
   width: 100%;
   height: 100%; }
 
 body {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Vollkorn', serif;
   font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center; }
   body .column__flow {
-    flex-flow: column; }
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center; }
     body .column__flow .btn__start {
       position: relative;
-      margin-top: 1.33333em;
-      margin-bottom: 1.33333em;
-      text-shadow: 0px 0px 2em silver;
+      margin-top: 13.33333px;
+      margin-bottom: 13.33333px;
+      text-shadow: 0px 0px 8px silver;
       text-transform: uppercase;
-      font-size: 4em;
+      font-size: 40px;
       text-align: center;
       cursor: pointer;
       -webkit-transition: font-size 0.5s;
@@ -32,21 +32,16 @@ body {
       -moz-user-select: none;
       -ms-user-select: none;
       user-select: none;
-      -webkit-transition: all 0.8s;
-      -moz-transition: all 0.8s;
-      -ms-transition: all 0.8s;
-      -o-transition: all 0.8s;
-      transition: all 0.8s; }
+      color: #ffffff; }
     body .column__flow .btn__start:hover {
-      -webkit-transition: all 0.8s;
-      -moz-transition: all 0.8s;
-      -ms-transition: all 0.8s;
-      -o-transition: all 0.8s;
-      transition: all 0.8s;
-      font-size: 4.8em;
-      text-shadow: 0px 0px 1.33333em silver; }
+      transform: scale(1.15, 1.15); }
     body .column__flow .__loader {
       font-size: 6rem; }
+    body .column__flow .sub__header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff; }
 
 .nav_bar {
   float: left;
@@ -73,13 +68,10 @@ body {
     .nav_bar ul li {
       height: 100%;
       text-align: center;
-      font-weight: 300;
-      font-size: large;
       margin-right: 20px;
       margin-left: 20px;
-      padding: 10px;
+      padding: 0 10px;
       cursor: pointer;
-      color: white;
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -88,6 +80,14 @@ body {
       -ms-transition: all 0.4s;
       -o-transition: all 0.4s;
       transition: all 0.4s; }
+      .nav_bar ul li a {
+        text-align: center;
+        color: white;
+        font-weight: 300;
+        font-size: large;
+        color: white;
+        font-weight: 300;
+        text-decoration: none; }
       .nav_bar ul li:hover {
         -webkit-transition: all 0.4s;
         -moz-transition: all 0.4s;
@@ -115,7 +115,7 @@ body {
   -moz-animation-name: rotate_animation;
   -o-animation-name: rotate_animation;
   animation-name: rotate_animation;
-  animation-duration: 0.5s;
+  animation-duration: 0.3s;
   animation-timing-function: cubic-bezier(0.77, 0, 0.175, 1);
   animation-iteration-count: 1; }
 .modal .actions {
@@ -154,11 +154,11 @@ body {
       display: flex;
       align-items: center;
       justify-content: center;
-      -webkit-transition: all 0.8s;
-      -moz-transition: all 0.8s;
-      -ms-transition: all 0.8s;
-      -o-transition: all 0.8s;
-      transition: all 0.8s; }
+      -webkit-transition: all 0.6s;
+      -moz-transition: all 0.6s;
+      -ms-transition: all 0.6s;
+      -o-transition: all 0.6s;
+      transition: all 0.6s; }
       .uploader .upload_segment .file_zone .fa.fa-file-text {
         color: rgba(138, 138, 138, 0.7);
         cursor: default; }
@@ -167,7 +167,7 @@ body {
         position: absolute;
         right: 10px;
         bottom: 10px;
-        color: lawngreen;
+        color: limegreen;
         cursor: default; }
       .uploader .upload_segment .file_zone .fa.fa-check-circle-o.invisible {
         display: none; }
@@ -184,11 +184,11 @@ body {
         position: absolute;
         filter: alpha(opacity=0); }
       .uploader .upload_segment .file_zone:hover {
-        -webkit-transition: all 0.8s;
-        -moz-transition: all 0.8s;
-        -ms-transition: all 0.8s;
-        -o-transition: all 0.8s;
-        transition: all 0.8s;
+        -webkit-transition: all 0.6s;
+        -moz-transition: all 0.6s;
+        -ms-transition: all 0.6s;
+        -o-transition: all 0.6s;
+        transition: all 0.6s;
         box-shadow: 0 0 8px black; }
 
 /*# sourceMappingURL=index.css.map */
