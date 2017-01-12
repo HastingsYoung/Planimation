@@ -32,14 +32,14 @@ var initialMappings = [{
         return {
             id: id,
             x: o2.x,
-            y: o2.y + 30
+            y: o2.y + 60
         };
     },
     false_func: function false_func(id, o1, o2) {
         return {
             id: id,
-            x: o2.x - 30,
-            y: o2.y - 30
+            x: o2.x - 60,
+            y: o2.y - 60
         };
     }
 }, {
@@ -47,15 +47,15 @@ var initialMappings = [{
     true_func: function true_func(id, o1) {
         return {
             id: id,
-            x: 250,
-            y: 150
+            x: 250 + Math.random() * 40,
+            y: 150 + Math.random() * 40
         };
     },
     false_func: function false_func(id, o1) {
         return {
             id: id,
-            x: 300,
-            y: 150
+            x: o1.x - 50,
+            y: o1.y - 50
         };
     }
 }, {
@@ -63,14 +63,14 @@ var initialMappings = [{
     true_func: function true_func(id, o1) {
         return {
             id: id,
-            x: o1.x - 80,
+            x: o1.x - 50,
             y: o1.y
         };
     },
     false_func: function false_func(id, o1) {
         return {
             id: id,
-            x: o1.x + 80,
+            x: o1.x + 50,
             y: o1.y
         };
     }
@@ -95,15 +95,15 @@ var initialMappings = [{
     true_func: function true_func(id, o1) {
         return {
             id: id,
-            x: 200,
-            y: 150
+            x: o1.x,
+            y: o1.y + 100
         };
     },
     false_func: function false_func(id, o1) {
         return {
             id: id,
-            x: 200,
-            y: 50
+            x: o1.x,
+            y: o1.y - 100
         };
     }
 }];
