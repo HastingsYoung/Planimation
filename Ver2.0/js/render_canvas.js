@@ -302,9 +302,14 @@ class Component {
 
 class Model extends Component {
 
+    constructor(props) {
+        super(props);
+        this.obj = JSON.parse(this.node.querySelector("input").value);
+    }
+
     renderModal(parentNode) {
 
-        var obj = JSON.parse(this.node.querySelector("input").value);
+        var obj = this.obj;
         var tags = "";
         for (var t in obj.data.domaintags) {
             tags += "<span>" + obj.data.domaintags[t] + "</span>";
@@ -314,11 +319,28 @@ class Model extends Component {
             "</h3></header><div class='content'><div class='tags'>" + "<img src='" + obj.data.logo + "' alt='No Image Available'>" +
             "<div class='sub_header'><h5>Domain Type: </h5>" + "<span>" + obj.data.domaintype + "</span>" +
             "</div><div class='sub_header'><h5>Domain Tags: </h5>" + tags + "</div>" +
-            "</div><div class='description'><h5>Description: </h5><p>" + obj.data.domaindescription + "</p></div></div></div>";
-        if (parentNode)
+            "</div><div class='description'><h5>Description: </h5><p>" + obj.data.domaindescription + "</p></div></div>" +
+            "<span class='modal-btns'><div class='file-upload-btn'><input type='file'/><span>UPLOAD IMAGE</span></div></span></div>";
+        let _this = this;
+        if (parentNode) {
             parentNode.appendChild(nodeContent);
-        else if (this.modalSelector)
+            parentNode.querySelector("input").addEventListener("change", function (evt) {
+                previewImage(_this.node.querySelector("img"), evt.target.files[0], function (imgLink) {
+                    _this.obj.data.logo = imgLink;
+                });
+                previewImage(parentNode.querySelector("img"), evt.target.files[0]);
+            });
+        }
+        else if (this.modalSelector) {
             document.querySelector(this.modalSelector).appendChild(this.parseDom(nodeContent));
+            document.querySelector(this.modalSelector).querySelector("input").addEventListener("change", function (evt) {
+                previewImage(_this.node.querySelector("img"), evt.target.files[0], function (imgLink) {
+                    _this.obj.data.logo = imgLink;
+                });
+                previewImage(document.querySelector(_this.modalSelector).querySelector("img"), files[0]);
+            });
+        }
+
     }
 
     render() {
@@ -328,7 +350,7 @@ class Model extends Component {
             event.target.className += " dragging";
         }, false);
 
-        var obj = JSON.parse(this.node.querySelector("input").value);
+        var obj = this.obj;
 
         const offsetWidth = document.querySelector(".side_menu").offsetWidth;
         const offsetHeight = this.node.offsetHeight;
@@ -552,7 +574,7 @@ for (var i = 0; i < problem[0].names.length; i++) {
         name: problem[0].names[i],
         parentSelector: '.preload',
         modalSelector: '.modal > .modal_panel > .modal_content',
-        id: "block-" + problem[0].names[i],
+        id: "object-" + problem[0].names[i],
         node: template.cloneNode(true)
     }));
 }
@@ -658,7 +680,7 @@ var Animation = (function () {
                 return "translate(" + d.x + "," + d.y + ")";
             });
             group.append("image").attr("width", sts.width).attr("height", sts.height).attr("href", function (d, i) {
-                var obj = JSON.parse(models[i].node.querySelector("input").value);
+                var obj = models[i].obj;
                 return obj.data.logo;
             });
             group.append("text").attr("dx", function (d, i) {
@@ -1026,6 +1048,26 @@ var AxisPlayer = (function () {
         play: _play
     }
 }());
+
+const previewImage = (imgSelector, file, callback)=> {
+    if (!imgSelector || !file)
+        throw new Error("No Selector Error");
+
+    let preview = null;
+    if (typeof imgSelector == "string")
+        preview = document.querySelector(imgSelector);
+    else if (typeof imgSelector == "object")
+        preview = imgSelector;
+    else throw new Error("Selector Type not Recognizable Error");
+    let reader = new FileReader();
+    reader.addEventListener("load", function () {
+        preview.src = reader.result;
+        callback(reader.result);
+    }, false);
+    if (file) {
+        reader.readAsDataURL(file);
+    }
+}
 
 renderInfrastructure.renderAll();
 

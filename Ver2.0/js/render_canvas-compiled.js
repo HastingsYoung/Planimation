@@ -1,5 +1,7 @@
 "use strict";
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
@@ -330,23 +332,43 @@ var Component = function () {
 var Model = function (_Component) {
     _inherits(Model, _Component);
 
-    function Model() {
+    function Model(props) {
         _classCallCheck(this, Model);
 
-        return _possibleConstructorReturn(this, (Model.__proto__ || Object.getPrototypeOf(Model)).apply(this, arguments));
+        var _this2 = _possibleConstructorReturn(this, (Model.__proto__ || Object.getPrototypeOf(Model)).call(this, props));
+
+        _this2.obj = JSON.parse(_this2.node.querySelector("input").value);
+        return _this2;
     }
 
     _createClass(Model, [{
         key: "renderModal",
         value: function renderModal(parentNode) {
 
-            var obj = JSON.parse(this.node.querySelector("input").value);
+            var obj = this.obj;
             var tags = "";
             for (var t in obj.data.domaintags) {
                 tags += "<span>" + obj.data.domaintags[t] + "</span>";
             }
-            var nodeContent = "<div class='model'>" + "<header><h3 class='modelid'>Model Id: " + this.id + "</h3></header><div class='content'><div class='tags'>" + "<img src='" + obj.data.logo + "' alt='No Image Available'>" + "<div class='sub_header'><h5>Domain Type: </h5>" + "<span>" + obj.data.domaintype + "</span>" + "</div><div class='sub_header'><h5>Domain Tags: </h5>" + tags + "</div>" + "</div><div class='description'><h5>Description: </h5><p>" + obj.data.domaindescription + "</p></div></div></div>";
-            if (parentNode) parentNode.appendChild(nodeContent);else if (this.modalSelector) document.querySelector(this.modalSelector).appendChild(this.parseDom(nodeContent));
+            var nodeContent = "<div class='model'>" + "<header><h3 class='modelid'>Model Id: " + this.id + "</h3></header><div class='content'><div class='tags'>" + "<img src='" + obj.data.logo + "' alt='No Image Available'>" + "<div class='sub_header'><h5>Domain Type: </h5>" + "<span>" + obj.data.domaintype + "</span>" + "</div><div class='sub_header'><h5>Domain Tags: </h5>" + tags + "</div>" + "</div><div class='description'><h5>Description: </h5><p>" + obj.data.domaindescription + "</p></div></div>" + "<span class='modal-btns'><div class='file-upload-btn'><input type='file'/><span>UPLOAD IMAGE</span></div></span></div>";
+            var _this = this;
+            if (parentNode) {
+                parentNode.appendChild(nodeContent);
+                parentNode.querySelector("input").addEventListener("change", function (evt) {
+                    previewImage(_this.node.querySelector("img"), evt.target.files[0], function (imgLink) {
+                        _this.obj.data.logo = imgLink;
+                    });
+                    previewImage(parentNode.querySelector("img"), evt.target.files[0]);
+                });
+            } else if (this.modalSelector) {
+                document.querySelector(this.modalSelector).appendChild(this.parseDom(nodeContent));
+                document.querySelector(this.modalSelector).querySelector("input").addEventListener("change", function (evt) {
+                    previewImage(_this.node.querySelector("img"), evt.target.files[0], function (imgLink) {
+                        _this.obj.data.logo = imgLink;
+                    });
+                    previewImage(document.querySelector(_this.modalSelector).querySelector("img"), files[0]);
+                });
+            }
         }
     }, {
         key: "render",
@@ -357,7 +379,7 @@ var Model = function (_Component) {
                 event.target.className += " dragging";
             }, false);
 
-            var obj = JSON.parse(this.node.querySelector("input").value);
+            var obj = this.obj;
 
             var offsetWidth = document.querySelector(".side_menu").offsetWidth;
             var offsetHeight = this.node.offsetHeight;
@@ -601,7 +623,7 @@ for (var i = 0; i < problem[0].names.length; i++) {
         name: problem[0].names[i],
         parentSelector: '.preload',
         modalSelector: '.modal > .modal_panel > .modal_content',
-        id: "block-" + problem[0].names[i],
+        id: "object-" + problem[0].names[i],
         node: template.cloneNode(true)
     }));
 }
@@ -706,7 +728,7 @@ var Animation = function () {
                     return "translate(" + d.x + "," + d.y + ")";
                 });
                 group.append("image").attr("width", sts.width).attr("height", sts.height).attr("href", function (d, i) {
-                    var obj = JSON.parse(models[i].node.querySelector("input").value);
+                    var obj = models[i].obj;
                     return obj.data.logo;
                 });
                 group.append("text").attr("dx", function (d, i) {
@@ -1075,6 +1097,21 @@ var AxisPlayer = function () {
         play: _play
     };
 }();
+
+var previewImage = function previewImage(imgSelector, file, callback) {
+    if (!imgSelector || !file) throw new Error("No Selector Error");
+
+    var preview = null;
+    if (typeof imgSelector == "string") preview = document.querySelector(imgSelector);else if ((typeof imgSelector === "undefined" ? "undefined" : _typeof(imgSelector)) == "object") preview = imgSelector;else throw new Error("Selector Type not Recognizable Error");
+    var reader = new FileReader();
+    reader.addEventListener("load", function () {
+        preview.src = reader.result;
+        callback(reader.result);
+    }, false);
+    if (file) {
+        reader.readAsDataURL(file);
+    }
+};
 
 renderInfrastructure.renderAll();
 
