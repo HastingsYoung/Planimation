@@ -9,11 +9,15 @@
 <script>
     if (navigator.userAgent.indexOf("Firefox") > 0)
         alert("You're using Firefox browser, please go to 'about:config' and set <dom.webcomponents.enabled> to true for plugin use!")
+    if (navigator.userAgent.indexOf("Opera") > 0)
+        alert("You're using Opera browser, please go to 'about:config' and set <dom.webcomponents.enabled> to true for plugin use!")
+    if (navigator.userAgent.indexOf("MSIE") > 0 )
+        alert("Sorry, this service is currently not supported by IE Explorer, please switch to another browser!")
 </script>
 <link rel="import" href="templates/models/Block.html" type="text/html" id="basic_block">
 <link rel="import" href="templates/actions/BasicAction.html" type="text/html" id="basic_action">
 <link rel="import" href="templates/predicates/BasicPredicate.html" type="text/html" id="basic_predicate">
-<link rel="import" href="templates/preconditions/BasicPrecondition.html" type="text/html" id="basic_precondition">
+<link rel="import" href="templates/images/BasicImage.html" type="text/html" id="basic_image">
 <body>
 <div class="side_menu">
     <div class="title">
@@ -23,6 +27,7 @@
         <label id="models" class="tab active">Models</label>
         <label id="predicates" class="tab">Predicates</label>
         <label id="actions" class="tab">Actions</label>
+        <label id="images" class="tab">Images</label>
         <!--<label id="preconditions" class="tab">Preconditions</label>-->
     </div>
     <div class="preload">

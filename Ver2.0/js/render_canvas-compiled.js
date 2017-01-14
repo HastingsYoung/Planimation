@@ -28,20 +28,184 @@ console.log(solution);
 
 var animationFuncs = [];
 
+// trucks
+//const initialMappings = [{
+//    name: "at",
+//    true_func: function (id, o1, o2) {
+//        return {
+//            id: id,
+//            x: o2.x,
+//            y: o2.y
+//        }
+//    },
+//    false_func: function (id, o1, o2) {
+//        return {
+//            id: id,
+//            x: o2.x,
+//            y: o2.y - 20
+//        }
+//    }
+//}, {
+//    name: "in",
+//    true_func: function (id, o1, o2, o3) {
+//        return {
+//            id: id,
+//            x: o3 ? (o3.x + 10) : (o2.x + 10),
+//            y: o3 ? (o3.y + 10) : (o2.y + 10)
+//        }
+//    },
+//    false_func: function (id, o1, o2, o3) {
+//        return {
+//            id: id,
+//            x: o3 ? (o3.x - 10) : (o2.x - 10),
+//            y: o3 ? (o3.y - 10) : (o2.y - 10)
+//        }
+//    }
+//}, {
+//    name: "connected",
+//    true_func: function (id, o1, o2) {
+//        return {
+//            id: id,
+//            x: o2.x - 40,
+//            y: o2.y
+//        }
+//    },
+//    false_func: function (id, o1, o2) {
+//        return {
+//            id: id,
+//            x: o2.x - 60,
+//            y: o2.y
+//        }
+//    }
+//}, {
+//    name: "free",
+//    true_func: function (id, o1, o2) {
+//        return {
+//            id: id,
+//            x: o1.x,
+//            y: o1.y
+//        }
+//    },
+//    false_func: function (id, o1, o2) {
+//        return {
+//            id: id,
+//            x: o1.x,
+//            y: o1.y
+//        }
+//    }
+//}, {
+//    name: "time-now",
+//    true_func: function (id, o1, o2) {
+//        return {
+//            id: id,
+//            x: o1.x,
+//            y: o1.y
+//        }
+//    },
+//    false_func: function (id, o1, o2) {
+//        return {
+//            id: id,
+//            x: o1.x,
+//            y: o1.y
+//        }
+//    }
+//}, {
+//    name: "next",
+//    true_func: function (id, o1, o2) {
+//        return {
+//            id: id,
+//            x: o1.x,
+//            y: o1.y
+//        }
+//    },
+//    false_func: function (id, o1, o2) {
+//        return {
+//            id: id,
+//            x: o1.x,
+//            y: o1.y
+//        }
+//    }
+//}, {
+//    name: "le",
+//    true_func: function (id, o1, o2) {
+//        return {
+//            id: id,
+//            x: o1.x,
+//            y: o1.y
+//        }
+//    },
+//    false_func: function (id, o1, o2) {
+//        return {
+//            id: id,
+//            x: o1.x,
+//            y: o1.y
+//        }
+//    }
+//}, {
+//    name: "delivered",
+//    true_func: function (id, o1, o2) {
+//        return {
+//            id: id,
+//            x: o2.x,
+//            y: o2.y
+//        }
+//    },
+//    false_func: function (id, o1, o2) {
+//        return {
+//            id: id,
+//            x: o1.x,
+//            y: o1.y
+//        }
+//    }
+//}, {
+//    name: "at-destination",
+//    true_func: function (id, o1, o2) {
+//        return {
+//            id: id,
+//            x: o2.x,
+//            y: o2.y
+//        }
+//    },
+//    false_func: function (id, o1, o2) {
+//        return {
+//            id: id,
+//            x: o1.x,
+//            y: o1.y
+//        }
+//    }
+//}, {
+//    name: "closer",
+//    true_func: function (id, o1, o2) {
+//        return {
+//            id: id,
+//            x: o1.x,
+//            y: o1.y
+//        }
+//    },
+//    false_func: function (id, o1, o2) {
+//        return {
+//            id: id,
+//            x: o1.x,
+//            y: o1.y
+//        }
+//    }
+//}];
+
+// blocks
 var initialMappings = [{
     name: "on",
     true_func: function true_func(id, o1, o2) {
         return {
             id: id,
             x: o2.x,
-            y: o2.y + 60
+            y: o2.y + 30
         };
     },
     false_func: function false_func(id, o1, o2) {
         return {
             id: id,
-            x: o2.x - 60,
-            y: o2.y - 60
+            x: o1.x - 20,
+            y: o1.y - 20
         };
     }
 }, {
@@ -49,8 +213,8 @@ var initialMappings = [{
     true_func: function true_func(id, o1) {
         return {
             id: id,
-            x: 250 + Math.random() * 40,
-            y: 150 + Math.random() * 40
+            x: 150 + Math.random() * 100,
+            y: 150 + Math.random() * 100
         };
     },
     false_func: function false_func(id, o1) {
@@ -65,15 +229,15 @@ var initialMappings = [{
     true_func: function true_func(id, o1) {
         return {
             id: id,
-            x: o1.x - 50,
-            y: o1.y
+            x: o1.x,
+            y: o1.y + 20
         };
     },
     false_func: function false_func(id, o1) {
         return {
             id: id,
-            x: o1.x + 50,
-            y: o1.y
+            x: o1.x,
+            y: o1.y - 20
         };
     }
 }, {
@@ -97,15 +261,15 @@ var initialMappings = [{
     true_func: function true_func(id, o1) {
         return {
             id: id,
-            x: o1.x,
-            y: o1.y + 100
+            x: o1.x + 120,
+            y: o1.y
         };
     },
     false_func: function false_func(id, o1) {
         return {
             id: id,
-            x: o1.x,
-            y: o1.y - 100
+            x: o1.x - 120,
+            y: o1.y
         };
     }
 }];
@@ -246,6 +410,13 @@ var TemplateFactory = function () {
     };
 }();
 
+/**
+ *  Components to be shown and operated on.
+ *  @render() render component to tabs
+ *  @resetClass() reset class name bound to component
+ *  @parseDom() parse string as DOM element
+ * */
+
 var Component = function () {
     function Component(props) {
         _classCallCheck(this, Component);
@@ -350,7 +521,7 @@ var Model = function (_Component) {
             for (var t in obj.data.domaintags) {
                 tags += "<span>" + obj.data.domaintags[t] + "</span>";
             }
-            var nodeContent = "<div class='model'>" + "<header><h3 class='modelid'>Model Id: " + this.id + "</h3></header><div class='content'><div class='tags'>" + "<img src='" + obj.data.logo + "' alt='No Image Available'>" + "<div class='sub_header'><h5>Domain Type: </h5>" + "<span>" + obj.data.domaintype + "</span>" + "</div><div class='sub_header'><h5>Domain Tags: </h5>" + tags + "</div>" + "</div><div class='description'><h5>Description: </h5><p>" + obj.data.domaindescription + "</p></div></div>" + "<span class='modal-btns'><div class='file-upload-btn'><input type='file'/><span>UPLOAD IMAGE</span></div></span></div>";
+            var nodeContent = "<div class='model'>" + "<header><h3 class='modelid'>Model Id: " + this.id + "</h3></header><div class='content'><div class='tags'>" + "<img src='" + obj.data.logo + "' alt='No Image Available'>" + "<div class='sub_header'><h5>Domain Type: </h5>" + "<span>" + obj.data.domaintype + "</span>" + "</div><div class='sub_header'><h5>Domain Tags: </h5>" + tags + "</div>" + "</div><div class='description'><h5>Description: </h5><p>" + obj.data.domaindescription + "</p></div></div>" + "<span class='modal-btns'><div class='file-upload-btn'><input type='file'/><span><i class='fa fa-cloud-upload'></i>Upload</span></div></span></div>";
             var _this = this;
             if (parentNode) {
                 parentNode.appendChild(nodeContent);
@@ -366,7 +537,7 @@ var Model = function (_Component) {
                     previewImage(_this.node.querySelector("img"), evt.target.files[0], function (imgLink) {
                         _this.obj.data.logo = imgLink;
                     });
-                    previewImage(document.querySelector(_this.modalSelector).querySelector("img"), files[0]);
+                    previewImage(document.querySelector(_this.modalSelector).querySelector("img"), evt.target.files[0]);
                 });
             }
         }
@@ -374,32 +545,32 @@ var Model = function (_Component) {
         key: "render",
         value: function render() {
             this.bindClass("selected");
-            this.node.addEventListener("dragstart", function (event) {
-                console.log("dragstart");
-                event.target.className += " dragging";
-            }, false);
+            //this.node.addEventListener("dragstart", function (event) {
+            //    console.log("dragstart");
+            //    event.target.className += " dragging";
+            //}, false);
+            //
+            //var obj = this.obj;
 
-            var obj = this.obj;
+            //const offsetWidth = document.querySelector(".side_menu").offsetWidth;
+            //const offsetHeight = this.node.offsetHeight;
 
-            var offsetWidth = document.querySelector(".side_menu").offsetWidth;
-            var offsetHeight = this.node.offsetHeight;
-
-            var _id = this.id;
-            this.node.addEventListener("dragend", function (event) {
-                console.log("dragend");
-                var reg = new RegExp('(\\s|^)' + "dragging" + '(\\s|$)');
-                event.target.className = event.target.className.replace(reg, ' ');
-
-                d3.select(".canvas > svg").append("image").attr("id", _id).classed("drag-ele", true).attr("width", 40).attr("height", 40).attr("href", obj.data.logo).attr("transform", function () {
-                    return "translate(" + (event.x - offsetWidth) + "," + (event.y - offsetHeight) + ")";
-                }).attr("fill", "#eee");
-                d3.select("#" + _id).data([{ x: event.x - offsetWidth, y: event.y - offsetHeight }]).call(drag);
-                event.stopPropagation();
-            }, false);
-
-            this.node.addEventListener("dragover", function (event) {
-                console.log("dragover");
-            }, false);
+            //const _id = this.id;
+            //this.node.addEventListener("dragend", function (event) {
+            //    console.log("dragend");
+            //    var reg = new RegExp('(\\s|^)' + "dragging" + '(\\s|$)');
+            //    event.target.className = event.target.className.replace(reg, ' ');
+            //
+            //    d3.select(".canvas > svg").append("image").attr("id", _id).classed("drag-ele", true).attr("width", 40).attr("height", 40).attr("href", obj.data.logo).attr("transform", function () {
+            //        return "translate(" + (event.x - offsetWidth) + "," + (event.y - offsetHeight) + ")";
+            //    }).attr("fill", "#eee");
+            //    d3.select("#" + _id).data([{x: event.x - offsetWidth, y: event.y - offsetHeight}]).call(drag);
+            //    event.stopPropagation();
+            //}, false);
+            //
+            //this.node.addEventListener("dragover", function (event) {
+            //    console.log("dragover");
+            //}, false);
         }
     }]);
 
@@ -481,10 +652,10 @@ var Predicate = function (_Component3) {
 
             var predicates = "(" + args.join(",") + ")";
 
-            var nodeContent = "<div class='predicate'>" + "<header><h3 class='name'>Predicate Name: " + this.data.name + "</h3></header>" + "<div class='content'><div class='tags'>" + "<div class='sub_header'><h5>Predicates: </h5>" + predicates + "</div>" + "<span><label><i class='fa fa-plus-square fa-2x' aria-hidden='true'></i></label><input class='predicate-true' placeholder='True Condition'/></span>" + "<span><label><i class='fa fa-minus-square fa-2x' aria-hidden='true'></i></label><input class='predicate-false' placeholder='False Condition' /></span><span class='modal-btns'>" + "<button class='btn-confirm'>Confirm</button><button class='btn-cancel'>Cancel</button></span>" + "</div><div class='modal-divider'></div><div class='description'><h4>Example</h4>" + "<p>x:x.x+y.x+10;y:x.y*10-y.y</p></div></div></div>";
+            var nodeContent = "<div class='predicate'>" + "<header><h3 class='name'>Predicate Name: " + this.data.name + "</h3></header>" + "<div class='content'><div class='tags'>" + "<div class='sub_header'><h5>Predicates: </h5>" + predicates + "</div>" + "<span><label><i class='fa fa-plus-square fa-2x' aria-hidden='true'></i></label><input class='predicate-true' placeholder='True Condition'/></span>" + "<span><label><i class='fa fa-minus-square fa-2x' aria-hidden='true'></i></label><input class='predicate-false' placeholder='False Condition' /></span><span class='modal-btns'>" + "<button id='modal-predicate-confirm' class='btn-confirm'>Confirm</button><button class='btn-cancel'>Cancel</button></span>" + "</div><div class='modal-divider'></div><div class='description'><h4>Example</h4>" + "<p>x:x.x+y.x+10;y:x.y*10-y.y</p></div></div></div>";
             if (parentNode) parentNode.appendChild(nodeContent);else if (this.modalSelector) document.querySelector(this.modalSelector).appendChild(this.parseDom(nodeContent));
             var _this = this;
-            $(".btn-confirm").click(function () {
+            $("#modal-predicate-confirm").click(function () {
                 var tValue = $(".predicate-true").val();
                 var fValue = $(".predicate-false").val();
                 var arrT = tValue.trim().split(";");
@@ -507,6 +678,91 @@ var Predicate = function (_Component3) {
     }]);
 
     return Predicate;
+}(Component);
+
+var Images = function (_Component4) {
+    _inherits(Images, _Component4);
+
+    function Images(props) {
+        _classCallCheck(this, Images);
+
+        var _this5 = _possibleConstructorReturn(this, (Images.__proto__ || Object.getPrototypeOf(Images)).call(this, props));
+
+        _this5.obj = JSON.parse(_this5.node.querySelector("input").value);
+        return _this5;
+    }
+
+    _createClass(Images, [{
+        key: "renderModal",
+        value: function renderModal(parentNode) {
+
+            var obj = this.obj;
+            var nodeContent = "<div class='model'>" + "<header><h3 class='modelid'>Image Id: " + this.id + "</h3></header><div class='content'><div class='content-left'>" + "<img src='" + obj.data.logo + "' alt='No Image Available'>" + "<span class='modal-btns'>" + "<div class='file-upload-btn modal-btn'><input type='file'/><span>Upload</span></div></span></div><div class='modal-divider'></div>" + "<div class='content-right'>" + "<span><label><i class='fa fa-arrows-h' aria-hidden='true'></i></label><input id='image-width' type='text' placeholder='Image Width'></span>" + "<span><label><i class='fa fa-arrows-v' aria-hidden='true'></i></label><input id='image-height' type='text' placeholder='Image Height'></span>" + "<span class='modal-btns'><button id='modal-image-confirm'>Confirm</button></span></div></div></div>";
+            var _this = this;
+            if (parentNode) {
+                parentNode.appendChild(nodeContent);
+                parentNode.querySelector("input").addEventListener("change", function (evt) {
+                    previewImage(_this.node.querySelector("img"), evt.target.files[0], function (imgLink) {
+                        _this.obj.data.logo = imgLink;
+                    });
+                    previewImage(parentNode.querySelector("img"), evt.target.files[0]);
+                });
+            } else if (this.modalSelector) {
+                document.querySelector(this.modalSelector).appendChild(this.parseDom(nodeContent));
+                document.querySelector(this.modalSelector).querySelector("input").addEventListener("change", function (evt) {
+                    previewImage(_this.node.querySelector("img"), evt.target.files[0], function (imgLink) {
+                        _this.obj.data.logo = imgLink;
+                    });
+                    previewImage(document.querySelector(_this.modalSelector).querySelector("img"), evt.target.files[0]);
+                });
+            }
+            $("#modal-image-confirm").click(function () {
+                var width = $("#image-width").val();
+                var height = $("#image-height").val();
+                if (checkNum(width) && checkNum(height)) {
+                    _this.obj.data.width = width;
+                    _this.obj.data.height = height;
+                    $(".modal").removeClass("active");
+                } else {
+                    alert("Please input number as reuqired!");
+                }
+            });
+        }
+    }, {
+        key: "render",
+        value: function render() {
+            this.node = this.node.cloneNode(true);
+            this.bindClass("selected");
+            this.node.addEventListener("dragstart", function (event) {
+                console.log("dragstart");
+                event.target.className += " dragging";
+            }, false);
+
+            var obj = this.obj;
+
+            var offsetWidth = document.querySelector(".side_menu").offsetWidth;
+            var offsetHeight = this.node.offsetHeight;
+
+            var _id = this.id;
+            this.node.addEventListener("dragend", function (event) {
+                console.log("dragend");
+                var reg = new RegExp('(\\s|^)' + "dragging" + '(\\s|$)');
+                event.target.className = event.target.className.replace(reg, ' ');
+
+                d3.select(".canvas > svg").append("image").attr("id", _id).classed("drag-ele", true).attr("width", obj.data.width).attr("height", obj.data.height).attr("href", obj.data.logo).attr("transform", function () {
+                    return "translate(" + (event.x - offsetWidth) + "," + (event.y - offsetHeight) + ")";
+                }).attr("fill", "#eee");
+                d3.select("#" + _id).data([{ x: event.x - offsetWidth, y: event.y - offsetHeight }]).call(drag);
+                event.stopPropagation();
+            }, false);
+
+            this.node.addEventListener("dragover", function (event) {
+                console.log("dragover");
+            }, false);
+        }
+    }]);
+
+    return Images;
 }(Component);
 
 /**
@@ -654,6 +910,20 @@ for (var i in domain[2]) {
     }));
 }
 
+fct.importSelector("#basic_image").setPrototype();
+template = fct.newTemplate();
+var images = [];
+for (var i = 0; i < 10; i++) {
+    images.push(new Images({
+        name: "image-" + i,
+        parentSelector: '.preload',
+        modalSelector: '.modal > .modal_panel > .modal_content',
+        node: template.cloneNode(true),
+        id: "image-" + i,
+        data: {}
+    }));
+}
+
 /**
  *  @steps animation data
  *  #example
@@ -710,7 +980,7 @@ var Animation = function () {
             fontSize: "15px",
             dx: 0,
             dy: _settings.MEDIUM + 20,
-            speed: _settings.PLAY_FAST
+            speed: _settings.PLAY_SLOW
         };
         if (options) {
             sts = Object.assign({}, sts, options);
@@ -754,6 +1024,7 @@ var Animation = function () {
             if (steps[s].length > 0) {
                 for (var o in steps[s]) {
                     d3.select("#" + steps[s][o].id).transition().attr("transform", function (d, i) {
+
                         return "translate(" + steps[s][o].x + "," + steps[s][o].y + ")";
                     }).delay(s * sts.speed);
                 }
@@ -775,13 +1046,18 @@ var Animation = function () {
     };
 }();
 
+// todo this if the domain change order of arguments
 var ArgsToIndexMapper = function ArgsToIndexMapper(arg) {
     var mapper = { "?x": 0, "?y": 1, "?z": 2 };
-    return mapper[arg];
+    if (mapper[arg] || mapper[arg] == 0) return mapper[arg];
+    throw new Error("Argument " + arg + " is not recognizable: Argument order need to be changed if domain is using special order of letters other than alphabet!");
 };
 
 /**
  *  transform raw data to animation objects
+ *  @getInit()
+ *  @initialte()
+ *  @transform()
  * */
 var Transformer = function () {
     var _initialStates = {};
@@ -837,21 +1113,22 @@ var Transformer = function () {
 
         // base cases
         for (var i in init) {
-            if (init[i].args.length == 1) {
-                _initialStates[init[i].args[0]] = {
-                    id: init[i].args[0],
-                    x: 500,
-                    y: 50
-                };
-            }
+            //if (init[i].args.length == 1) {
+            if (init[i].args[0]) _initialStates[init[i].args[0]] = {
+                id: init[i].args[0],
+                x: 500,
+                y: 50
+            };
+            //}
         }
+
         // derivative cases
         var loopStack = [];
         for (var i in init) {
             if (init[i].args.length > 1) {
                 var b = true;
                 /** as the input order of arguments are now in dependent order, we don't need a loopStack to handle non-existence dependencies
-                 * but would be useful later ⤵
+                 * but would be useful in the future ⤵
                  */
                 for (var arg = 1; arg < init[i].args.length; arg++) {
                     // if any dependent argument does not exist(the first one is variable to be calculated)
@@ -868,16 +1145,18 @@ var Transformer = function () {
                 if (b) {
                     var _predicates$init$i$na, _predicates$init$i$na2;
 
-                    if (init[i].truthiness == "true") _initialStates[init[i].args[0]] = (_predicates$init$i$na = _predicates[init[i].name]).true.apply(_predicates$init$i$na, [init[i].args[0]].concat(_toConsumableArray(init[i].args.map(function (p, index) {
-                        return _initialStates[init[i].args[index]];
-                    }))));else _initialStates[init[i].args[0]] = (_predicates$init$i$na2 = _predicates[init[i].name]).false.apply(_predicates$init$i$na2, [init[i].args[0]].concat(_toConsumableArray(init[i].args.map(function (p, index) {
+                    if (init[i].truthiness == "true")
+                        // init[i].args[0]: the first argument is always the argument to be operated on
+                        _initialStates[init[i].args[0]] = (_predicates$init$i$na = _predicates[init[i].name]).true.apply(_predicates$init$i$na, [init[i].args[0]].concat(_toConsumableArray(init[i].args.map(function (p, index) {
+                            return _initialStates[init[i].args[index]];
+                        }))));else _initialStates[init[i].args[0]] = (_predicates$init$i$na2 = _predicates[init[i].name]).false.apply(_predicates$init$i$na2, [init[i].args[0]].concat(_toConsumableArray(init[i].args.map(function (p, index) {
                         return _initialStates[init[i].args[index]];
                     }))));
                 }
             }
         }
         /** as the input order of arguments are now in dependent order, we don't need a loopStack to handle non-existence dependencies
-         * but would be useful later ⤵
+         * but would be useful in the future ⤵
          */
 
         //while (loopStack.length > 0) {
@@ -923,8 +1202,6 @@ var Transformer = function () {
             var stack = [];
 
             var _loop = function _loop() {
-                var _predicates$effs$e$na, _predicates$effs$e$na2;
-
                 // specify which parameter should be map to which argument(in index)
                 var indices = effs[e].parameters ? effs[e].parameters.map(function (prs) {
                     return ArgsToIndexMapper(prs.name);
@@ -933,13 +1210,23 @@ var Transformer = function () {
                 // 1. map arguments in solution to function in initialStates
                 // 2. expand initialStates array as arguments from the 2nd to last at predicate function
                 // 3. the first argument of predicate function is object id/name
-                if (effs[e].truthiness == "true") stack.push((_predicates$effs$e$na = _predicates[effs[e].name]).true.apply(_predicates$effs$e$na, [_solutions[s].args[0]].concat(_toConsumableArray(_solutions[s].args.map(function (sol, index) {
-                    if (indices.length > 0) return _initialStates[_solutions[s].args[indices[index]]];
-                    return _initialStates[_solutions[s].args[index]];
-                })))));else stack.push((_predicates$effs$e$na2 = _predicates[effs[e].name]).false.apply(_predicates$effs$e$na2, [_solutions[s].args[0]].concat(_toConsumableArray(_solutions[s].args.map(function (sol, index) {
-                    if (indices.length > 0) return _initialStates[_solutions[s].args[indices[index]]];
-                    return _initialStates[_solutions[s].args[index]];
-                })))));
+                if (effs[e].truthiness == "true") {
+                    var _predicates$effs$e$na;
+
+                    var arr = _solutions[s].args.map(function (sol, index) {
+                        if (indices.length > 0) return _initialStates[_solutions[s].args[indices[index]]];
+                        return _initialStates[_solutions[s].args[index]];
+                    });
+                    stack.push((_predicates$effs$e$na = _predicates[effs[e].name]).true.apply(_predicates$effs$e$na, [arr[0].id].concat(_toConsumableArray(arr))));
+                } else {
+                    var _predicates$effs$e$na2;
+
+                    var _arr = _solutions[s].args.map(function (sol, index) {
+                        if (indices.length > 0) return _initialStates[_solutions[s].args[indices[index]]];
+                        return _initialStates[_solutions[s].args[index]];
+                    });
+                    stack.push((_predicates$effs$e$na2 = _predicates[effs[e].name]).false.apply(_predicates$effs$e$na2, [_arr[0].id].concat(_toConsumableArray(_arr))));
+                }
             };
 
             for (var e in effs) {
@@ -965,6 +1252,9 @@ var Transformer = function () {
     };
 }();
 
+/**
+ *  Map customize predicate settings to animation config
+ * */
 var predicateMappings = function predicateMappings(mappings) {
     if (!mappings) {
         return initialMappings;
@@ -978,6 +1268,10 @@ var predicateMappings = function predicateMappings(mappings) {
         }
     }
     return imap;
+};
+
+var checkNum = function checkNum(toCheck) {
+    return !isNaN(parseFloat(toCheck));
 };
 
 var renderInfrastructure = function () {
@@ -1019,11 +1313,11 @@ var renderInfrastructure = function () {
                 var init = [];
                 for (var p in problem[1]) {
                     var o = problem[1][p];
-                    if (o.parameters) init.push({
+                    init.push({
                         name: o.name,
-                        args: o.parameters.map(function (p) {
+                        args: o.parameters ? o.parameters.map(function (p) {
                             return p.value;
-                        }),
+                        }) : [],
                         truthiness: o.truthiness
                     });
                 }
@@ -1098,15 +1392,19 @@ var AxisPlayer = function () {
     };
 }();
 
+/**
+ * Change image of object
+ * @previewImage(imgSelector, file, callback);
+ * */
 var previewImage = function previewImage(imgSelector, file, callback) {
-    if (!imgSelector || !file) throw new Error("No Selector Error");
+    if (!imgSelector || !file) throw new Error("No Selector or File Error");
 
     var preview = null;
     if (typeof imgSelector == "string") preview = document.querySelector(imgSelector);else if ((typeof imgSelector === "undefined" ? "undefined" : _typeof(imgSelector)) == "object") preview = imgSelector;else throw new Error("Selector Type not Recognizable Error");
     var reader = new FileReader();
     reader.addEventListener("load", function () {
         preview.src = reader.result;
-        callback(reader.result);
+        if (callback) callback(reader.result);
     }, false);
     if (file) {
         reader.readAsDataURL(file);
@@ -1116,7 +1414,7 @@ var previewImage = function previewImage(imgSelector, file, callback) {
 renderInfrastructure.renderAll();
 
 // modules loading
-var maps = { "models": models, "actions": actions, "predicates": predicates /*"preconditions": preconditions*/ };
+var maps = { "models": models, "actions": actions, "predicates": predicates, "images": images };
 var renderer = Renderer.getInstance(maps);
 renderer.init();
 
