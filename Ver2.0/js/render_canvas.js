@@ -260,6 +260,7 @@ const initialMappings = [{
     }
 }];
 
+
 /**
  *  A Singleton Factory responsible for generating template files.
  *  1. Promise Style.
@@ -971,7 +972,6 @@ var Animation = (function () {
             if (steps[s].length > 0) {
                 for (var o in steps[s]) {
                     d3.select("#" + steps[s][o].id).transition().attr("transform", function (d, i) {
-
                         return "translate(" + steps[s][o].x + "," + steps[s][o].y + ")";
                     }).delay(s * sts.speed);
                 }
@@ -992,6 +992,15 @@ var Animation = (function () {
         settings: _settings
     }
 }());
+
+let animationOptions = {
+    width: Animation.settings.MEDIUM,
+    height: Animation.settings.MEDIUM,
+    fontSize: Animation.settings.FONT_MEDIUM,
+    dx: 0,
+    dy: Animation.settings.MEDIUM + 20,
+    speed: Animation.settings.PLAY_SLOW
+}
 
 // todo this if the domain change order of arguments
 const ArgsToIndexMapper = (arg)=> {
@@ -1241,6 +1250,7 @@ var renderInfrastructure = (function () {
     }
 
     function _renderButtons() {
+        // set each cuz for each tab the buttons are different
         $(".btn.edit").each(function () {
             $(this).click(function () {
                 if (document.querySelector(".template.selected")) {
@@ -1268,9 +1278,9 @@ var renderInfrastructure = (function () {
                 }
                 let trans = Transformer.initiate(predicateMappings(animationFuncs), init, solution, domain[3]);
                 // enter initial condition
-                let anime = Animation.register(trans.getInit());
+                let anime = Animation.register(trans.getInit(), animationOptions);
                 // play steps
-                anime.play(trans.transform());
+                anime.play(trans.transform(), animationOptions);
             });
         });
         $(".btn.reset").each(function () {
@@ -1278,6 +1288,63 @@ var renderInfrastructure = (function () {
                 Animation.clear();
             });
         });
+        $(".btn.settings").each(function () {
+            $(this).click(function () {
+                let str = "<div class='model'>" +
+                    "<header><h3 class='modelid'>Settings</h3></header><div class='content'><div class='content-left'>" +
+                    "<span><label><i class='fa fa-arrows-h' aria-hidden='true'></i></label><input id='obj-width' type='text' placeholder='Width'></span>" +
+                    "<span><label><i class='fa fa-arrows-v' aria-hidden='true'></i></label><input id='obj-height' type='text' placeholder='Height'></span>" +
+                    "<div class='radios'><div class='radio'><label for='font-small'><i class='fa fa-font' aria-hidden='true'></i></label><input id='font-small' type='radio' name='font-size' value='12px'></div>" +
+                    "<div class='radio'><label for='font-medium'><i class='fa fa-font fa-2x' aria-hidden='true'></i></label><input id='font-medium' type='radio' name='font-size' value='15px'></div>" +
+                    "<div class='radio'><label for='font-large'><i class='fa fa-font fa-3x' aria-hidden='true'></i></label><input id='font-large' type='radio' name='font-size' value='20px'></div></div>" +
+                    "</div><div class='modal-divider'></div>" +
+                    "<div class='content-right'>" +
+                    "<span><label><i class='fa fa-indent' aria-hidden='true'></i></label><input id='obj-offsetx' type='text' placeholder='Offset X'></span>" +
+                    "<span><label><i class='fa fa-outdent' aria-hidden='true'></i></label><input id='obj-offsety' type='text' placeholder='Offset Y'></span>" + "<div class='radios'><div class='radio'>" +
+                    "<input type='radio' name='speed' id='slow' value='800'><label for='slow'>Slow</label></div>" +
+                    "<div class='radio'><input type='radio' name='speed' id='medium' value='500'><label for='medium'>Medium</label></div>" +
+                    "<div class='radio'><input type='radio' name='speed' id='fast' value='200'><label for='fast'>Fast</label></div></div>" +
+                    "</div></div><span class='modal-btns'><button id='modal-settings-confirm'>Confirm</button></span></div>";
+                let parser = new DOMParser();
+                str = str.replace(/>\s+([^\s<]*)\s+</g, '>$1<').trim();
+                let domPrototype = parser.parseFromString(str, "text/html");
+                document.querySelector(".modal > .modal_panel > .modal_content").innerHTML = "";
+                document.querySelector('.modal > .modal_panel > .modal_content').appendChild(domPrototype.body.childNodes[0])
+                $("#modal-settings-confirm").click(function () {
+                    let width = document.getElementById("obj-width").value;
+                    let height = document.getElementById("obj-height").value;
+                    let offX = document.getElementById("obj-offsetx").value;
+                    let offY = document.getElementById("obj-offsety").value;
+                    if ((width=="" || checkNum(width)) && (height == "" || checkNum(height)) && (offX=="" || checkNum(offX)) && (offY==""  || checkNum(offY))) {
+                        if (height)
+                            animationOptions.height = height;
+                        if (width)
+                            animationOptions.width = width;
+                        if (offX)
+                            animationOptions.dy = offY;
+                        if (offY)
+                            animationOptions.dx = offX;
+                        let fontSize = document.getElementsByName("font-size");
+                        fontSize.forEach((f, i)=> {
+                            if (f.checked == true) {
+                                animationOptions.fontSize = f.value;
+                            }
+                        });
+                        let animeSpd = document.getElementsByName("speed");
+                        animeSpd.forEach((spd, i)=> {
+                            if (spd.checked == true) {
+                                animationOptions.speed = parseInt(spd.value);
+                            }
+                        });
+                        $(".modal").removeClass("active");
+                    } else {
+                        alert("Please enter number!")
+                    }
+                });
+
+                $(".modal").addClass("active");
+            });
+        })
     }
 
     function _renderModal() {

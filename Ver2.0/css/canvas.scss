@@ -153,7 +153,7 @@ body {
   }
   .extensive {
     display: flex;
-    flex: 8;
+    flex: 9;
     position: relative;
     flex-flow: column;
     width: 100%;
@@ -172,7 +172,7 @@ body {
       }
     }
     .btn {
-      margin: 10px auto 10px auto;
+      margin: 5px auto 10px auto;
       position: relative;
       text-align: center;
       width: 160px;
@@ -226,7 +226,6 @@ body {
         }
       }
     }
-
     .edit {
       color: whitesmoke;
       background-color: #006699;
@@ -238,6 +237,10 @@ body {
     .start {
       color: whitesmoke;
       background-color: #2e3032;
+    }
+    .settings {
+      color: whitesmoke;
+      background-color: #000000;
     }
   }
 }
@@ -579,7 +582,7 @@ span.modal-btns {
             max-width: 200px;
             max-height: 200px;
           }
-          span.modal-btns{
+          span.modal-btns {
             border: none;
           }
           span {
@@ -618,43 +621,68 @@ span.modal-btns {
             border: 1px solid #E6E6E6;
             border-radius: 15px;
           }
-        }
-        .description {
-          display: flex;
-          flex: 2;
-          position: relative;
-          flex-flow: column;
-          align-items: center;
-          justify-content: flex-start;
-          width: 100%;
-          margin: 0 0px;
-          font-size: 15px;
-          h4 {
-            margin: 5px;
-            padding: 5px;
+          .radios {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-flow: row;
+            flex: 1;
+            position: relative;
+            .radio {
+              display: flex;
+              flex-flow: row;
+              align-items: center;
+              justify-content: space-between;
+              flex: 1;
+              input {
+                position: relative;
+              }
+              label {
+                display: flex;
+                flex: 1;
+                padding: 0 5px;
+                font-size: 14px;
+                font-family: "Adobe Ming Std";
+              }
+            }
           }
-          p {
-            font-size: 12px;
-            font-weight: 100;
-            font-family: "Adobe Ming Std";
-          }
         }
-        .modal-divider {
-          display: flex;
-          flex-flow: column;
-          position: relative;
-          margin: 0 30px;
-          content: "";
-          width: 2px;
-          border-radius: 3px;
-          background-color: #e3e3e3;
-        }
-      }
-      span.modal-btns {
-        border: none;
-        border-radius: 0px;
       }
     }
+    .description {
+      display: flex;
+      flex: 2;
+      position: relative;
+      flex-flow: column;
+      align-items: center;
+      justify-content: flex-start;
+      width: 100%;
+      margin: 0 0px;
+      font-size: 15px;
+      h4 {
+        margin: 5px;
+        padding: 5px;
+      }
+      p {
+        font-size: 12px;
+        font-weight: 100;
+        font-family: "Adobe Ming Std";
+      }
+    }
+    .modal-divider {
+      display: flex;
+      flex-flow: column;
+      position: relative;
+      margin: 0 30px;
+      content: "";
+      width: 2px;
+      border-radius: 3px;
+      background-color: #e3e3e3;
+    }
+  }
+  span.modal-btns {
+    border: none;
+    border-radius: 0px;
   }
 }
 
