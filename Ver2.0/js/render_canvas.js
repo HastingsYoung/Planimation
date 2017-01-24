@@ -14,171 +14,8 @@ console.log(solution);
 
 let animationFuncs = [];
 
-// trucks
-//const initialMappings = [{
-//    name: "at",
-//    true_func: function (id, o1, o2) {
-//        return {
-//            id: id,
-//            x: o2.x,
-//            y: o2.y
-//        }
-//    },
-//    false_func: function (id, o1, o2) {
-//        return {
-//            id: id,
-//            x: o2.x,
-//            y: o2.y - 20
-//        }
-//    }
-//}, {
-//    name: "in",
-//    true_func: function (id, o1, o2, o3) {
-//        return {
-//            id: id,
-//            x: o3 ? (o3.x + 10) : (o2.x + 10),
-//            y: o3 ? (o3.y + 10) : (o2.y + 10)
-//        }
-//    },
-//    false_func: function (id, o1, o2, o3) {
-//        return {
-//            id: id,
-//            x: o3 ? (o3.x - 10) : (o2.x - 10),
-//            y: o3 ? (o3.y - 10) : (o2.y - 10)
-//        }
-//    }
-//}, {
-//    name: "connected",
-//    true_func: function (id, o1, o2) {
-//        return {
-//            id: id,
-//            x: o2.x - 40,
-//            y: o2.y
-//        }
-//    },
-//    false_func: function (id, o1, o2) {
-//        return {
-//            id: id,
-//            x: o2.x - 60,
-//            y: o2.y
-//        }
-//    }
-//}, {
-//    name: "free",
-//    true_func: function (id, o1, o2) {
-//        return {
-//            id: id,
-//            x: o1.x,
-//            y: o1.y
-//        }
-//    },
-//    false_func: function (id, o1, o2) {
-//        return {
-//            id: id,
-//            x: o1.x,
-//            y: o1.y
-//        }
-//    }
-//}, {
-//    name: "time-now",
-//    true_func: function (id, o1, o2) {
-//        return {
-//            id: id,
-//            x: o1.x,
-//            y: o1.y
-//        }
-//    },
-//    false_func: function (id, o1, o2) {
-//        return {
-//            id: id,
-//            x: o1.x,
-//            y: o1.y
-//        }
-//    }
-//}, {
-//    name: "next",
-//    true_func: function (id, o1, o2) {
-//        return {
-//            id: id,
-//            x: o1.x,
-//            y: o1.y
-//        }
-//    },
-//    false_func: function (id, o1, o2) {
-//        return {
-//            id: id,
-//            x: o1.x,
-//            y: o1.y
-//        }
-//    }
-//}, {
-//    name: "le",
-//    true_func: function (id, o1, o2) {
-//        return {
-//            id: id,
-//            x: o1.x,
-//            y: o1.y
-//        }
-//    },
-//    false_func: function (id, o1, o2) {
-//        return {
-//            id: id,
-//            x: o1.x,
-//            y: o1.y
-//        }
-//    }
-//}, {
-//    name: "delivered",
-//    true_func: function (id, o1, o2) {
-//        return {
-//            id: id,
-//            x: o2.x,
-//            y: o2.y
-//        }
-//    },
-//    false_func: function (id, o1, o2) {
-//        return {
-//            id: id,
-//            x: o1.x,
-//            y: o1.y
-//        }
-//    }
-//}, {
-//    name: "at-destination",
-//    true_func: function (id, o1, o2) {
-//        return {
-//            id: id,
-//            x: o2.x,
-//            y: o2.y
-//        }
-//    },
-//    false_func: function (id, o1, o2) {
-//        return {
-//            id: id,
-//            x: o1.x,
-//            y: o1.y
-//        }
-//    }
-//}, {
-//    name: "closer",
-//    true_func: function (id, o1, o2) {
-//        return {
-//            id: id,
-//            x: o1.x,
-//            y: o1.y
-//        }
-//    },
-//    false_func: function (id, o1, o2) {
-//        return {
-//            id: id,
-//            x: o1.x,
-//            y: o1.y
-//        }
-//    }
-//}];
-
 // blocks
-const initialMappings = [{
+const blocksWorldMappings = [{
     name: "on",
     true_func: function (id, o1, o2) {
         return {
@@ -260,6 +97,16 @@ const initialMappings = [{
     }
 }];
 
+const domainMappings = {
+    "BLOCKSWORLD": blocksWorldMappings
+}
+
+const selectMapping = (domain)=> {
+    return domainMappings[domain.toUpperCase()]
+}
+
+let initialMappings = [];
+initialMappings = selectMapping("blocksworld");
 
 /**
  *  A Singleton Factory responsible for generating template files.
@@ -1315,7 +1162,7 @@ var renderInfrastructure = (function () {
                     let height = document.getElementById("obj-height").value;
                     let offX = document.getElementById("obj-offsetx").value;
                     let offY = document.getElementById("obj-offsety").value;
-                    if ((width=="" || checkNum(width)) && (height == "" || checkNum(height)) && (offX=="" || checkNum(offX)) && (offY==""  || checkNum(offY))) {
+                    if ((width == "" || checkNum(width)) && (height == "" || checkNum(height)) && (offX == "" || checkNum(offX)) && (offY == "" || checkNum(offY))) {
                         if (height)
                             animationOptions.height = height;
                         if (width)
