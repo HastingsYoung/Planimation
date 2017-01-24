@@ -1008,6 +1008,7 @@ var Animation = function () {
                 }).attr("font-size", sts.fontSize).text(function (d, i) {
                     return models[i].id;
                 });
+                // todo fix bugs in
             })();
         }
         return this;
@@ -1332,6 +1333,7 @@ var renderInfrastructure = function () {
                 }
                 var trans = Transformer.initiate(predicateMappings(animationFuncs), init, solution, domain[3]);
                 // enter initial condition
+                console.log(trans.getInit());
                 var anime = Animation.register(trans.getInit(), animationOptions);
                 // play steps
                 anime.play(trans.transform(), animationOptions);

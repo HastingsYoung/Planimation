@@ -609,7 +609,7 @@ class Predicate extends Component {
             "<div class='sub_header'><h5>Predicates: </h5>" + predicates + "</div>" + "<span><label><i class='fa fa-plus-square fa-2x' aria-hidden='true'></i></label><input class='predicate-true' placeholder='True Condition'/></span>"
             + "<span><label><i class='fa fa-minus-square fa-2x' aria-hidden='true'></i></label><input class='predicate-false' placeholder='False Condition' /></span><span class='modal-btns'>" +
             "<button id='modal-predicate-confirm' class='btn-confirm'>Confirm</button><button class='btn-cancel'>Cancel</button></span>" + "</div><div class='modal-divider'></div><div class='description'><h4>Example</h4>" +
-            "<p>x:x.x+y.x+10;y:x.y*10-y.y</p></div></div></div>";
+            "<p>If we've got variable (?a,?b) then the input should be x:a.x+b.x+10;y:a.y*10-b.y</p></div></div></div>";
         if (parentNode)
             parentNode.appendChild(nodeContent);
         else if (this.modalSelector)
@@ -955,7 +955,7 @@ var Animation = (function () {
             }).attr("dy", function (d, i) {
                 return sts.dy;
             }).attr("font-size", sts.fontSize).text(function (d, i) {
-                return models[i].id
+                return "Object-" + d.id;
             });
         }
         return this;
