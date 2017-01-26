@@ -21,14 +21,14 @@ const blocksWorldMappings = [{
         return {
             id: id,
             x: o2.x,
-            y: o2.y + 30
+            y: o2.y + 60
         }
     },
     false_func: function (id, o1, o2) {
         return {
             id: id,
-            x: o1.x - 20,
-            y: o1.y - 20
+            x: o1.x,
+            y: o1.y
         }
     }
 }, {
@@ -43,8 +43,8 @@ const blocksWorldMappings = [{
     false_func: function (id, o1) {
         return {
             id: id,
-            x: o1.x - 50,
-            y: o1.y - 50
+            x: 150 - Math.random() * 100,
+            y: 150 - Math.random() * 100
         }
     }
 }, {
@@ -53,14 +53,14 @@ const blocksWorldMappings = [{
         return {
             id: id,
             x: o1.x,
-            y: o1.y + 20
+            y: o1.y
         }
     },
     false_func: function (id, o1) {
         return {
             id: id,
             x: o1.x,
-            y: o1.y - 20
+            y: o1.y
         }
     }
 }, {
@@ -84,14 +84,14 @@ const blocksWorldMappings = [{
     true_func: function (id, o1) {
         return {
             id: id,
-            x: o1.x + 120,
-            y: o1.y
+            x: 620,
+            y: 220
         }
     },
     false_func: function (id, o1) {
         return {
             id: id,
-            x: o1.x - 120,
+            x: o1.x,
             y: o1.y
         }
     }
@@ -814,6 +814,7 @@ var Animation = (function () {
     }
 
     function _play(steps, options) {
+        console.log(steps);
         let sts = _applySettings(options);
         for (var s in steps) {
             if (steps[s].length > 0) {
@@ -1021,7 +1022,10 @@ var Transformer = (function () {
                             return _initialStates[_solutions[s].args[indices[index]]];
                         return _initialStates[_solutions[s].args[index]];
                     }));
-                    stack.push(_predicates[effs[e].name].true(arr[0].id, ...arr));
+                    let preObj = arr[0];
+                    let afterObj = _predicates[effs[e].name].true(arr[0].id, ...arr);
+                    if (preObj.x != afterObj.x || preObj.y != afterObj.y)
+                        stack.push(afterObj);
                 }
                 else {
                     let arr = (_solutions[s].args.map((sol, index)=> {
@@ -1029,7 +1033,10 @@ var Transformer = (function () {
                             return _initialStates[_solutions[s].args[indices[index]]];
                         return _initialStates[_solutions[s].args[index]];
                     }));
-                    stack.push(_predicates[effs[e].name].false(arr[0].id, ...arr));
+                    let preObj = arr[0];
+                    let afterObj = _predicates[effs[e].name].false(arr[0].id, ...arr);
+                    if (preObj.x != afterObj.x || preObj.y != afterObj.y)
+                        stack.push(afterObj);
                 }
             }
             _dataArray.push(stack);
@@ -1133,6 +1140,7 @@ var renderInfrastructure = (function () {
         $(".btn.reset").each(function () {
             $(this).click(function () {
                 Animation.clear();
+                AxisPlayer.clear();
             });
         });
         $(".btn.settings").each(function () {
@@ -1232,20 +1240,33 @@ var renderInfrastructure = (function () {
 }());
 
 var AxisPlayer = (function () {
+    let timeoutStack = [];
     let _play = (speed = 500)=> {
         $(".element").each(function (i, d) {
             var _this = $(this);
-            setTimeout(function () {
+            let ts = setTimeout(function () {
                 _this.addClass("active");
             }, speed * i);
-            setTimeout(function () {
+            let te = setTimeout(function () {
                 _this.removeClass("active");
             }, speed * (i + 1));
+            timeoutStack.push(ts);
+            timeoutStack.push(te);
         });
     }
 
+    let _clear = ()=> {
+        timeoutStack.forEach((t)=> {
+            clearTimeout(t);
+            $(".element").each(function (i, d) {
+                $(this).removeClass("active");
+            });
+        })
+    }
+
     return {
-        play: _play
+        play: _play,
+        clear: _clear
     }
 }());
 

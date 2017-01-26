@@ -28,184 +28,21 @@ console.log(solution);
 
 var animationFuncs = [];
 
-// trucks
-//const initialMappings = [{
-//    name: "at",
-//    true_func: function (id, o1, o2) {
-//        return {
-//            id: id,
-//            x: o2.x,
-//            y: o2.y
-//        }
-//    },
-//    false_func: function (id, o1, o2) {
-//        return {
-//            id: id,
-//            x: o2.x,
-//            y: o2.y - 20
-//        }
-//    }
-//}, {
-//    name: "in",
-//    true_func: function (id, o1, o2, o3) {
-//        return {
-//            id: id,
-//            x: o3 ? (o3.x + 10) : (o2.x + 10),
-//            y: o3 ? (o3.y + 10) : (o2.y + 10)
-//        }
-//    },
-//    false_func: function (id, o1, o2, o3) {
-//        return {
-//            id: id,
-//            x: o3 ? (o3.x - 10) : (o2.x - 10),
-//            y: o3 ? (o3.y - 10) : (o2.y - 10)
-//        }
-//    }
-//}, {
-//    name: "connected",
-//    true_func: function (id, o1, o2) {
-//        return {
-//            id: id,
-//            x: o2.x - 40,
-//            y: o2.y
-//        }
-//    },
-//    false_func: function (id, o1, o2) {
-//        return {
-//            id: id,
-//            x: o2.x - 60,
-//            y: o2.y
-//        }
-//    }
-//}, {
-//    name: "free",
-//    true_func: function (id, o1, o2) {
-//        return {
-//            id: id,
-//            x: o1.x,
-//            y: o1.y
-//        }
-//    },
-//    false_func: function (id, o1, o2) {
-//        return {
-//            id: id,
-//            x: o1.x,
-//            y: o1.y
-//        }
-//    }
-//}, {
-//    name: "time-now",
-//    true_func: function (id, o1, o2) {
-//        return {
-//            id: id,
-//            x: o1.x,
-//            y: o1.y
-//        }
-//    },
-//    false_func: function (id, o1, o2) {
-//        return {
-//            id: id,
-//            x: o1.x,
-//            y: o1.y
-//        }
-//    }
-//}, {
-//    name: "next",
-//    true_func: function (id, o1, o2) {
-//        return {
-//            id: id,
-//            x: o1.x,
-//            y: o1.y
-//        }
-//    },
-//    false_func: function (id, o1, o2) {
-//        return {
-//            id: id,
-//            x: o1.x,
-//            y: o1.y
-//        }
-//    }
-//}, {
-//    name: "le",
-//    true_func: function (id, o1, o2) {
-//        return {
-//            id: id,
-//            x: o1.x,
-//            y: o1.y
-//        }
-//    },
-//    false_func: function (id, o1, o2) {
-//        return {
-//            id: id,
-//            x: o1.x,
-//            y: o1.y
-//        }
-//    }
-//}, {
-//    name: "delivered",
-//    true_func: function (id, o1, o2) {
-//        return {
-//            id: id,
-//            x: o2.x,
-//            y: o2.y
-//        }
-//    },
-//    false_func: function (id, o1, o2) {
-//        return {
-//            id: id,
-//            x: o1.x,
-//            y: o1.y
-//        }
-//    }
-//}, {
-//    name: "at-destination",
-//    true_func: function (id, o1, o2) {
-//        return {
-//            id: id,
-//            x: o2.x,
-//            y: o2.y
-//        }
-//    },
-//    false_func: function (id, o1, o2) {
-//        return {
-//            id: id,
-//            x: o1.x,
-//            y: o1.y
-//        }
-//    }
-//}, {
-//    name: "closer",
-//    true_func: function (id, o1, o2) {
-//        return {
-//            id: id,
-//            x: o1.x,
-//            y: o1.y
-//        }
-//    },
-//    false_func: function (id, o1, o2) {
-//        return {
-//            id: id,
-//            x: o1.x,
-//            y: o1.y
-//        }
-//    }
-//}];
-
 // blocks
-var initialMappings = [{
+var blocksWorldMappings = [{
     name: "on",
     true_func: function true_func(id, o1, o2) {
         return {
             id: id,
             x: o2.x,
-            y: o2.y + 30
+            y: o2.y + 60
         };
     },
     false_func: function false_func(id, o1, o2) {
         return {
             id: id,
-            x: o1.x - 20,
-            y: o1.y - 20
+            x: o1.x,
+            y: o1.y
         };
     }
 }, {
@@ -220,8 +57,8 @@ var initialMappings = [{
     false_func: function false_func(id, o1) {
         return {
             id: id,
-            x: o1.x - 50,
-            y: o1.y - 50
+            x: 150 - Math.random() * 100,
+            y: 150 - Math.random() * 100
         };
     }
 }, {
@@ -230,14 +67,14 @@ var initialMappings = [{
         return {
             id: id,
             x: o1.x,
-            y: o1.y + 20
+            y: o1.y
         };
     },
     false_func: function false_func(id, o1) {
         return {
             id: id,
             x: o1.x,
-            y: o1.y - 20
+            y: o1.y
         };
     }
 }, {
@@ -261,18 +98,29 @@ var initialMappings = [{
     true_func: function true_func(id, o1) {
         return {
             id: id,
-            x: o1.x + 120,
-            y: o1.y
+            x: 620,
+            y: 220
         };
     },
     false_func: function false_func(id, o1) {
         return {
             id: id,
-            x: o1.x - 120,
+            x: o1.x,
             y: o1.y
         };
     }
 }];
+
+var domainMappings = {
+    "BLOCKSWORLD": blocksWorldMappings
+};
+
+var selectMapping = function selectMapping(domain) {
+    return domainMappings[domain.toUpperCase()];
+};
+
+var initialMappings = [];
+initialMappings = selectMapping("blocksworld");
 
 /**
  *  A Singleton Factory responsible for generating template files.
@@ -652,7 +500,7 @@ var Predicate = function (_Component3) {
 
             var predicates = "(" + args.join(",") + ")";
 
-            var nodeContent = "<div class='predicate'>" + "<header><h3 class='name'>Predicate Name: " + this.data.name + "</h3></header>" + "<div class='content'><div class='tags'>" + "<div class='sub_header'><h5>Predicates: </h5>" + predicates + "</div>" + "<span><label><i class='fa fa-plus-square fa-2x' aria-hidden='true'></i></label><input class='predicate-true' placeholder='True Condition'/></span>" + "<span><label><i class='fa fa-minus-square fa-2x' aria-hidden='true'></i></label><input class='predicate-false' placeholder='False Condition' /></span><span class='modal-btns'>" + "<button id='modal-predicate-confirm' class='btn-confirm'>Confirm</button><button class='btn-cancel'>Cancel</button></span>" + "</div><div class='modal-divider'></div><div class='description'><h4>Example</h4>" + "<p>x:x.x+y.x+10;y:x.y*10-y.y</p></div></div></div>";
+            var nodeContent = "<div class='predicate'>" + "<header><h3 class='name'>Predicate Name: " + this.data.name + "</h3></header>" + "<div class='content'><div class='tags'>" + "<div class='sub_header'><h5>Predicates: </h5>" + predicates + "</div>" + "<span><label><i class='fa fa-plus-square fa-2x' aria-hidden='true'></i></label><input class='predicate-true' placeholder='True Condition'/></span>" + "<span><label><i class='fa fa-minus-square fa-2x' aria-hidden='true'></i></label><input class='predicate-false' placeholder='False Condition' /></span><span class='modal-btns'>" + "<button id='modal-predicate-confirm' class='btn-confirm'>Confirm</button><button class='btn-cancel'>Cancel</button></span>" + "</div><div class='modal-divider'></div><div class='description'><h4>Example</h4>" + "<p>If we've got variable (?a,?b) then the input should be x:a.x+b.x+10;y:a.y*10-b.y</p></div></div></div>";
             if (parentNode) parentNode.appendChild(nodeContent);else if (this.modalSelector) document.querySelector(this.modalSelector).appendChild(this.parseDom(nodeContent));
             var _this = this;
             $("#modal-predicate-confirm").click(function () {
@@ -1006,9 +854,8 @@ var Animation = function () {
                 }).attr("dy", function (d, i) {
                     return sts.dy;
                 }).attr("font-size", sts.fontSize).text(function (d, i) {
-                    return models[i].id;
+                    return "Object-" + d.id;
                 });
-                // todo fix bugs in
             })();
         }
         return this;
@@ -1020,6 +867,7 @@ var Animation = function () {
     }
 
     function _play(steps, options) {
+        console.log(steps);
         var sts = _applySettings(options);
         for (var s in steps) {
             if (steps[s].length > 0) {
@@ -1226,7 +1074,9 @@ var Transformer = function () {
                         if (indices.length > 0) return _initialStates[_solutions[s].args[indices[index]]];
                         return _initialStates[_solutions[s].args[index]];
                     });
-                    stack.push((_predicates$effs$e$na = _predicates[effs[e].name]).true.apply(_predicates$effs$e$na, [arr[0].id].concat(_toConsumableArray(arr))));
+                    var preObj = arr[0];
+                    var afterObj = (_predicates$effs$e$na = _predicates[effs[e].name]).true.apply(_predicates$effs$e$na, [arr[0].id].concat(_toConsumableArray(arr)));
+                    if (preObj.x != afterObj.x || preObj.y != afterObj.y) stack.push(afterObj);
                 } else {
                     var _predicates$effs$e$na2;
 
@@ -1234,7 +1084,9 @@ var Transformer = function () {
                         if (indices.length > 0) return _initialStates[_solutions[s].args[indices[index]]];
                         return _initialStates[_solutions[s].args[index]];
                     });
-                    stack.push((_predicates$effs$e$na2 = _predicates[effs[e].name]).false.apply(_predicates$effs$e$na2, [_arr[0].id].concat(_toConsumableArray(_arr))));
+                    var _preObj = _arr[0];
+                    var _afterObj = (_predicates$effs$e$na2 = _predicates[effs[e].name]).false.apply(_predicates$effs$e$na2, [_arr[0].id].concat(_toConsumableArray(_arr)));
+                    if (_preObj.x != _afterObj.x || _preObj.y != _afterObj.y) stack.push(_afterObj);
                 }
             };
 
@@ -1333,7 +1185,6 @@ var renderInfrastructure = function () {
                 }
                 var trans = Transformer.initiate(predicateMappings(animationFuncs), init, solution, domain[3]);
                 // enter initial condition
-                console.log(trans.getInit());
                 var anime = Animation.register(trans.getInit(), animationOptions);
                 // play steps
                 anime.play(trans.transform(), animationOptions);
@@ -1342,6 +1193,7 @@ var renderInfrastructure = function () {
         $(".btn.reset").each(function () {
             $(this).click(function () {
                 Animation.clear();
+                AxisPlayer.clear();
             });
         });
         $(".btn.settings").each(function () {
@@ -1423,22 +1275,35 @@ var renderInfrastructure = function () {
 }();
 
 var AxisPlayer = function () {
+    var timeoutStack = [];
     var _play = function _play() {
         var speed = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 500;
 
         $(".element").each(function (i, d) {
             var _this = $(this);
-            setTimeout(function () {
+            var ts = setTimeout(function () {
                 _this.addClass("active");
             }, speed * i);
-            setTimeout(function () {
+            var te = setTimeout(function () {
                 _this.removeClass("active");
             }, speed * (i + 1));
+            timeoutStack.push(ts);
+            timeoutStack.push(te);
+        });
+    };
+
+    var _clear = function _clear() {
+        timeoutStack.forEach(function (t) {
+            clearTimeout(t);
+            $(".element").each(function (i, d) {
+                $(this).removeClass("active");
+            });
         });
     };
 
     return {
-        play: _play
+        play: _play,
+        clear: _clear
     };
 }();
 
