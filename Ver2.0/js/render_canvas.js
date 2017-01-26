@@ -43,8 +43,8 @@ const blocksWorldMappings = [{
     false_func: function (id, o1) {
         return {
             id: id,
-            x: 150 - Math.random() * 100,
-            y: 150 - Math.random() * 100
+            x: o1.x,
+            y: o1.y
         }
     }
 }, {
@@ -433,7 +433,7 @@ class Action extends Component {
             "<div class='sub_header'><h5>Parameters: </h5>" + parameters +
             "</div>"/*<div class='sub_header'><h5>Preconditions: </h5>" + preconditions + "</div>"*/ +
             "<div class='sub_header'><h5>Effects: </h5>" + effects + "</div>" +
-            "</div><div class='description'><h5>Description: </h5><form action=''>" + "</form></div></div></div>";
+            "</div><div class='description'><h5>Description: </h5><p>Action description...</p></div></div></div>";
         if (parentNode)
             parentNode.appendChild(nodeContent);
         else if (this.modalSelector)
@@ -708,7 +708,7 @@ for (var i in domain[2]) {
 fct.importSelector("#basic_image").setPrototype();
 template = fct.newTemplate();
 var images = [];
-for (var i = 0; i < 10; i++) {
+for (var i = 0; i < 9; i++) {
     images.push(new Images({
         name: "image-" + i,
         parentSelector: '.preload',
