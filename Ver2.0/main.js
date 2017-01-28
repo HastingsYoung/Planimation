@@ -1,11 +1,11 @@
 var http = require("http");
 var fs = require('fs');
 var url = require('url');
-var scanner = require('./js/scan.js');
+
 var start = function(){
     http.createServer(function(request, response) {
         var pathname = url.parse(request.url).pathname;
-        var ext = pathname.match(/(\.[^.]+|)$/)[0];//取得后缀名
+        var ext = pathname.match(/(\.[^.]+|)$/)[0];//get affix
         switch(ext){
             case ".css":
             case ".js":

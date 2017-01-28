@@ -1,0 +1,91 @@
+<xsd:schema targetNamespace="http://planning.domains" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns="http://planning.domains" elementFormDefault="qualified">
+    <xsd:annotation>
+        <xsd:documentation xml:lang="en">
+            Plannimation rules schema for planning.domains.
+        </xsd:documentation>
+    </xsd:annotation>
+    <xsd:element name="rules" type="Rules"></xsd:element>
+    <xsd:element name="action" type="Action"></xsd:element>
+    <xsd:element name="domain" type="Domain"></xsd:element>
+
+    <xsd:element name="comment" type="xsd:string"></xsd:element>
+
+    <xsd:complexType name="Rules">
+        <xsd:choice maxOccurs="unbounded">
+            <xsd:element type="Rule" name="Rule"></xsd:element>
+        </xsd:choice>
+    </xsd:complexType>
+    <xsd:complexType name="Rule">
+        <xsd:all>
+            <xsd:element name="RuleIdentity" type="xsd:string"/>
+            <xsd:element name="Operators" type="Parameters"/>
+            <xsd:element name="Predicate" type="xsd:boolean"/>
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="Action">
+        <xsd:all>
+            <xsd:element name="Name" type="xsd:string"></xsd:element>
+            <xsd:element name="Parameters" type="Parameters"></xsd:element>
+            <xsd:element name="Preconditions" type="Precondition"></xsd:element>
+            <xsd:element name="Effects" type="Effects"></xsd:element>
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="Parameters">
+        <xsd:choice maxOccurs="unbounded">
+            <xsd:element name="Parameter" type="Parameter"></xsd:element>
+        </xsd:choice>
+    </xsd:complexType>
+
+    <xsd:complexType name="Parameter">
+        <xsd:all>
+            <xsd:element name="Class" type="xsd:string"></xsd:element>
+            <xsd:element name="Default" type="xsd:string"></xsd:element>
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="Preconditions">
+        <xsd:choice maxOccurs="unbounded">
+            <xsd:element name="Precondition" type="Precondition"></xsd:element>
+        </xsd:choice>
+    </xsd:complexType>
+
+    <xsd:complexType name="Precondition">
+        <xsd:all>
+            <xsd:element name="Rule" type="Rule"></xsd:element>
+            <xsd:element name="Operator" type="xsd:string"></xsd:element>
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="Effects">
+        <xsd:choice maxOccurs="unbounded">
+            <xsd:element name="Effect" type="Effect"></xsd:element>
+        </xsd:choice>
+    </xsd:complexType>
+
+    <xsd:complexType name="Effect">
+        <xsd:all>
+            <xsd:element name="Rule" type="Rule"></xsd:element>
+            <xsd:element name="Operator" type="xsd:string"></xsd:element>
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="Domain">
+        <xsd:all>
+            <xsd:element name="DomainId" type="xsd:integer"></xsd:element>
+            <xsd:element name="DomainType" type="xsd:string"></xsd:element>
+            <xsd:element name="DomainTags" type="DomainTags"></xsd:element>
+            <xsd:element name="DomainDescription" type="xsd:string"></xsd:element>
+            <xsd:element name="Logo" type="xsd:string"></xsd:element>
+        </xsd:all>
+    </xsd:complexType>
+    <xsd:complexType name="DomainTags">
+        <xsd:choice maxOccurs="unbounded">
+            <xsd:element name="DomainTag" type="xsd:string"></xsd:element>
+        </xsd:choice>
+    </xsd:complexType>
+
+</xsd:schema>
+

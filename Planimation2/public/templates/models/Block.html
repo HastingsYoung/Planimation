@@ -1,0 +1,33 @@
+<div class="template" draggable="false">
+    <div class="header img">
+        <img draggable="false" src="imgs/objects-box-icon.png" alt="N/A" height="40" width="40">
+    </div>
+    <div class="name" style='
+      text-transform:uppercase;
+      text-align: center;
+      font-family: "Century Gothic";
+      font-size: 12px;
+      text-shadow: 1px 2px 5px #fff;'>
+        <p class="template-title"></p>
+        <p class="template-desc"></p>
+    </div>
+    <input type="hidden" value='{
+  "type": "action",
+  "data": {
+    "domainid": 110,
+    "domaintype": "assembly",
+    "domaintags": [
+      ":adl",
+      ":strips",
+      ":conditional-effects",
+      ":action-costs",
+      ":derived-predicates",
+      ":equality",
+      ":negative-preconditions",
+      ":typing"
+    ],
+    "domaindescription": "The goal is to assemble a complex object made out of subassemblies. The sequence of steps must obey a given partial order. In addition, through poor engineering design, many subassemblies must be installed temporarily in one assembly, then removed and given a permanent home in another. This domain was created by Drew McDermott.",
+    "logo": "imgs/objects-box-icon.png"
+  }
+}' class="template-data">
+</div>

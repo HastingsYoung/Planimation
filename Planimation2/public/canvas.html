@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<link rel="stylesheet" href="./css/canvas.css" type="text/css">
+<link rel="stylesheet" href="./css/font-awesome.min.css" type="text/css">
+<script>
+    if (navigator.userAgent.indexOf("Firefox") > 0)
+        alert("You're using Firefox browser, please go to 'about:config' and set <dom.webcomponents.enabled> to true for plugin use!")
+    if (navigator.userAgent.indexOf("Opera") > 0)
+        alert("You're using Opera browser, please go to 'about:config' and set <dom.webcomponents.enabled> to true for plugin use!")
+    if (navigator.userAgent.indexOf("MSIE") > 0 )
+        alert("Sorry, this service is currently not supported by IE Explorer, please switch to another browser!")
+</script>
+<link rel="import" href="templates/models/Block.html" type="text/html" id="basic_block">
+<link rel="import" href="templates/actions/BasicAction.html" type="text/html" id="basic_action">
+<link rel="import" href="templates/predicates/BasicPredicate.html" type="text/html" id="basic_predicate">
+<link rel="import" href="templates/images/BasicImage.html" type="text/html" id="basic_image">
+<body>
+<div class="side_menu">
+    <div class="title">
+        Planimation
+    </div>
+    <div class="tabs">
+        <label id="models" class="tab active">Objects</label>
+        <label id="predicates" class="tab">Predicates</label>
+        <label id="actions" class="tab">Actions</label>
+        <label id="images" class="tab">Images</label>
+        <!--<label id="preconditions" class="tab">Preconditions</label>-->
+    </div>
+    <div class="preload">
+    </div>
+    <div class="divider"></div>
+    <div class="extensive">
+        <div class="btn edit"><span>Edit</span><i class="fa fa-pencil" aria-hidden="true"></i>
+        </div>
+        <div class="btn reset"><span>Reset</span><i class="fa fa-undo" aria-hidden="true"></i>
+        </div>
+        <div class="btn start"><span>Start</span><i class="fa fa-play-circle-o" aria-hidden="true"></i>
+        </div>
+        <div class="btn settings"><span>Settings</span><i class="fa fa-cog" aria-hidden="true"></i>
+        </div>
+        <!--<div class="template_upload">
+            <input class="upload_button" type="file"/>
+        </div>-->
+    </div>
+</div>
+<div class="canvas_area">
+    <div class="canvas">
+    </div>
+    <div class="axis">
+
+    </div>
+</div>
+<div class="modal">
+    <div class="modal_overlay">
+    </div>
+    <div class="modal_panel">
+        <div class="btn__close"><i class="fa fa-times"></i></div>
+        <div class="modal_content">
+
+        </div>
+    </div>
+</div>
+</body>
+<script src="js/jquery.min.js"></script>
+<script src="js/Plan_Parser.js"></script>
+<script src="js/PDDL_Parser.js"></script>
+<script src="js/d3.min.js"></script>
+<script src="js/render_canvas.js"></script>
+</html>

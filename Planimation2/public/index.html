@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Planimation</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<link rel="stylesheet" href="./css/index.css" type="text/css">
+<link rel="stylesheet" href="./css/text_animate.css" type="text/css">
+<link rel="stylesheet" href="./css/font-awesome.min.css" type="text/css">
+<link rel="stylesheet" href="./css/button.min.css" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=Vollkorn" rel="stylesheet">
+<body>
+<div class="nav_bar">
+    <ul>
+        <li><a href="">Home</a></li>
+        <li><a href="http://solver.planning.domains/">Online Solver</a></li>
+        <li><a href="">Open Source Project</a></li>
+        <li><a href="http://planning.domains/">planning.domains</a></li>
+        <li><a href="http://editor.planning.domains/">Editor</a></li>
+        <li><a href="http://api.planning.domains/">API</a></li>
+    </ul>
+</div>
+<div class="column__flow">
+    <div class="__loader">
+        <div class="loader__mask">
+            <div class="loader__text loader__text--progress">Planimation
+            </div>
+        </div>
+        <div class="loader__text loader__text--preload">Planimation
+        </div>
+    </div>
+    <div class="sub__header">
+        <p>
+            <i>A Planning Visualisation Toolkit</i>
+        </p>
+    </div>
+    <div class="btn__start">
+        Start
+    </div>
+</div>
+
+<div class="ui large basic modal">
+    <div class="btn__close"><i class="fa fa-times fa-2x"></i></div>
+    <div class="header">File Uploading</div>
+    <div class="content">
+        <div class="uploader">
+            <div class="upload_segment">
+                <h4 class="blue_header">Drop a Domain file inside...</h4>
+                <div class="file_zone">
+                    <input type="file" id="domain_file"/>
+                    <i class="fa fa-file-text fa-5x" aria-hidden="true"></i>
+                    <i class="fa fa-check-circle-o fa-3x invisible" aria-hidden="true"></i>
+                </div>
+                <p>Or click to Browse</p>
+            </div>
+            <div class="upload_segment">
+                <h4 class="purple_header">Drop a Problem file inside...</h4>
+                <div class="file_zone">
+                    <input type="file" id="problem_file"/>
+                    <i class="fa fa-file-text fa-5x" aria-hidden="true"></i>
+                    <i class="fa fa-check-circle-o fa-3x invisible" aria-hidden="true"></i>
+                </div>
+                <p>Or click to Browse</p>
+            </div>
+            <div class="upload_segment">
+                <h4 class="violet_header">Drop a Solution file inside...</h4>
+                <div class="file_zone">
+                    <input type="file" id="solution_file"/>
+                    <i class="fa fa-file-text fa-5x" aria-hidden="true"></i>
+                    <i class="fa fa-check-circle-o fa-3x invisible" aria-hidden="true"></i>
+                </div>
+                <p>Or click to Browse</p>
+            </div>
+        </div>
+    </div>
+    <div class="actions">
+        <div class="ui cancel button right floated red">Clear</div>
+        <div class="ui approve button right floated teal">OK</div>
+        <div class="clear"></div>
+    </div>
+</div>
+</body>
+<script src="js/jquery.min.js"></script>
+<link rel="stylesheet" href="./css/dimmer.css" type="text/css">
+<link rel="stylesheet" href="./css/modal.css" type="text/css">
+<link rel="stylesheet" href="./css/transition.css" type="text/css">
+<script src="js/semantic.min.js"></script>
+<script src="js/render_index.js"></script>
+</html>
