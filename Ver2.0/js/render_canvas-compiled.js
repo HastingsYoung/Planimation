@@ -35,7 +35,7 @@ var blocksWorldMappings = [{
         return {
             id: id,
             x: o2.x,
-            y: o2.y + 60
+            y: o2.y + 40
         };
     },
     false_func: function false_func(id, o1, o2) {
@@ -50,8 +50,8 @@ var blocksWorldMappings = [{
     true_func: function true_func(id, o1) {
         return {
             id: id,
-            x: 150 + Math.random() * 100,
-            y: 150 + Math.random() * 100
+            x: 600 + Math.random() * 100,
+            y: 50 + Math.random() * 100
         };
     },
     false_func: function false_func(id, o1) {
@@ -98,8 +98,8 @@ var blocksWorldMappings = [{
     true_func: function true_func(id, o1) {
         return {
             id: id,
-            x: 620,
-            y: 220
+            x: 100,
+            y: 450
         };
     },
     false_func: function false_func(id, o1) {
@@ -500,7 +500,7 @@ var Predicate = function (_Component3) {
 
             var predicates = "(" + args.join(",") + ")";
 
-            var nodeContent = "<div class='predicate'>" + "<header><h3 class='name'>Predicate Name: " + this.data.name + "</h3></header>" + "<div class='content'><div class='tags'>" + "<div class='sub_header'><h5>Predicates: </h5>" + predicates + "</div>" + "<span><label><i class='fa fa-plus-square fa-2x' aria-hidden='true'></i></label><input class='predicate-true' placeholder='True Condition'/></span>" + "<span><label><i class='fa fa-minus-square fa-2x' aria-hidden='true'></i></label><input class='predicate-false' placeholder='False Condition' /></span><span class='modal-btns'>" + "<button id='modal-predicate-confirm' class='btn-confirm'>Confirm</button><button class='btn-cancel'>Cancel</button></span>" + "</div><div class='modal-divider'></div><div class='description'><h4>Example</h4>" + "<p>If we've got variable (?a,?b) then the input should be x:a.x+b.x+10;y:a.y*10-b.y</p></div></div></div>";
+            var nodeContent = "<div class='predicate'>" + "<header><h3 class='name'>Predicate Name: " + this.data.name + "</h3></header>" + "<div class='content'><div class='tags'>" + "<div class='sub_header'><h5>Predicates: </h5>" + predicates + "</div>" + "<span><label><i class='fa fa-plus-square fa-2x' aria-hidden='true'></i></label><input class='predicate-true' placeholder='True Condition'/></span>" + "<span><label><i class='fa fa-minus-square fa-2x' aria-hidden='true'></i></label><input class='predicate-false' placeholder='False Condition' /></span>" + "<span class='modal-btns'>" + "<button id='modal-predicate-confirm' class='btn-confirm'>Confirm</button><button class='btn-cancel'>Cancel</button></span>" + "</div><div class='modal-divider'></div><div class='description'><h4>Example</h4>" + "<p>If we've got variable (?a,?b) then the input should be x:a.x+b.x+10;y:a.y*10-b.y</p></div></div></div>";
             if (parentNode) parentNode.appendChild(nodeContent);else if (this.modalSelector) document.querySelector(this.modalSelector).appendChild(this.parseDom(nodeContent));
             var _this = this;
             $("#modal-predicate-confirm").click(function () {
@@ -818,7 +818,18 @@ var Animation = function () {
         "FONT_SMALL": "15px",
         "PLAY_FAST": 200,
         "PLAY_MEDIUM": 500,
-        "PLAY_SLOW": 800
+        "PLAY_SLOW": 800,
+        "TRANSITION_EASE_LINEAR": d3.easeLinear,
+        "TRANSITION_EASE_CUBIC": d3.easeCubic,
+        "TRANSITION_EASE_POLYOUT": d3.easePolyOut,
+        "TRANSITION_EASE_POLYIN": d3.easePolyIn,
+        "TRANSITION_EASE_BOUNCE": d3.easeBounce,
+        "TRANSITION_EASE_ELASTIC_IN": d3.easeElasticIn,
+        "TRANSITION_EASE_ELASTIC_OUT": d3.easeElasticOut,
+        "TRANSITION_EASE_ELASTIC_IN_OUT": d3.easeElasticInOut,
+        "TRANSITION_EASE_BACK_IN": d3.easeBackIn,
+        "TRANSITION_EASE_BACK_OUT": d3.easeBackOut,
+        "TRANSITION_EASE_BACK_IN_OUT": d3.easeBackInOut
     };
 
     function _applySettings(options) {
@@ -828,10 +839,14 @@ var Animation = function () {
             fontSize: "15px",
             dx: 0,
             dy: _settings.MEDIUM + 20,
-            speed: _settings.PLAY_SLOW
+            speed: _settings.PLAY_SLOW,
+            transition: _settings.TRANSITION_EASE_CUBIC
         };
         if (options) {
             sts = Object.assign({}, sts, options);
+            if (options.transition) {
+                sts.transition = _settings[options.transition];
+            }
         }
         return sts;
     }
@@ -874,12 +889,12 @@ var Animation = function () {
                 for (var o in steps[s]) {
                     d3.select("#" + steps[s][o].id).transition().attr("transform", function (d, i) {
                         return "translate(" + steps[s][o].x + "," + steps[s][o].y + ")";
-                    }).delay(s * sts.speed);
+                    }).delay(s * sts.speed).ease(sts.transition);
                 }
             } else {
                 d3.select("#" + steps[s].id).transition().attr("transform", function (d, i) {
                     return "translate(" + steps[s].x + "," + steps[s].y + ")";
-                }).delay(s * sts.speed);
+                }).delay(s * sts.speed).ease(sts.transition);
             }
         }
         AxisPlayer.play(sts.speed);
@@ -897,10 +912,15 @@ var Animation = function () {
 var animationOptions = {
     width: Animation.settings.MEDIUM,
     height: Animation.settings.MEDIUM,
-    fontSize: Animation.settings.FONT_MEDIUM,
+    fontSize: Animation.settings.FONT_SMALL,
     dx: 0,
     dy: Animation.settings.MEDIUM + 20,
-    speed: Animation.settings.PLAY_SLOW
+    speed: Animation.settings.PLAY_SLOW,
+    basePosition: {
+        x: 65,
+        y: 50
+    },
+    transition: Animation.settings.TRANSITION_EASE_CUBIC
 };
 
 // todo this if the domain change order of arguments
@@ -973,8 +993,8 @@ var Transformer = function () {
             //if (init[i].args.length == 1) {
             if (init[i].args[0]) _initialStates[init[i].args[0]] = {
                 id: init[i].args[0],
-                x: 500,
-                y: 50
+                x: 1000 - animationOptions.basePosition.x * i,
+                y: animationOptions.basePosition.y
             };
             //}
         }
@@ -1005,9 +1025,9 @@ var Transformer = function () {
                     if (init[i].truthiness == "true")
                         // init[i].args[0]: the first argument is always the argument to be operated on
                         _initialStates[init[i].args[0]] = (_predicates$init$i$na = _predicates[init[i].name]).true.apply(_predicates$init$i$na, [init[i].args[0]].concat(_toConsumableArray(init[i].args.map(function (p, index) {
-                            return _initialStates[init[i].args[index]];
+                            return _initialStates[p];
                         }))));else _initialStates[init[i].args[0]] = (_predicates$init$i$na2 = _predicates[init[i].name]).false.apply(_predicates$init$i$na2, [init[i].args[0]].concat(_toConsumableArray(init[i].args.map(function (p, index) {
-                        return _initialStates[init[i].args[index]];
+                        return _initialStates[p];
                     }))));
                 }
             }
@@ -1198,7 +1218,7 @@ var renderInfrastructure = function () {
         });
         $(".btn.settings").each(function () {
             $(this).click(function () {
-                var str = "<div class='model'>" + "<header><h3 class='modelid'>Settings</h3></header><div class='content'><div class='content-left'>" + "<span><label><i class='fa fa-arrows-h' aria-hidden='true'></i></label><input id='obj-width' type='text' placeholder='Width'></span>" + "<span><label><i class='fa fa-arrows-v' aria-hidden='true'></i></label><input id='obj-height' type='text' placeholder='Height'></span>" + "<div class='radios'><div class='radio'><label for='font-small'><i class='fa fa-font' aria-hidden='true'></i></label><input id='font-small' type='radio' name='font-size' value='12px'></div>" + "<div class='radio'><label for='font-medium'><i class='fa fa-font fa-2x' aria-hidden='true'></i></label><input id='font-medium' type='radio' name='font-size' value='15px'></div>" + "<div class='radio'><label for='font-large'><i class='fa fa-font fa-3x' aria-hidden='true'></i></label><input id='font-large' type='radio' name='font-size' value='20px'></div></div>" + "</div><div class='modal-divider'></div>" + "<div class='content-right'>" + "<span><label><i class='fa fa-indent' aria-hidden='true'></i></label><input id='obj-offsetx' type='text' placeholder='Offset X'></span>" + "<span><label><i class='fa fa-outdent' aria-hidden='true'></i></label><input id='obj-offsety' type='text' placeholder='Offset Y'></span>" + "<div class='radios'><div class='radio'>" + "<input type='radio' name='speed' id='slow' value='800'><label for='slow'>Slow</label></div>" + "<div class='radio'><input type='radio' name='speed' id='medium' value='500'><label for='medium'>Medium</label></div>" + "<div class='radio'><input type='radio' name='speed' id='fast' value='200'><label for='fast'>Fast</label></div></div>" + "</div></div><span class='modal-btns'><button id='modal-settings-confirm'>Confirm</button></span></div>";
+                var str = "<div class='model'>" + "<header><h3 class='modelid'>Settings</h3></header><div class='content'><div class='content-left'>" + "<span><label><i class='fa fa-arrows-h' aria-hidden='true'></i></label><input id='obj-width' type='text' placeholder='Width'></span>" + "<span><label><i class='fa fa-arrows-v' aria-hidden='true'></i></label><input id='obj-height' type='text' placeholder='Height'></span>" + "<div class='radios'><div class='radio'><label for='font-small'><i class='fa fa-font' aria-hidden='true'></i></label><input id='font-small' type='radio' name='font-size' value='12px'></div>" + "<div class='radio'><label for='font-medium'><i class='fa fa-font fa-2x' aria-hidden='true'></i></label><input id='font-medium' type='radio' name='font-size' value='15px'></div>" + "<div class='radio'><label for='font-large'><i class='fa fa-font fa-3x' aria-hidden='true'></i></label><input id='font-large' type='radio' name='font-size' value='20px'></div></div>" + "<div class='select'><select name='animation-type' id='animation-type' placeholder='EASING'>" + "<option value='TRANSITION_EASE_CUBIC'>EASE CUBIC</option>" + "<option value='TRANSITION_EASE_LINEAR'>EASE LINEAR</option>" + "<option value='TRANSITION_EASE_POLYOUT'>EASE POLYOUT</option>" + "<option value='TRANSITION_EASE_BOUNCE'>EASE BOUNCE</option>" + "<option value='TRANSITION_EASE_ELASTIC_IN'>EASE EALISTIC-IN</option>" + "<option value='TRANSITION_EASE_ELASTIC_OUT'>EASE EALISTIC-OUT</option>" + "<option value='TRANSITION_EASE_ELASTIC_IN_OUT'>EASE EALISTIC-IN-OUT</option>" + "<option value='TRANSITION_EASE_BACK_IN'>EASE BACK-IN</option>" + "<option value='TRANSITION_EASE_BACK_OUT'>EASE BACK-OUT</option>" + "<option value='TRANSITION_EASE_BACK_IN_OUT'>EASE BACK-IN-OUT</option>" + "</select><label class='select_arrow'><i class='fa fa-arrow-circle-o-down fa-2x' aria-hidden='true'></i></label></div>" + "</div><div class='modal-divider'></div>" + "<div class='content-right'>" + "<span><label><i class='fa fa-indent' aria-hidden='true'></i></label><input id='obj-offsetx' type='text' placeholder='Offset X'></span>" + "<span><label><i class='fa fa-outdent' aria-hidden='true'></i></label><input id='obj-offsety' type='text' placeholder='Offset Y'></span>" + "<div class='radios'><div class='radio'>" + "<input type='radio' name='speed' id='slow' value='800'><label for='slow'>Slow</label></div>" + "<div class='radio'><input type='radio' name='speed' id='medium' value='500'><label for='medium'>Medium</label></div>" + "<div class='radio'><input type='radio' name='speed' id='fast' value='200'><label for='fast'>Fast</label></div></div>" + "</div></div><span class='modal-btns'><button id='modal-settings-confirm'>Confirm</button></span></div>";
                 var parser = new DOMParser();
                 str = str.replace(/>\s+([^\s<]*)\s+</g, '>$1<').trim();
                 var domPrototype = parser.parseFromString(str, "text/html");
@@ -1226,6 +1246,8 @@ var renderInfrastructure = function () {
                                 animationOptions.speed = parseInt(spd.value);
                             }
                         });
+                        var animeTrans = document.getElementById("animation-type");
+                        if (animeTrans.value) animationOptions.transition = animeTrans.value;
                         $(".modal").removeClass("active");
                     } else {
                         alert("Please enter number!");

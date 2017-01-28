@@ -641,8 +641,63 @@ span.modal-btns {
                 display: flex;
                 flex: 1;
                 padding: 0 5px;
-                font-size: 14px;
+                font-size: 16px;
                 font-family: "Adobe Ming Std";
+              }
+            }
+          }
+          .select {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-flow: row;
+            flex: 1;
+            position: relative;
+            margin: 10px 0;
+            width: 100%;
+            background: gainsboro;
+            border-radius: 15px;
+            &:hover {
+              background: darkgray;
+              select {
+                color: #000000;
+              }
+              .select_arrow {
+                border-color: #000000 transparent transparent transparent;
+              }
+            }
+            select {
+              cursor: pointer;
+              width: 90%;
+              height: 90%;
+              -webkit-appearance: none;
+              -moz-appearance: none;
+              -ms-appearance: none;
+              appearance: none;
+              outline: 0;
+              box-shadow: none;
+              -webkit-border-radius: 0;
+              -moz-border-radius: 0;
+              border-radius: 0;
+              font-family: 'Open Sans Light', sans-serif;
+              font-size: 14px;
+              color: #000000;
+              overflow: hidden;
+              padding: 5% 5%;
+              border: none;
+              background-color: transparent;
+            }
+            .select_arrow {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              right: 5%;
+              position: absolute;
+              pointer-events: none;
+              height: 100%;
+              i {
+                color: #ffffff;
+                text-align: center;
               }
             }
           }

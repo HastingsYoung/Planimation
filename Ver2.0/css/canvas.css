@@ -595,8 +595,56 @@ span.modal-btns {
               display: flex;
               flex: 1;
               padding: 0 5px;
-              font-size: 14px;
+              font-size: 16px;
               font-family: "Adobe Ming Std"; }
+        .modal .modal_panel .model .content .content-left .select, .modal .modal_panel .model .content .content-right .select, .modal .modal_panel .action .content .content-left .select, .modal .modal_panel .action .content .content-right .select, .modal .modal_panel .predicate .content .content-left .select, .modal .modal_panel .predicate .content .content-right .select {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-flow: row;
+          flex: 1;
+          position: relative;
+          margin: 10px 0;
+          width: 100%;
+          background: gainsboro;
+          border-radius: 15px; }
+          .modal .modal_panel .model .content .content-left .select:hover, .modal .modal_panel .model .content .content-right .select:hover, .modal .modal_panel .action .content .content-left .select:hover, .modal .modal_panel .action .content .content-right .select:hover, .modal .modal_panel .predicate .content .content-left .select:hover, .modal .modal_panel .predicate .content .content-right .select:hover {
+            background: darkgray; }
+            .modal .modal_panel .model .content .content-left .select:hover select, .modal .modal_panel .model .content .content-right .select:hover select, .modal .modal_panel .action .content .content-left .select:hover select, .modal .modal_panel .action .content .content-right .select:hover select, .modal .modal_panel .predicate .content .content-left .select:hover select, .modal .modal_panel .predicate .content .content-right .select:hover select {
+              color: #000000; }
+            .modal .modal_panel .model .content .content-left .select:hover .select_arrow, .modal .modal_panel .model .content .content-right .select:hover .select_arrow, .modal .modal_panel .action .content .content-left .select:hover .select_arrow, .modal .modal_panel .action .content .content-right .select:hover .select_arrow, .modal .modal_panel .predicate .content .content-left .select:hover .select_arrow, .modal .modal_panel .predicate .content .content-right .select:hover .select_arrow {
+              border-color: #000000 transparent transparent transparent; }
+          .modal .modal_panel .model .content .content-left .select select, .modal .modal_panel .model .content .content-right .select select, .modal .modal_panel .action .content .content-left .select select, .modal .modal_panel .action .content .content-right .select select, .modal .modal_panel .predicate .content .content-left .select select, .modal .modal_panel .predicate .content .content-right .select select {
+            cursor: pointer;
+            width: 90%;
+            height: 90%;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            -ms-appearance: none;
+            appearance: none;
+            outline: 0;
+            box-shadow: none;
+            -webkit-border-radius: 0;
+            -moz-border-radius: 0;
+            border-radius: 0;
+            font-family: 'Open Sans Light', sans-serif;
+            font-size: 14px;
+            color: #000000;
+            overflow: hidden;
+            padding: 5% 5%;
+            border: none;
+            background-color: transparent; }
+          .modal .modal_panel .model .content .content-left .select .select_arrow, .modal .modal_panel .model .content .content-right .select .select_arrow, .modal .modal_panel .action .content .content-left .select .select_arrow, .modal .modal_panel .action .content .content-right .select .select_arrow, .modal .modal_panel .predicate .content .content-left .select .select_arrow, .modal .modal_panel .predicate .content .content-right .select .select_arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            right: 5%;
+            position: absolute;
+            pointer-events: none;
+            height: 100%; }
+            .modal .modal_panel .model .content .content-left .select .select_arrow i, .modal .modal_panel .model .content .content-right .select .select_arrow i, .modal .modal_panel .action .content .content-left .select .select_arrow i, .modal .modal_panel .action .content .content-right .select .select_arrow i, .modal .modal_panel .predicate .content .content-left .select .select_arrow i, .modal .modal_panel .predicate .content .content-right .select .select_arrow i {
+              color: #ffffff;
+              text-align: center; }
     .modal .modal_panel .description {
       display: flex;
       flex: 2;
