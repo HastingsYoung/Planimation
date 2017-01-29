@@ -1,0 +1,98 @@
+#container {
+  margin: 0 auto;
+  padding: 50px;
+  background: transparent;
+}
+
+h1 {
+  position: relative;
+  font-size: 10rem;
+  z-index: 10;
+}
+
+h2 {
+  position: relative;
+  font-size: 4rem;
+  z-index: 10;
+}
+
+html {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #0f0f10, #000000);
+  color: #000000;
+  font-size: 16px;
+  font-family: 'Open Sans', sans-serif;
+  overflow: hidden;
+}
+
+.light {
+  position: absolute;
+  border-radius: 100%;
+  width: 150px;
+  height: 150px;
+  background-color: #ffffff;
+  -webkit-animation: light-track-1 6s infinite;
+  -o-animation: light-track-1 6s infinite;
+  animation: light-track-1 6s infinite;
+}
+
+.light.light-large {
+  width: 450px;
+  height: 450px;
+  -webkit-animation: light-track-2 6s infinite;
+  -o-animation: light-track-2 6s infinite;
+  animation: light-track-2 6s infinite;
+  opacity: .85;
+}
+
+@keyframes light-track-1 {
+  0% {
+    top: 3%;
+    left: 3%;
+  }
+  25% {
+    top: 50%;
+    left: 35%;
+  }
+  40% {
+    top: 40%;
+    left: 75%;
+  }
+  60% {
+    top: 4%;
+    left: 65%;
+  }
+  75% {
+    top: 60%;
+    left: 25%;
+  }
+  100% {
+    top: 3%;
+    left: 3%;
+  }
+}
+
+@keyframes light-track-2 {
+  0% {
+    top: 33%;
+    left: 83%;
+  }
+  25% {
+    top: 50%;
+    left: 35%;
+  }
+  50% {
+    top: 2%;
+    left: 5%;
+  }
+  75% {
+    top: 60%;
+    left: 25%;
+  }
+  100% {
+    top: 33%;
+    left: 83%;
+  }
+}
