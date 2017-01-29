@@ -3,7 +3,6 @@
     <properties>
       <sourceFilesUrls>
         <item url="file://$PROJECT_DIR$/Ver2.0/node_modules/.bin/mime-compiled.js" />
-        <item url="file://$PROJECT_DIR$/Ver2.0/app-compiled.js" />
         <item url="file://$PROJECT_DIR$/Ver2.0/node_modules/negotiator/lib/mediaType-compiled.js" />
         <item url="file://$PROJECT_DIR$/Ver2.0/node_modules/path-to-regexp/index-compiled.js" />
         <item url="file://$PROJECT_DIR$/Ver2.0/node_modules/negotiator/index-compiled.js" />
@@ -57,6 +56,8 @@
         <item url="file://$PROJECT_DIR$/Ver2.0/node_modules/finalhandler/node_modules/debug/browser-compiled.js" />
         <item url="file://$PROJECT_DIR$/Ver2.0/node_modules/finalhandler/node_modules/debug/node-compiled.js" />
         <item url="file://$PROJECT_DIR$/Ver2.0/node_modules/depd/lib/browser/index-compiled.js" />
+        <item url="file://$PROJECT_DIR$/Planimation2/public/js/render_index-compiled.js" />
+        <item url="file://$PROJECT_DIR$/Planimation2/public/js/render_canvas-compiled.js" />
         <item url="file://$PROJECT_DIR$/Ver2.0/node_modules/finalhandler/index-compiled.js" />
         <item url="file://$PROJECT_DIR$/Ver2.0/node_modules/qs/dist/qs-compiled.js" />
         <item url="file://$PROJECT_DIR$/Ver2.0/node_modules/depd/lib/compat/index-compiled.js" />
@@ -104,8 +105,8 @@
         <item url="file://$PROJECT_DIR$/Ver2.0/node_modules/mime/build/build-compiled.js" />
         <item url="file://$PROJECT_DIR$/Ver2.0/node_modules/on-finished/index-compiled.js" />
         <item url="file://$PROJECT_DIR$/Ver2.0/node_modules/graceful-fs/polyfills-compiled.js" />
-        <item url="file://$PROJECT_DIR$/Ver2.0/node_modules/proxy-addr/index-compiled.js" />
         <item url="file://$PROJECT_DIR$/Ver2.0/node_modules/fsevents/node_modules/request/request-compiled.js" />
+        <item url="file://$PROJECT_DIR$/Ver2.0/node_modules/proxy-addr/index-compiled.js" />
         <item url="file://$PROJECT_DIR$/Ver2.0/node_modules/fsevents/node_modules/hoek/test/index-compiled.js" />
         <item url="file://$PROJECT_DIR$/Ver2.0/node_modules/cookie-signature/index-compiled.js" />
         <item url="file://$PROJECT_DIR$/Ver2.0/node_modules/array-flatten/array-flatten-compiled.js" />
@@ -126,8 +127,8 @@
       <root url="file://$PROJECT_DIR$/Ver2.0/js/tab.min-compiled.js" />
       <root url="file://$PROJECT_DIR$/Ver2.0/webpack.config-compiled.js" />
       <root url="file://$PROJECT_DIR$/Ver2.0/webpack.config-compiled.js" />
-      <root url="file://$PROJECT_DIR$/Ver2.0/node_modules/.bin/mime-compiled.js" />
       <root url="file://$PROJECT_DIR$/Ver2.0/app-compiled.js" />
+      <root url="file://$PROJECT_DIR$/Ver2.0/node_modules/.bin/mime-compiled.js" />
       <root url="file://$PROJECT_DIR$/Ver2.0/node_modules/negotiator/lib/mediaType-compiled.js" />
       <root url="file://$PROJECT_DIR$/Ver2.0/node_modules/path-to-regexp/index-compiled.js" />
       <root url="file://$PROJECT_DIR$/Ver2.0/node_modules/negotiator/index-compiled.js" />
@@ -181,6 +182,8 @@
       <root url="file://$PROJECT_DIR$/Ver2.0/node_modules/finalhandler/node_modules/debug/browser-compiled.js" />
       <root url="file://$PROJECT_DIR$/Ver2.0/node_modules/finalhandler/node_modules/debug/node-compiled.js" />
       <root url="file://$PROJECT_DIR$/Ver2.0/node_modules/depd/lib/browser/index-compiled.js" />
+      <root url="file://$PROJECT_DIR$/Planimation2/public/js/render_index-compiled.js" />
+      <root url="file://$PROJECT_DIR$/Planimation2/public/js/render_canvas-compiled.js" />
       <root url="file://$PROJECT_DIR$/Ver2.0/node_modules/finalhandler/index-compiled.js" />
       <root url="file://$PROJECT_DIR$/Ver2.0/node_modules/qs/dist/qs-compiled.js" />
       <root url="file://$PROJECT_DIR$/Ver2.0/node_modules/depd/lib/compat/index-compiled.js" />
@@ -228,8 +231,8 @@
       <root url="file://$PROJECT_DIR$/Ver2.0/node_modules/mime/build/build-compiled.js" />
       <root url="file://$PROJECT_DIR$/Ver2.0/node_modules/on-finished/index-compiled.js" />
       <root url="file://$PROJECT_DIR$/Ver2.0/node_modules/graceful-fs/polyfills-compiled.js" />
-      <root url="file://$PROJECT_DIR$/Ver2.0/node_modules/proxy-addr/index-compiled.js" />
       <root url="file://$PROJECT_DIR$/Ver2.0/node_modules/fsevents/node_modules/request/request-compiled.js" />
+      <root url="file://$PROJECT_DIR$/Ver2.0/node_modules/proxy-addr/index-compiled.js" />
       <root url="file://$PROJECT_DIR$/Ver2.0/node_modules/fsevents/node_modules/hoek/test/index-compiled.js" />
       <root url="file://$PROJECT_DIR$/Ver2.0/node_modules/cookie-signature/index-compiled.js" />
       <root url="file://$PROJECT_DIR$/Ver2.0/node_modules/array-flatten/array-flatten-compiled.js" />

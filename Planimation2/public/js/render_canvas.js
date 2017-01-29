@@ -485,7 +485,7 @@ class Predicate extends Component {
     }
 }
 
-class Images extends Component {
+class Image extends Component {
 
     constructor(props) {
         super(props);
@@ -710,7 +710,7 @@ fct.importSelector("#basic_image").setPrototype();
 template = fct.newTemplate();
 var images = [];
 for (var i = 0; i < 9; i++) {
-    images.push(new Images({
+    images.push(new Image({
         name: "image-" + i,
         parentSelector: '.preload',
         modalSelector: '.modal > .modal_panel > .modal_content',
@@ -1106,7 +1106,7 @@ const checkNum = (toCheck)=> {
     return !isNaN(parseFloat(toCheck));
 }
 
-var renderInfrastructure = (function () {
+var Infrastructure = (function () {
     function _renderTab() {
         $(".tab").each(function () {
             var _this = $(this);
@@ -1335,7 +1335,7 @@ const previewImage = (imgSelector, file, callback)=> {
     }
 }
 
-renderInfrastructure.renderAll();
+Infrastructure.renderAll();
 
 // modules loading
 var maps = {"models": models, "actions": actions, "predicates": predicates, "images": images};

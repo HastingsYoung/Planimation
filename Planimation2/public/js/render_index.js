@@ -50,7 +50,7 @@ var FileDropper = (function () {
                 localStorage.setItem('file_container', JSON.stringify(fd.get_container()));
                 var array = localStorage.getItem('file_container');
                 console.log(array);
-                window.location.href = './canvas.html';
+                window.location.href = './canvas';
             }
         }).modal('show');
     });
