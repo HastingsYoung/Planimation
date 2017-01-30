@@ -777,11 +777,10 @@ var fct = TemplateFactory.getInstance().importSelector(templatesMapping["model"]
                         data: {}
                     }));
                 }
-
-                Infrastructure.renderAll();
                 // modules loading
                 let maps = {"models": models, "actions": actions, "predicates": predicates, "images": images};
-                let renderer = Renderer.getInstance(maps);
+                renderer = Renderer.getInstance(maps);
+                Infrastructure.renderAll();
                 renderer.init();
             });
         });
@@ -1404,3 +1403,5 @@ const previewImage = (imgSelector, file, callback)=> {
         reader.readAsDataURL(file);
     }
 }
+
+let renderer = {};
