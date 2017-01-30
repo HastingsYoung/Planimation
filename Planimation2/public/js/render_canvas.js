@@ -13,8 +13,9 @@ let solution = Plan_Parser.parse(array[2]);
 console.log(solution);
 
 let animationFuncs = [];
-
-// blocks
+/**
+ * Blocks World
+ **/
 const blocksWorldMappings = [{
     name: "on",
     true_func: function (id, o1, o2) {
@@ -97,6 +98,9 @@ const blocksWorldMappings = [{
     }
 }];
 
+/**
+ * Map Domain to Default Settings
+ * */
 const domainMappings = {
     "BLOCKSWORLD": blocksWorldMappings
 }
@@ -107,6 +111,25 @@ const selectMapping = (domain)=> {
 
 let initialMappings = [];
 initialMappings = selectMapping("blocksworld");
+
+const validateJSON = (json)=> {
+    if (typeof json == "string") {
+        this.json = JSON.parse(json);
+    } else if (typeof json == 'object') {
+        this.json = json;
+    } else {
+        throw new Error("Unknown JSON Type Error!");
+    }
+    if (this.json.type && this.json.data) {
+        return true;
+    }
+    return false;
+}
+
+const validateUrl = (url)=> {
+    let regex = /[-a-zA-Z0-9@:%+.~#?&//=]{2,256}.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%+.~#?&//=]*)?/gi;
+    return regex.test(url);
+}
 
 /**
  *  A Singleton Factory responsible for generating template files.
@@ -141,14 +164,34 @@ var TemplateFactory = (function () {
             return factory_instance;
         };
 
-        importSelector(pattern) {
-            this._link = document.querySelector(pattern);
-            this._content = this._link.import;
-            return this;
+        importSelector(pattern, callback) {
+            if (!validateUrl(pattern)) {
+                this._link = document.querySelector(pattern);
+                this._content = this._link.import;
+            } else {
+                let _this = this;
+                let pms = new Promise(function (resolve, reject) {
+                    $.ajax({url: pattern}).done(function (data) {
+                        resolve(data);
+                    }).fail(function (err) {
+                        if (err)
+                            alert(err);
+                        reject();
+                    });
+                });
+                pms.then(function (data) {
+                    _this._content = data;
+                    callback(_this);
+                });
+            }
         }
 
-        importSelectorAll(pattern) {
-            this._link = document.querySelectorAll(pattern);
+        /**
+         * url template currently not supported
+         * */
+        // todo add url pattern to array input
+        importSelectorAll(patterns) {
+            this._link = document.querySelectorAll(patterns);
             var contents = [];
             for (var l in this._link) {
                 contents.push(this._link[l].import);
@@ -321,7 +364,9 @@ class Model extends Component {
 
     constructor(props) {
         super(props);
-        this.obj = JSON.parse(this.node.querySelector("input").value);
+        let json = this.node.querySelector("input").value;
+        if (validateJSON(json))
+            this.obj = JSON.parse(json);
     }
 
     renderModal(parentNode) {
@@ -489,7 +534,9 @@ class Image extends Component {
 
     constructor(props) {
         super(props);
-        this.obj = JSON.parse(this.node.querySelector("input").value);
+        let json = this.node.querySelector("input").value;
+        if (validateJSON(json))
+            this.obj = JSON.parse(json);
     }
 
     renderModal(parentNode) {
@@ -589,7 +636,7 @@ class Image extends Component {
  * */
 var Renderer = (function () {
     class RendererInstance {
-        constructor() {
+        constructor(props) {
         }
 
         addComponent(key, components) {
@@ -667,58 +714,72 @@ var Renderer = (function () {
     }
 }());
 
-var fct = TemplateFactory.getInstance({importSelector: "#basic_block"});
-var template = fct.newTemplate();
-var models = [];
-for (var i = 0; i < problem[0].names.length; i++) {
-    models.push(new Model({
-        name: problem[0].names[i],
-        parentSelector: '.preload',
-        modalSelector: '.modal > .modal_panel > .modal_content',
-        id: "object-" + problem[0].names[i],
-        node: template.cloneNode(true)
-    }));
-}
+let models = [];
+let actions = [];
+let predicates = [];
+let images = [];
 
-fct.importSelector("#basic_action").setPrototype();
-template = fct.newTemplate();
-var actions = [];
-for (var i in domain[3]) {
-    actions.push(new Action({
-        name: domain[3][i].name,
-        parentSelector: '.preload',
-        modalSelector: '.modal > .modal_panel > .modal_content',
-        node: template.cloneNode(true),
-        data: domain[3][i]
-    }));
-}
+var fct = TemplateFactory.getInstance().importSelector("http://localhost:4000/templates/models/Block.html", function(fct){
+    fct.setPrototype();
+    var template = fct.newTemplate();
+    for (var i = 0; i < problem[0].names.length; i++) {
+        models.push(new Model({
+            name: problem[0].names[i],
+            parentSelector: '.preload',
+            modalSelector: '.modal > .modal_panel > .modal_content',
+            id: "object-" + problem[0].names[i],
+            node: template.cloneNode(true)
+        }));
+    }
 
-fct.importSelector("#basic_predicate").setPrototype();
-template = fct.newTemplate();
-var predicates = [];
-for (var i in domain[2]) {
-    predicates.push(new Predicate({
-        name: domain[2][i].name,
-        parentSelector: '.preload',
-        modalSelector: '.modal > .modal_panel > .modal_content',
-        node: template.cloneNode(true),
-        data: domain[2][i]
-    }));
-}
+    fct.importSelector("http://localhost:4000/templates/actions/BasicAction.html", function(fct){
+        fct.setPrototype();
+        template = fct.newTemplate();
+        for (var i in domain[3]) {
+            actions.push(new Action({
+                name: domain[3][i].name,
+                parentSelector: '.preload',
+                modalSelector: '.modal > .modal_panel > .modal_content',
+                node: template.cloneNode(true),
+                data: domain[3][i]
+            }));
+        }
 
-fct.importSelector("#basic_image").setPrototype();
-template = fct.newTemplate();
-var images = [];
-for (var i = 0; i < 9; i++) {
-    images.push(new Image({
-        name: "image-" + i,
-        parentSelector: '.preload',
-        modalSelector: '.modal > .modal_panel > .modal_content',
-        node: template.cloneNode(true),
-        id: "image-" + i,
-        data: {}
-    }));
-}
+        fct.importSelector("http://localhost:4000/templates/predicates/BasicPredicate.html",function(fct){
+            fct.setPrototype();
+            template = fct.newTemplate();
+            for (var i in domain[2]) {
+                predicates.push(new Predicate({
+                    name: domain[2][i].name,
+                    parentSelector: '.preload',
+                    modalSelector: '.modal > .modal_panel > .modal_content',
+                    node: template.cloneNode(true),
+                    data: domain[2][i]
+                }));
+            }
+            fct.importSelector("http://localhost:4000/templates/images/BasicImage.html",function(fct){
+                fct.setPrototype();
+                template = fct.newTemplate();
+                for (var i = 0; i < 9; i++) {
+                    images.push(new Image({
+                        name: "image-" + i,
+                        parentSelector: '.preload',
+                        modalSelector: '.modal > .modal_panel > .modal_content',
+                        node: template.cloneNode(true),
+                        id: "image-" + i,
+                        data: {}
+                    }));
+                }
+
+                Infrastructure.renderAll();
+                // modules loading
+                let maps = {"models": models, "actions": actions, "predicates": predicates, "images": images};
+                let renderer = Renderer.getInstance(maps);
+                renderer.init();
+            });
+        });
+    });
+});
 
 /**
  *  @steps animation data
@@ -795,7 +856,7 @@ var Animation = (function () {
             if (options.transition) {
                 sts.transition = _settings[options.transition];
             }
-            if(!sts.transition)
+            if (!sts.transition)
                 sts.transition = _settings.TRANSITION_EASE_CUBIC;
         }
         return sts;
@@ -829,6 +890,7 @@ var Animation = (function () {
     function _clear() {
         let canvas = $(".canvas > svg");
         canvas.empty();
+        return this;
     }
 
     function _play(steps, options) {
@@ -1027,6 +1089,7 @@ var Transformer = (function () {
         _actions = {};
         _solutions = [];   // store actual solutions objects to represent what is the next pair of coordinates
         _dataArray = [];
+        return this;
     }
 
     function _transform() {
@@ -1334,10 +1397,3 @@ const previewImage = (imgSelector, file, callback)=> {
         reader.readAsDataURL(file);
     }
 }
-
-Infrastructure.renderAll();
-
-// modules loading
-var maps = {"models": models, "actions": actions, "predicates": predicates, "images": images};
-var renderer = Renderer.getInstance(maps);
-renderer.init();
