@@ -1,7 +1,7 @@
 let array = localStorage.getItem('file_container');
 if (!array) {
     alert("Please Load Requisite Files Before Entering This Page!");
-    window.location.href = "../index.html";
+    window.location.href = "../index";
 }
 array = JSON.parse(array);
 
@@ -726,6 +726,9 @@ let actions = [];
 let predicates = [];
 let images = [];
 
+/**
+ * Load templates, this is done in promise style in order to address asynchronous issues
+ * */
 var fct = TemplateFactory.getInstance().importSelector(templatesMapping["model"], function (fct) {
     fct.setPrototype();
     var template = fct.newTemplate();
@@ -954,7 +957,7 @@ const ArgsToIndexMapper = (arg)=> {
 /**
  *  transform raw data to animation objects
  *  @getInit()
- *  @initialte()
+ *  @initiate()
  *  @transform()
  * */
 var Transformer = (function () {
@@ -1175,6 +1178,9 @@ const checkNum = (toCheck)=> {
     return !isNaN(parseFloat(toCheck));
 }
 
+/**
+ *  Render Infrastructure
+ * */
 var Infrastructure = (function () {
     function _renderTab() {
         $(".tab").each(function () {
@@ -1348,6 +1354,11 @@ var Infrastructure = (function () {
     };
 }());
 
+/**
+ * Play animation for axis
+ * @play([speed])   speed in seconds
+ * @clear()
+ * */
 var AxisPlayer = (function () {
     let timeoutStack = [];
     let _play = (speed = 500)=> {
