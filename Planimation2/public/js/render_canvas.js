@@ -12,6 +12,13 @@ console.log(problem);
 let solution = Plan_Parser.parse(array[2]);
 console.log(solution);
 
+const templatesMapping = {
+    "model": "http://localhost:4000/templates/models/Block.html",
+    "action": "http://localhost:4000/templates/actions/BasicAction.html",
+    "predicate": "http://localhost:4000/templates/predicates/BasicPredicate.html",
+    "image": "http://localhost:4000/templates/images/BasicImage.html"
+}
+
 let animationFuncs = [];
 /**
  * Blocks World
@@ -719,7 +726,7 @@ let actions = [];
 let predicates = [];
 let images = [];
 
-var fct = TemplateFactory.getInstance().importSelector("http://localhost:4000/templates/models/Block.html", function(fct){
+var fct = TemplateFactory.getInstance().importSelector(templatesMapping["model"], function (fct) {
     fct.setPrototype();
     var template = fct.newTemplate();
     for (var i = 0; i < problem[0].names.length; i++) {
@@ -732,7 +739,7 @@ var fct = TemplateFactory.getInstance().importSelector("http://localhost:4000/te
         }));
     }
 
-    fct.importSelector("http://localhost:4000/templates/actions/BasicAction.html", function(fct){
+    fct.importSelector(templatesMapping["action"], function (fct) {
         fct.setPrototype();
         template = fct.newTemplate();
         for (var i in domain[3]) {
@@ -745,7 +752,7 @@ var fct = TemplateFactory.getInstance().importSelector("http://localhost:4000/te
             }));
         }
 
-        fct.importSelector("http://localhost:4000/templates/predicates/BasicPredicate.html",function(fct){
+        fct.importSelector(templatesMapping["predicate"], function (fct) {
             fct.setPrototype();
             template = fct.newTemplate();
             for (var i in domain[2]) {
@@ -757,7 +764,7 @@ var fct = TemplateFactory.getInstance().importSelector("http://localhost:4000/te
                     data: domain[2][i]
                 }));
             }
-            fct.importSelector("http://localhost:4000/templates/images/BasicImage.html",function(fct){
+            fct.importSelector(templatesMapping["image"], function (fct) {
                 fct.setPrototype();
                 template = fct.newTemplate();
                 for (var i = 0; i < 9; i++) {
