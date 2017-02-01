@@ -592,9 +592,15 @@ class Image extends Component {
 
     render() {
         this.node = this.node.cloneNode(true);
+        const _id = this.id;
         this.bindClass("selected");
         this.node.addEventListener("dragstart", function (event) {
             console.log("dragstart");
+            if(document.querySelector("#" + _id)){
+                alert("Each image should only point to one canvas instance! Please choose another image!");
+                event.preventDefault();
+                return;
+            }
             event.target.className += " dragging";
         }, false);
 
@@ -603,7 +609,6 @@ class Image extends Component {
         const offsetWidth = document.querySelector(".side_menu").offsetWidth;
         const offsetHeight = this.node.offsetHeight;
 
-        const _id = this.id;
         this.node.addEventListener("dragend", function (event) {
             console.log("dragend");
             var reg = new RegExp('(\\s|^)' + "dragging" + '(\\s|$)');
