@@ -119,23 +119,125 @@ const selectMapping = (domain)=> {
 let initialMappings = [];
 initialMappings = selectMapping("blocksworld");
 
-const validateJSON = (json)=> {
-    if (typeof json == "string") {
-        this.json = JSON.parse(json);
-    } else if (typeof json == 'object') {
-        this.json = json;
-    } else {
-        throw new Error("Unknown JSON Type Error!");
+/**
+ * A simple schema for data validation.
+ *
+ * Usage: let ds = new DataSchema({
+ *      key1:{
+ *          type: "String"
+ *      },
+ *      key2:{
+ *          type: "String",
+ *          regex: /abc/gi
+ *      },
+ *      key3:{
+ *          type: "Number"
+ *      },
+ *      key4:{
+ *          type: "Array"
+ *      }
+ * });
+ *
+ *      ds.validate(data);
+ * */
+class DataSchema {
+    constructor(props) {
+        if (!props || Object.keys(props).length <= 0) {
+            throw new Error("No Data Input Error, Please Add Properties to Schema!")
+        }
+        const DATATYPES = {
+            "string": "String",
+            "object": "Object",
+            "number": "Number",
+            "array": "Array",
+            "boolean": "Boolean",
+            "function": "Function"
+        };
+        this.keys = Object.keys(props);
+        let schema = {};
+        this.keys.forEach((k, i)=> {
+            if (typeof props[k] != "object" || !props[k].type || !DATATYPES[props[k].type.toLowerCase()]) {
+                throw new Error("Unrecognizable Props Input: The argument " + k + " does not conform to schema rules. Please check the input.");
+            }
+        });
+        this.schema = props;
     }
-    if (this.json.type && this.json.data) {
+
+    validate(data) {
+        const dataKeys = Object.keys(data);
+        if (dataKeys.length != this.keys.length)
+            return false;
+        for (let i = 0; i < dataKeys.length; i++) {
+            let dks = dataKeys[i];
+            if (!this.schema[dks]) {
+                return false;
+            } else {
+                if (typeof data[dks] != this.schema[dks].type.toLowerCase()) {
+                    if (this.schema[dks].type.toLowerCase() != "number")
+                        return false;
+                    if(!DataSchema.isNumber(data[dks])){
+                        return false;
+                    }
+                }
+            }
+            if (this.schema[dks].regex) {
+                if (typeof this.schema[dks].regex == 'object') {
+                    if (!this.schema[dks].regex.test(data[dks])) {
+                        return false;
+                    }
+                } else {
+                    let re = new RegExp(this.schema[dks].regex);
+                    if (!re.test(data[dks])) {
+                        return false;
+                    }
+                }
+            }
+        }
         return true;
     }
-    return false;
-}
 
-const validateUrl = (url)=> {
-    let regex = /[-a-zA-Z0-9@:%+.~#?&//=]{2,256}.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%+.~#?&//=]*)?/gi;
-    return regex.test(url);
+    static validateJSON(json) {
+        if (typeof json == "string") {
+            this.json = JSON.parse(json);
+        } else if (typeof json == 'object') {
+            this.json = json;
+        } else {
+            throw new Error("Unknown JSON Type Error!");
+        }
+        if (this.json.type && this.json.data) {
+            return true;
+        }
+        return false;
+    }
+
+    static validateUrl(url) {
+        let regex = /[-a-zA-Z0-9@:%+.~#?&//=]{2,256}.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%+.~#?&//=]*)?/gi;
+        return regex.test(url);
+    }
+
+    static isObject(obj) {
+        return typeof obj == "object";
+    }
+
+    static isFunction(func) {
+        return typeof func == "function";
+    }
+
+    static isString(str) {
+        return typeof str == "string";
+    }
+
+    static isFunction(func) {
+        return typeof obj == "function";
+    }
+
+    static isNumber(num) {
+        return !isNaN(parseFloat(num));
+    }
+
+    static isArray(arr) {
+        return typeof arr == "array";
+    }
 }
 
 /**
@@ -172,7 +274,7 @@ var TemplateFactory = (function () {
         };
 
         importSelector(pattern, callback) {
-            if (!validateUrl(pattern)) {
+            if (!DataSchema.validateUrl(pattern)) {
                 this._link = document.querySelector(pattern);
                 this._content = this._link.import;
             } else {
@@ -372,7 +474,7 @@ class Model extends Component {
     constructor(props) {
         super(props);
         let json = this.node.querySelector("input").value;
-        if (validateJSON(json))
+        if (DataSchema.validateJSON(json))
             this.obj = JSON.parse(json);
     }
 
@@ -542,7 +644,7 @@ class Image extends Component {
     constructor(props) {
         super(props);
         let json = this.node.querySelector("input").value;
-        if (validateJSON(json))
+        if (DataSchema.validateJSON(json))
             this.obj = JSON.parse(json);
     }
 
@@ -580,7 +682,7 @@ class Image extends Component {
         $("#modal-image-confirm").click(function () {
             let width = $("#image-width").val();
             let height = $("#image-height").val();
-            if (checkNum(width) && checkNum(height)) {
+            if (DataSchema.isNumber(width) && DataSchema.isNumber(height)) {
                 _this.obj.data.width = width;
                 _this.obj.data.height = height;
                 $(".modal").removeClass("active");
@@ -596,7 +698,7 @@ class Image extends Component {
         this.bindClass("selected");
         this.node.addEventListener("dragstart", function (event) {
             console.log("dragstart");
-            if(document.querySelector("#" + _id)){
+            if (document.querySelector("#" + _id)) {
                 alert("Each image should only point to one canvas instance! Please choose another image!");
                 event.preventDefault();
                 return;
@@ -863,15 +965,46 @@ var Animation = (function () {
             dx: 0,
             dy: _settings.MEDIUM + 20,
             speed: _settings.PLAY_SLOW,
-            transition: _settings.TRANSITION_EASE_CUBIC
+            transition: _settings.TRANSITION_EASE_CUBIC,
         }
-        if (options) {
-            sts = Object.assign({}, sts, options);
-            if (options.transition) {
-                sts.transition = _settings[options.transition];
+        let stsSchema = new DataSchema({
+            "width": {
+                type: "Number"
+            },
+            "height": {
+                type: "Number"
+            },
+            "fontSize": {
+                type: "String",
+                regex: /\d+(px)$/gi
+            },
+            "dx": {
+                type: "Number"
+            },
+            "dy": {
+                type: "Number"
+            },
+            "speed": {
+                type: "Number"
+            },
+            "transition": {
+                type: "String"
+            },
+            "basePosition": {
+                type: "Object"
             }
-            if (!sts.transition)
-                sts.transition = _settings.TRANSITION_EASE_CUBIC;
+        });
+        if (options) {
+            if (stsSchema.validate(options)) {
+                sts = Object.assign({}, sts, options);
+                if (options.transition) {
+                    sts.transition = _settings[options.transition];
+                }
+                if (!sts.transition)
+                    sts.transition = _settings.TRANSITION_EASE_CUBIC;
+            } else {
+                alert("Settings Input not in Correct Format!");
+            }
         }
         return sts;
     }
@@ -1179,10 +1312,6 @@ const predicateMappings = (mappings)=> {
     return imap;
 }
 
-const checkNum = (toCheck)=> {
-    return !isNaN(parseFloat(toCheck));
-}
-
 /**
  *  Render Infrastructure
  * */
@@ -1287,7 +1416,7 @@ var Infrastructure = (function () {
                     let height = document.getElementById("obj-height").value;
                     let offX = document.getElementById("obj-offsetx").value;
                     let offY = document.getElementById("obj-offsety").value;
-                    if ((width == "" || checkNum(width)) && (height == "" || checkNum(height)) && (offX == "" || checkNum(offX)) && (offY == "" || checkNum(offY))) {
+                    if ((width == "" || DataSchema.isNumber(width)) && (height == "" || DataSchema.isNumber(height)) && (offX == "" || DataSchema.isNumber(offX)) && (offY == "" || DataSchema.isNumber(offY))) {
                         if (height)
                             animationOptions.height = height;
                         if (width)
