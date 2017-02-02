@@ -175,9 +175,8 @@ class DataSchema {
                 if (typeof data[dks] != this.schema[dks].type.toLowerCase()) {
                     if (this.schema[dks].type.toLowerCase() != "number")
                         return false;
-                    if(!DataSchema.isNumber(data[dks])){
+                    else if (!DataSchema.isNumber(data[dks]))
                         return false;
-                    }
                 }
             }
             if (this.schema[dks].regex) {
@@ -967,7 +966,7 @@ var Animation = (function () {
             speed: _settings.PLAY_SLOW,
             transition: _settings.TRANSITION_EASE_CUBIC,
         }
-        let stsSchema = new DataSchema({
+        let stsSchema1 = new DataSchema({
             "width": {
                 type: "Number"
             },
@@ -994,8 +993,35 @@ var Animation = (function () {
                 type: "Object"
             }
         });
+        let stsSchema2 = new DataSchema({
+            "width": {
+                type: "Number"
+            },
+            "height": {
+                type: "Number"
+            },
+            "fontSize": {
+                type: "String",
+                regex: /\d+(px)$/gi
+            },
+            "dx": {
+                type: "Number"
+            },
+            "dy": {
+                type: "Number"
+            },
+            "speed": {
+                type: "Number"
+            },
+            "transition": {
+                type: "Function"
+            },
+            "basePosition": {
+                type: "Object"
+            }
+        });
         if (options) {
-            if (stsSchema.validate(options)) {
+            if (stsSchema1.validate(options) || stsSchema2.validate(options)) {
                 sts = Object.assign({}, sts, options);
                 if (options.transition) {
                     sts.transition = _settings[options.transition];
@@ -1159,7 +1185,7 @@ var Transformer = (function () {
             if (init[i].args[0])
                 _initialStates[init[i].args[0]] = {
                     id: init[i].args[0],
-                    x: 1000 - animationOptions.basePosition.x * i,
+                    x: animationOptions.basePosition.x * i - 600,
                     y: animationOptions.basePosition.y
                 };
             //}
