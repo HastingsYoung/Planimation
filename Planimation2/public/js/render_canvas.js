@@ -106,10 +106,112 @@ const blocksWorldMappings = [{
 }];
 
 /**
+ * Gripper
+ **/
+const gripperMappings = [{
+    name: "ball",
+    true_func: function (id, o1) {
+        return {
+            id: id,
+            x: o1.x,
+            y: o1.y
+        }
+    },
+    false_func: function (id, o1, o2) {
+        return {
+            id: id,
+            x: o1.x,
+            y: o1.y
+        }
+    }
+}, {
+    name: "at",
+    true_func: function (id, o1, o2) {
+        return {
+            id: id,
+            x: o2.x + 200 * Math.random(),
+            y: o2.y + 200 * Math.random()
+        }
+    },
+    false_func: function (id, o1, o2) {
+        return {
+            id: id,
+            x: o1.x,
+            y: o1.y
+        }
+    }
+}, {
+    name: "gripper",
+    true_func: function (id, o1) {
+        return {
+            id: id,
+            x: 600 + Math.random() * 100,
+            y: 100 + Math.random() * 100
+        }
+    },
+    false_func: function (id, o1) {
+        return {
+            id: id,
+            x: o1.x,
+            y: o1.y
+        }
+    }
+}, {
+    name: "free",
+    true_func: function (id, o1) {
+        return {
+            id: id,
+            x: o1.x,
+            y: o1.y
+        }
+    },
+    false_func: function (id, o1) {
+        return {
+            id: id,
+            x: o1.x,
+            y: o1.y
+        }
+    }
+}, {
+    name: "at-robby",
+    true_func: function (id, o1) {
+        return {
+            id: id,
+            x: 100,
+            y: 450
+        }
+    },
+    false_func: function (id, o1) {
+        return {
+            id: id,
+            x: o1.x,
+            y: o1.y
+        }
+    }
+}, {
+    name: "carry",
+    true_func: function (id, o1, o2) {
+        return {
+            id: id,
+            x: o2.x,
+            y: o2.y
+        }
+    },
+    false_func: function (id, o1, o2) {
+        return {
+            id: id,
+            x: o1.x,
+            y: o1.y
+        }
+    }
+}];
+
+/**
  * Map Domain to Default Settings
  * */
 const domainMappings = {
-    "BLOCKSWORLD": blocksWorldMappings
+    "BLOCKSWORLD": blocksWorldMappings,
+    "GRIPPER": gripperMappings
 }
 
 const selectMapping = (domain)=> {
@@ -117,7 +219,7 @@ const selectMapping = (domain)=> {
 }
 
 let initialMappings = [];
-initialMappings = selectMapping("blocksworld");
+initialMappings = selectMapping("gripper");
 
 /**
  * A simple schema for data validation.
@@ -942,7 +1044,7 @@ var Animation = (function () {
         "FONT_SMALL": "15px",
         "PLAY_FAST": 200,
         "PLAY_MEDIUM": 500,
-        "PLAY_SLOW": 800,
+        "PLAY_SLOW": 1000,
         "TRANSITION_EASE_LINEAR": d3.easeLinear,
         "TRANSITION_EASE_CUBIC": d3.easeCubic,
         "TRANSITION_EASE_POLYOUT": d3.easePolyOut,
@@ -1075,16 +1177,16 @@ var Animation = (function () {
                     d3.select("#" + steps[s][o].id).transition().attr("transform", function (d, i) {
                         return "translate(" + steps[s][o].x + "," + steps[s][o].y + ")";
                     }).delay(s * sts.speed)
-                        .ease(sts.transition);
+                        .ease(sts.transition).duration(sts.speed);
                 }
             } else {
                 d3.select("#" + steps[s].id).transition().attr("transform", function (d, i) {
                     return "translate(" + steps[s].x + "," + steps[s].y + ")";
                 }).delay(s * sts.speed)
-                    .ease(sts.transition);
+                    .ease(sts.transition).duration(sts.speed);
             }
         }
-        AxisPlayer.play(sts.speed);
+        AxisPlayer.play(sts.speed * 2);
         return this;
     }
 
@@ -1104,7 +1206,7 @@ let animationOptions = {
     dy: Animation.settings.MEDIUM + 20,
     speed: Animation.settings.PLAY_SLOW,
     basePosition: {
-        x: 65,
+        x: 10,
         y: 50
     },
     transition: Animation.settings.TRANSITION_EASE_CUBIC
@@ -1112,7 +1214,7 @@ let animationOptions = {
 
 // todo this if the domain change order of arguments
 const ArgsToIndexMapper = (arg)=> {
-    const mapper = {"?x": 0, "?y": 1, "?z": 2};
+    const mapper = {"?x": 0, "?y": 1, "?z": 2, "?from": 0, "?to": 1, "?obj": 0, "?room": "1", "?gripper": 2};
     if (mapper[arg] || mapper[arg] == 0)
         return mapper[arg];
     throw new Error("Argument " + arg + " is not recognizable: Argument order need to be changed if domain is using special order of letters other than alphabet!");
@@ -1185,7 +1287,7 @@ var Transformer = (function () {
             if (init[i].args[0])
                 _initialStates[init[i].args[0]] = {
                     id: init[i].args[0],
-                    x: animationOptions.basePosition.x * i - 600,
+                    x: animationOptions.basePosition.x * i,
                     y: animationOptions.basePosition.y
                 };
             //}
