@@ -21,6 +21,8 @@ const templatesMapping = {
     "image": "http://localhost:4000/templates/images/BasicImage.html"
 }
 
+const argsToIndexMapping = {"?x": 0, "?y": 1, "?z": 2, "?from": 0, "?to": 1, "?obj": 0, "?room": "1", "?gripper": 2};
+
 let animationFuncs = [];
 /**
  * Blocks World
@@ -237,7 +239,7 @@ const selectMapping = (domain)=> {
 }
 
 let initialMappings = [];
-initialMappings = selectMapping("gripper");
+initialMappings = selectMapping(defaultSettings.currentDomain ? defaultSettings.currentDomain : "gripper");
 
 /**
  * A simple schema for data validation.
@@ -1232,7 +1234,16 @@ let animationOptions = {
 
 // todo this if the domain change order of arguments
 const ArgsToIndexMapper = (arg)=> {
-    const mapper = {"?x": 0, "?y": 1, "?z": 2, "?from": 0, "?to": 1, "?obj": 0, "?room": "1", "?gripper": 2};
+    const mapper = argsToIndexMapping ? argsToIndexMapping : {
+        "?x": 0,
+        "?y": 1,
+        "?z": 2,
+        "?from": 0,
+        "?to": 1,
+        "?obj": 0,
+        "?room": "1",
+        "?gripper": 2
+    };
     if (mapper[arg] || mapper[arg] == 0)
         return mapper[arg];
     throw new Error("Argument " + arg + " is not recognizable: Argument order need to be changed if domain is using special order of letters other than alphabet!");
@@ -1593,7 +1604,17 @@ var Infrastructure = (function () {
                 });
 
                 $("#modal-settings-download").click(function () {
-                    let f = new File([JSON.stringify(blocksWorldMappings),JSON.stringify(gripperMappings),JSON.stringify(animationOptions)], "planimation_settings.json");
+                    let json = {
+                        domains: [blocksWorldMappings, gripperMappings],
+                        animationOption: animationOptions,
+                        argsToIndexMapping: argsToIndexMapping,
+                        currentDomain: "GRIPPER"
+                    };
+                    let f = new File([JSON.stringify(json, function (key, val) {
+                        if (typeof val == 'function')
+                            return val + '';
+                        return val;
+                    })], "planimation_settings.json");
                     let a = document.createElement('a');
                     a.download = "planimation_settings.json";
                     a.href = window.URL.createObjectURL(f);
