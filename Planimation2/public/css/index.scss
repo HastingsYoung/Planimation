@@ -63,6 +63,9 @@ html, body {
       .violet_header {
         color: mediumvioletred;
       }
+      .orange_header {
+        color: orangered;
+      }
       .file_zone {
         background-color: #ffffff;
         border: 4px dashed gray;
@@ -110,10 +113,17 @@ html, body {
   }
 }
 
+.loader__text {
+  &::first-letter {
+    font-family: 'Dancing Script', cursive, "Adobe Heiti Std";
+    font-size: 10rem;
+  }
+}
+
 body {
-  font-family: 'Vollkorn', serif;
+  font-family: 'Halant', serif, "Adobe Heiti Std";
   //'Playfair Display', serif;
-  font-weight: 700;
+  font-weight: 400;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -123,11 +133,11 @@ body {
     flex-flow: column;
     justify-content: center;
     align-items: center;
-    @include btn__start(40px,20px);
+    @include btn__start(40px, 20px);
     .__loader {
       font-size: 6rem;
     }
-    .sub__header{
+    .sub__header {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -206,6 +216,7 @@ body {
   }
   .btn__close:hover {
     .fa {
+      transform: scale(1.1, 1.1);
       color: #1B1C1D;
       text-shadow: 0px 0px 10px silver;
       -webkit-animation-name: rotate_animation;
@@ -236,4 +247,4 @@ body {
   clear: both;
 }
 
-@include file_zone(300px, 200px);
+@include file_zone(230px, 170px);

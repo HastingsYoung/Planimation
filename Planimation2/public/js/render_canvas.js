@@ -11,9 +11,11 @@ let problem = PDDL_Parser.parse(array[1]);
 console.log(problem);
 let solution = Plan_Parser.parse(array[2]);
 console.log(solution);
+let defaultSettings = array[3] ? array[3] : {};
+console.log(defaultSettings);
 
 const templatesMapping = {
-    "model": "http://localhost:4000/templates/models/Block.html",
+    "model": "http://localhost:4000/templates/models/Ball.html",
     "action": "http://localhost:4000/templates/actions/BasicAction.html",
     "predicate": "http://localhost:4000/templates/predicates/BasicPredicate.html",
     "image": "http://localhost:4000/templates/images/BasicImage.html"
@@ -109,6 +111,22 @@ const blocksWorldMappings = [{
  * Gripper
  **/
 const gripperMappings = [{
+    name: "room",
+    true_func: function (id, o1) {
+        return {
+            id: id,
+            x: 500,
+            y: 100 + Math.random() * 200
+        }
+    },
+    false_func: function (id, o1) {
+        return {
+            id: id,
+            x: o1.x,
+            y: o1.y
+        }
+    }
+}, {
     name: "ball",
     true_func: function (id, o1) {
         return {
@@ -129,8 +147,8 @@ const gripperMappings = [{
     true_func: function (id, o1, o2) {
         return {
             id: id,
-            x: o2.x + 200 * Math.random(),
-            y: o2.y + 200 * Math.random()
+            x: o2.x,
+            y: o2.y
         }
     },
     false_func: function (id, o1, o2) {
@@ -145,8 +163,8 @@ const gripperMappings = [{
     true_func: function (id, o1) {
         return {
             id: id,
-            x: 600 + Math.random() * 100,
-            y: 100 + Math.random() * 100
+            x: 600,
+            y: 100
         }
     },
     false_func: function (id, o1) {
@@ -161,15 +179,15 @@ const gripperMappings = [{
     true_func: function (id, o1) {
         return {
             id: id,
-            x: o1.x,
-            y: o1.y
+            x: 650,
+            y: 200
         }
     },
     false_func: function (id, o1) {
         return {
             id: id,
-            x: o1.x,
-            y: o1.y
+            x: 200,
+            y: 200
         }
     }
 }, {
@@ -177,7 +195,7 @@ const gripperMappings = [{
     true_func: function (id, o1) {
         return {
             id: id,
-            x: 100,
+            x: 450,
             y: 450
         }
     },
@@ -193,8 +211,8 @@ const gripperMappings = [{
     true_func: function (id, o1, o2) {
         return {
             id: id,
-            x: o2.x,
-            y: o2.y
+            x: o2.x - 20,
+            y: o2.y + 100
         }
     },
     false_func: function (id, o1, o2) {
@@ -978,7 +996,7 @@ var fct = TemplateFactory.getInstance().importSelector(templatesMapping["model"]
             fct.importSelector(templatesMapping["image"], function (fct) {
                 fct.setPrototype();
                 template = fct.newTemplate();
-                for (var i = 0; i < 9; i++) {
+                for (var i = 0; i < 15; i++) {
                     images.push(new Image({
                         name: "image-" + i,
                         parentSelector: '.preload',
@@ -1204,7 +1222,7 @@ let animationOptions = {
     fontSize: Animation.settings.FONT_SMALL,
     dx: 0,
     dy: Animation.settings.MEDIUM + 20,
-    speed: Animation.settings.PLAY_SLOW,
+    speed: Animation.settings.PLAY_MEDIUM,
     basePosition: {
         x: 10,
         y: 50
@@ -1296,7 +1314,7 @@ var Transformer = (function () {
         // derivative cases
         var loopStack = [];
         for (var i in init) {
-            if (init[i].args.length > 1) {
+            if (init[i].args.length >= 1) {
                 var b = true;
                 /** as the input order of arguments are now in dependent order, we don't need a loopStack to handle non-existence dependencies
                  * but would be useful in the future ⤵

@@ -12,8 +12,8 @@ var FileDropper = (function () {
             if (window.FileReader && window.localStorage) {
                 var file = files[0];
                 const affix = file.name.split(/\./).pop().toLowerCase();
-                if (affix != "pddl" && affix != "txt") {
-                    alert("Not supported file format, please upload '.pddl' or '.txt' files.")
+                if (affix != "pddl" && affix != "txt" && affix != "json" ) {
+                    alert("Not supported file format, please upload '.pddl' or '.txt' or '.json' files.")
                     return false;
                 }
                 var reader = new FileReader();
@@ -49,7 +49,6 @@ var FileDropper = (function () {
                 localStorage.removeItem('file_container');
                 localStorage.setItem('file_container', JSON.stringify(fd.get_container()));
                 var array = localStorage.getItem('file_container');
-                console.log(array);
                 window.location.href = './canvas';
             }
         }).modal('show');
