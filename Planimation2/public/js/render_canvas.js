@@ -1551,7 +1551,7 @@ var Infrastructure = (function () {
                     "<input type='radio' name='speed' id='slow' value='800'><label for='slow'>Slow</label></div>" +
                     "<div class='radio'><input type='radio' name='speed' id='medium' value='500'><label for='medium'>Medium</label></div>" +
                     "<div class='radio'><input type='radio' name='speed' id='fast' value='200'><label for='fast'>Fast</label></div></div>" +
-                    "</div></div><span class='modal-btns'><button id='modal-settings-confirm'>Confirm</button></span></div>";
+                    "</div></div><span class='modal-btns'><button id='modal-settings-confirm'>Confirm</button><button id='modal-settings-download'>Download</button></span></div>";
                 let parser = new DOMParser();
                 str = str.replace(/>\s+([^\s<]*)\s+</g, '>$1<').trim();
                 let domPrototype = parser.parseFromString(str, "text/html");
@@ -1590,6 +1590,15 @@ var Infrastructure = (function () {
                     } else {
                         alert("Please enter number!")
                     }
+                });
+
+                $("#modal-settings-download").click(function () {
+                    let f = new File([JSON.stringify(blocksWorldMappings),JSON.stringify(gripperMappings),JSON.stringify(animationOptions)], "planimation_settings.json");
+                    let a = document.createElement('a');
+                    a.download = "planimation_settings.json";
+                    a.href = window.URL.createObjectURL(f);
+                    document.body.appendChild(a);
+                    a.click();
                 });
 
                 $(".modal").addClass("active");
