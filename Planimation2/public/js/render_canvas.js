@@ -5,29 +5,70 @@ if (!array) {
 }
 array = JSON.parse(array);
 
+let parseSettings = (str) => {
+    let ds = JSON.parse(str);
+    if (ds.animationOptions && ds.animationOptions.transition) {
+        ds.animationOptions.transition = eval("(" + ds.animationOptions.transition.trim() + ")");
+    }
+    ;
+    if (ds.domains && ds.domains.BLOCKSWORLD) {
+        ds.domains.BLOCKSWORLD.forEach((pre, i)=> {
+            if (pre.true_func) {
+                pre.true_func = eval("(" + pre.true_func + ")");
+            }
+            if (pre.false_func) {
+                pre.false_func = eval("(" + pre.false_func + ")");
+            }
+        });
+    }
+    if (ds.domains && ds.domains.GRIPPER) {
+        ds.domains.GRIPPER.forEach((pre, i)=> {
+            if (pre.true_func) {
+                pre.true_func = eval("(" + pre.true_func + ")");
+            }
+            if (pre.false_func) {
+                pre.false_func = eval("(" + pre.false_func + ")");
+            }
+        });
+    }
+    return ds;
+};
+
 let domain = PDDL_Parser.parse(array[0]);
 console.log(domain);
 let problem = PDDL_Parser.parse(array[1]);
 console.log(problem);
 let solution = Plan_Parser.parse(array[2]);
 console.log(solution);
-let defaultSettings = array[3] ? array[3] : {};
+let defaultSettings = array[3] ? parseSettings(array[3]) : {};
 console.log(defaultSettings);
 
-const templatesMapping = {
-    "model": "http://localhost:4000/templates/models/Ball.html",
+
+console.log(defaultSettings);
+
+const templatesMapping = defaultSettings.templatesMapping ? defaultSettings.templatesMapping : {
+    "model": "http://localhost:4000/templates/models/Block.html",
     "action": "http://localhost:4000/templates/actions/BasicAction.html",
     "predicate": "http://localhost:4000/templates/predicates/BasicPredicate.html",
     "image": "http://localhost:4000/templates/images/BasicImage.html"
 }
 
-const argsToIndexMapping = {"?x": 0, "?y": 1, "?z": 2, "?from": 0, "?to": 1, "?obj": 0, "?room": "1", "?gripper": 2};
+const argsToIndexMapping = defaultSettings.argsToIndexMapping ? defaultSettings.argsToIndexMapping : {
+    "?x": 0,
+    "?y": 1,
+    "?z": 2,
+    "?from": 0,
+    "?to": 1,
+    "?obj": 0,
+    "?room": "1",
+    "?gripper": 2
+};
 
 let animationFuncs = [];
 /**
  * Blocks World
  **/
-const blocksWorldMappings = [{
+const blocksWorldMappings = defaultSettings.domains && defaultSettings.domains.BLOCKSWORLD ? eval(defaultSettings.domains.BLOCKSWORLD) : [{
     name: "on",
     true_func: function (id, o1, o2) {
         return {
@@ -112,7 +153,7 @@ const blocksWorldMappings = [{
 /**
  * Gripper
  **/
-const gripperMappings = [{
+const gripperMappings = defaultSettings.domains && defaultSettings.domains.GRIPPER ? eval(defaultSettings.domains.GRIPPER) : [{
     name: "room",
     true_func: function (id, o1) {
         return {
@@ -239,7 +280,7 @@ const selectMapping = (domain)=> {
 }
 
 let initialMappings = [];
-initialMappings = selectMapping(defaultSettings.currentDomain ? defaultSettings.currentDomain : "gripper");
+initialMappings = selectMapping(defaultSettings.currentDomain ? defaultSettings.currentDomain : "BLOCKSWORLD");
 
 /**
  * A simple schema for data validation.
@@ -1197,16 +1238,16 @@ var Animation = (function () {
                     d3.select("#" + steps[s][o].id).transition().attr("transform", function (d, i) {
                         return "translate(" + steps[s][o].x + "," + steps[s][o].y + ")";
                     }).delay(s * sts.speed)
-                        .ease(sts.transition).duration(sts.speed);
+                        .ease(sts.transition);
                 }
             } else {
                 d3.select("#" + steps[s].id).transition().attr("transform", function (d, i) {
                     return "translate(" + steps[s].x + "," + steps[s].y + ")";
                 }).delay(s * sts.speed)
-                    .ease(sts.transition).duration(sts.speed);
+                    .ease(sts.transition);
             }
         }
-        AxisPlayer.play(sts.speed * 2);
+        AxisPlayer.play(sts.speed);
         return this;
     }
 
@@ -1218,7 +1259,7 @@ var Animation = (function () {
     }
 }());
 
-let animationOptions = {
+let animationOptions = defaultSettings.animationOptions ? defaultSettings.animationOptions : {
     width: Animation.settings.MEDIUM,
     height: Animation.settings.MEDIUM,
     fontSize: Animation.settings.FONT_SMALL,
@@ -1605,10 +1646,14 @@ var Infrastructure = (function () {
 
                 $("#modal-settings-download").click(function () {
                     let json = {
-                        domains: [blocksWorldMappings, gripperMappings],
-                        animationOption: animationOptions,
+                        domains: {
+                            "BLOCKSWORLD": blocksWorldMappings,
+                            "GRIPPER": gripperMappings
+                        },
+                        animationOptions: animationOptions,
                         argsToIndexMapping: argsToIndexMapping,
-                        currentDomain: "GRIPPER"
+                        currentDomain: "BLOCKSWORLD",
+                        templatesMapping: templatesMapping
                     };
                     let f = new File([JSON.stringify(json, function (key, val) {
                         if (typeof val == 'function')
