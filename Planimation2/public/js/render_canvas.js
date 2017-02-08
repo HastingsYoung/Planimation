@@ -43,9 +43,6 @@ console.log(solution);
 let defaultSettings = array[3] ? parseSettings(array[3]) : {};
 console.log(defaultSettings);
 
-
-console.log(defaultSettings);
-
 const templatesMapping = defaultSettings.templatesMapping ? defaultSettings.templatesMapping : {
     "model": "http://localhost:4000/templates/models/Block.html",
     "action": "http://localhost:4000/templates/actions/BasicAction.html",
@@ -68,7 +65,7 @@ let animationFuncs = [];
 /**
  * Blocks World
  **/
-const blocksWorldMappings = defaultSettings.domains && defaultSettings.domains.BLOCKSWORLD ? eval(defaultSettings.domains.BLOCKSWORLD) : [{
+const blocksWorldMappings = defaultSettings.domains && defaultSettings.domains.BLOCKSWORLD ? defaultSettings.domains.BLOCKSWORLD : [{
     name: "on",
     true_func: function (id, o1, o2) {
         return {
@@ -153,7 +150,7 @@ const blocksWorldMappings = defaultSettings.domains && defaultSettings.domains.B
 /**
  * Gripper
  **/
-const gripperMappings = defaultSettings.domains && defaultSettings.domains.GRIPPER ? eval(defaultSettings.domains.GRIPPER) : [{
+const gripperMappings = defaultSettings.domains && defaultSettings.domains.GRIPPER ? defaultSettings.domains.GRIPPER : [{
     name: "room",
     true_func: function (id, o1) {
         return {
