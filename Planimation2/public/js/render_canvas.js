@@ -1,5 +1,5 @@
 let array = localStorage.getItem('file_container');
-if (!array) {
+if (!array || array.length < 3) {
     alert("Please Load Requisite Files Before Entering This Page!");
     window.location.href = "../index";
 }
@@ -50,14 +50,14 @@ const templatesMapping = defaultSettings.templatesMapping ? defaultSettings.temp
     "image": "http://localhost:4000/templates/images/BasicImage.html"
 }
 
-const argsToIndexMapping = defaultSettings.argsToIndexMapping ? defaultSettings.argsToIndexMapping : {
+const argsToPriorityMapping = defaultSettings.argsToPriorityMapping ? defaultSettings.argsToPriorityMapping : {
     "?x": 0,
     "?y": 1,
     "?z": 2,
     "?from": 0,
     "?to": 1,
     "?obj": 0,
-    "?room": "1",
+    "?room": 1,
     "?gripper": 2
 };
 
@@ -155,8 +155,8 @@ const gripperMappings = defaultSettings.domains && defaultSettings.domains.GRIPP
     true_func: function (id, o1) {
         return {
             id: id,
-            x: 500,
-            y: 100 + Math.random() * 200
+            x: 100,
+            y: 50 + Math.random() * 400
         }
     },
     false_func: function (id, o1) {
@@ -203,7 +203,7 @@ const gripperMappings = defaultSettings.domains && defaultSettings.domains.GRIPP
     true_func: function (id, o1) {
         return {
             id: id,
-            x: 600,
+            x: 400 + (Math.random() * 300),
             y: 100
         }
     },
@@ -219,15 +219,15 @@ const gripperMappings = defaultSettings.domains && defaultSettings.domains.GRIPP
     true_func: function (id, o1) {
         return {
             id: id,
-            x: 650,
-            y: 200
+            x: o1.x,
+            y: o1.y
         }
     },
     false_func: function (id, o1) {
         return {
             id: id,
-            x: 200,
-            y: 200
+            x: o1.x,
+            y: o1.y
         }
     }
 }, {
@@ -235,8 +235,8 @@ const gripperMappings = defaultSettings.domains && defaultSettings.domains.GRIPP
     true_func: function (id, o1) {
         return {
             id: id,
-            x: 450,
-            y: 450
+            x: o1.x,
+            y: o1.y
         }
     },
     false_func: function (id, o1) {
@@ -387,7 +387,7 @@ class DataSchema {
     }
 
     static isFunction(func) {
-        return typeof obj == "function";
+        return typeof func == "function";
     }
 
     static isNumber(num) {
@@ -396,6 +396,100 @@ class DataSchema {
 
     static isArray(arr) {
         return typeof arr == "array";
+    }
+}
+/**
+ * let priorQueue = new PriorityQueue([3,2,1,4,5]);
+ * let priorQueue = new PriorityQueue([[1,2],[3,1],[2,5]]);
+ * @init [[priority, value],[priority, value]] or [priority,priority,priority]
+ * */
+class PriorityQueue {
+    constructor(init) {
+        this.arr = [];
+        if (init && init.length >= 0) {
+            let self = this;
+            init.forEach((ini, i)=> {
+                if (!isNaN(parseFloat(ini)))
+                    self.insert(ini, i);
+                else if (ini.length >= 0) {
+                    self.insert(ini[0], ini[1]);
+                } else
+                    throw new Error("Unrecognized argument type in PriorityQueue!");
+            });
+        }
+    }
+
+    insert(priority, value) {
+        this.arr.push({
+            prior: priority,
+            value: value,
+            index: this.arr.length
+        });
+        this.sort();
+    }
+
+    sort() {
+        this.arr.sort(function (a, b) {
+            if (a.prior < b.prior) {
+                return -1;
+            } else if (a.prior == b.prior) {
+                return 0;
+            } else {
+                return 1;
+            }
+        });
+    }
+
+    max() {
+        let max = {};
+        this.arr.forEach((a, i)=> {
+            if (!max.prior)
+                max = a;
+            if (max.prior < a.prior) {
+                max = a;
+            }
+        });
+        return max;
+    }
+
+    eject() {
+        return this.arr.pop().value;
+    }
+
+    ejectPrior() {
+        return this.arr.pop().prior;
+    }
+
+    get indices() {
+        let resultArr = [];
+        this.arr.forEach((a, i)=> {
+            resultArr[a.index] = i;
+        });
+        return resultArr;
+    }
+
+    get values() {
+        let resultArr = [];
+        this.arr.forEach((a, i)=> {
+            resultArr[a.index] = a.value;
+        });
+        return resultArr;
+    }
+
+    get sortedValues() {
+        let resultArr = [];
+        this.arr.forEach((a, i)=> {
+            resultArr.push(a.value);
+        });
+        return resultArr;
+    }
+
+    get sortedValuesDesc() {
+        let resultArr = [];
+        this.arr.forEach((a, i)=> {
+            resultArr.unshift(a.value);
+        });
+        return resultArr;
     }
 }
 
@@ -1227,7 +1321,6 @@ var Animation = (function () {
     }
 
     function _play(steps, options) {
-        console.log(steps);
         let sts = _applySettings(options);
         for (var s in steps) {
             if (steps[s].length > 0) {
@@ -1271,15 +1364,15 @@ let animationOptions = defaultSettings.animationOptions ? defaultSettings.animat
 }
 
 // todo this if the domain change order of arguments
-const ArgsToIndexMapper = (arg)=> {
-    const mapper = argsToIndexMapping ? argsToIndexMapping : {
+const ArgsToPriorityMapper = (arg)=> {
+    const mapper = argsToPriorityMapping ? argsToPriorityMapping : {
         "?x": 0,
         "?y": 1,
         "?z": 2,
         "?from": 0,
         "?to": 1,
         "?obj": 0,
-        "?room": "1",
+        "?room": 1,
         "?gripper": 2
     };
     if (mapper[arg] || mapper[arg] == 0)
@@ -1441,8 +1534,8 @@ var Transformer = (function () {
             var stack = [];
             for (var e in effs) {
                 // specify which parameter should be map to which argument(in index)
-                let indices = effs[e].parameters ? effs[e].parameters.map((prs)=>(ArgsToIndexMapper(prs.name))) : [];
-
+                let priorities = effs[e].parameters ? effs[e].parameters.map((prs)=>(ArgsToPriorityMapper(prs.name))) : [];
+                let indices = new PriorityQueue(priorities).indices;
                 // 1. map arguments in solution to function in initialStates
                 // 2. expand initialStates array as arguments from the 2nd to last at predicate function
                 // 3. the first argument of predicate function is object id/name
@@ -1648,15 +1741,15 @@ var Infrastructure = (function () {
                             "GRIPPER": gripperMappings
                         },
                         animationOptions: animationOptions,
-                        argsToIndexMapping: argsToIndexMapping,
-                        currentDomain: "BLOCKSWORLD",
+                        argsToPriorityMapping: argsToPriorityMapping,
+                        currentDomain: defaultSettings.currentDomain ? defaultSettings.currentDomain : "BLOCKSWORLD",
                         templatesMapping: templatesMapping
                     };
                     let f = new File([JSON.stringify(json, function (key, val) {
                         if (typeof val == 'function')
-                            return val + '';
+                            return val.toString();
                         return val;
-                    })], "planimation_settings.json");
+                    }).replace(/\\n/g, "").trim()], "planimation_settings.json");
                     let a = document.createElement('a');
                     a.download = "planimation_settings.json";
                     a.href = window.URL.createObjectURL(f);
