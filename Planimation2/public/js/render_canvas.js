@@ -491,6 +491,22 @@ class PriorityQueue {
         });
         return resultArr;
     }
+
+    static ArgsToPriorityMapper(arg) {
+        const mapper = argsToPriorityMapping ? argsToPriorityMapping : {
+            "?x": 0,
+            "?y": 1,
+            "?z": 2,
+            "?from": 0,
+            "?to": 1,
+            "?obj": 0,
+            "?room": 1,
+            "?gripper": 2
+        };
+        if (mapper[arg] || mapper[arg] == 0)
+            return mapper[arg];
+        throw new Error("Argument " + arg + " is not recognizable: Argument order need to be changed if domain is using special order of letters other than alphabet!");
+    }
 }
 
 /**
@@ -1363,23 +1379,6 @@ let animationOptions = defaultSettings.animationOptions ? defaultSettings.animat
     transition: Animation.settings.TRANSITION_EASE_CUBIC
 }
 
-// todo this if the domain change order of arguments
-const ArgsToPriorityMapper = (arg)=> {
-    const mapper = argsToPriorityMapping ? argsToPriorityMapping : {
-        "?x": 0,
-        "?y": 1,
-        "?z": 2,
-        "?from": 0,
-        "?to": 1,
-        "?obj": 0,
-        "?room": 1,
-        "?gripper": 2
-    };
-    if (mapper[arg] || mapper[arg] == 0)
-        return mapper[arg];
-    throw new Error("Argument " + arg + " is not recognizable: Argument order need to be changed if domain is using special order of letters other than alphabet!");
-}
-
 /**
  *  transform raw data to animation objects
  *  @getInit()
@@ -1534,7 +1533,7 @@ var Transformer = (function () {
             var stack = [];
             for (var e in effs) {
                 // specify which parameter should be map to which argument(in index)
-                let priorities = effs[e].parameters ? effs[e].parameters.map((prs)=>(ArgsToPriorityMapper(prs.name))) : [];
+                let priorities = effs[e].parameters ? effs[e].parameters.map((prs)=>(PriorityQueue.ArgsToPriorityMapper(prs.name))) : [];
                 let indices = new PriorityQueue(priorities).indices;
                 // 1. map arguments in solution to function in initialStates
                 // 2. expand initialStates array as arguments from the 2nd to last at predicate function
