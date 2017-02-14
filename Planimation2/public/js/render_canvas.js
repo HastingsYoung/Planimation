@@ -134,7 +134,7 @@ const blocksWorldMappings = defaultSettings.domains && defaultSettings.domains.B
     true_func: function (id, o1) {
         return {
             id: id,
-            x: 100,
+            x: 300,
             y: 450
         }
     },
@@ -1380,8 +1380,10 @@ let animationOptions = defaultSettings.animationOptions ? defaultSettings.animat
     dy: Animation.settings.MEDIUM + 20,
     speed: Animation.settings.PLAY_MEDIUM,
     basePosition: {
-        x: 10,
-        y: 50
+        x: -300,
+        y: 50,
+        marginX: 50,
+        marginY: 0
     },
     transition: Animation.settings.TRANSITION_EASE_CUBIC
 }
@@ -1453,8 +1455,8 @@ var Transformer = (function () {
             if (init[i].args[0])
                 _initialStates[init[i].args[0]] = {
                     id: init[i].args[0],
-                    x: animationOptions.basePosition.x * i,
-                    y: animationOptions.basePosition.y
+                    x: animationOptions.basePosition.x + animationOptions.basePosition.marginX * i,
+                    y: animationOptions.basePosition.y + animationOptions.basePosition.marginY * i
                 };
             //}
         }
