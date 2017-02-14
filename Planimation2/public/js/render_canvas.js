@@ -333,10 +333,15 @@ class DataSchema {
                 return false;
             } else {
                 if (typeof data[dks] != this.schema[dks].type.toLowerCase()) {
-                    if (this.schema[dks].type.toLowerCase() != "number")
+                    let type = this.schema[dks].type.toLowerCase();
+                    if (type != "number" && type != "array")
                         return false;
-                    else if (!DataSchema.isNumber(data[dks]))
-                        return false;
+                    else {
+                        if (type == "number" && !DataSchema.isNumber(data[dks]))
+                            return false;
+                        else if (type == "array" && data[dks].length < 0)
+                            return false;
+                    }
                 }
             }
             if (this.schema[dks].regex) {
@@ -395,7 +400,7 @@ class DataSchema {
     }
 
     static isArray(arr) {
-        return typeof arr == "array";
+        return typeof arr == "object" && arr.length >= 0;
     }
 }
 /**
@@ -666,6 +671,8 @@ var TemplateFactory = (function () {
  * */
 class Component {
     constructor(props) {
+        if(!props)
+            throw new Error("Unrecognized argument input.");
         var keys = Object.keys(props);
         for (var k in keys) {
             this[keys[k]] = props[keys[k]];
