@@ -324,7 +324,10 @@ const domainMappings = {
 }
 
 const selectMapping = (domain)=> {
-    return domainMappings[domain.toUpperCase()]
+    if (domainMappings[domain.toUpperCase()])
+        return domainMappings[domain.toUpperCase()]
+    alert("The domain is currently not supported, please contact author to continue!");
+    window.location.href = "../index";
 }
 
 let initialMappings = [];
@@ -927,25 +930,28 @@ class Action extends Component {
 class Predicate extends Component {
     renderModal(parentNode) {
         var args = []
-
+        let _this = this;
         for (var t in this.data.parameters) {
             args.push(this.data.parameters[t].name);
         }
 
         var predicates = "(" + args.join(",") + ")";
-
+        let predicateFuncs = initialMappings.filter((init, i)=> {
+            return init.name == _this.data.name
+        });
+        console.log(predicateFuncs);
         var nodeContent = "<div class='predicate'>" + "<header><h3 class='name'>Predicate Name: " + this.data.name +
             "</h3></header>" + "<div class='content'><div class='tags'>" +
             "<div class='sub_header'><h5>Predicates: </h5>" + predicates + "</div>" + "<span><label><i class='fa fa-plus-square fa-2x' aria-hidden='true'></i></label><input class='predicate-true' placeholder='True Condition'/></span>"
             + "<span><label><i class='fa fa-minus-square fa-2x' aria-hidden='true'></i></label><input class='predicate-false' placeholder='False Condition' /></span>" +
             "<span class='modal-btns'>" +
             "<button id='modal-predicate-confirm' class='btn-confirm'>Confirm</button><button class='btn-cancel'>Cancel</button></span>" + "</div><div class='modal-divider'></div><div class='description'><h4>Example</h4>" +
-            "<p>If we've got variable (?a,?b) then the input should be x:a.x+b.x+10;y:a.y*10-b.y</p></div></div></div>";
+            "<p>If we've got variable (?a,?b) then the input should be x:a.x+b.x+10;y:a.y*10-b.y</p>" +
+            "<h4>Initial Formula</h4><p><b>True</b>: " + predicateFuncs[0].true_func.toString() + "</p><p><b>False</b>: " + predicateFuncs[0].false_func.toString() + "</p></div></div></div>";
         if (parentNode)
             parentNode.appendChild(nodeContent);
         else if (this.modalSelector)
             document.querySelector(this.modalSelector).appendChild(this.parseDom(nodeContent));
-        let _this = this;
         $("#modal-predicate-confirm").click(function () {
             let tValue = $(".predicate-true").val();
             let fValue = $(".predicate-false").val();
@@ -1616,7 +1622,7 @@ var Transformer = (function () {
                     }));
                     let preObj = arr[0];
                     let afterObj = _predicates[effs[e].name].true(arr[0].id, ...arr);
-                    if (afterObj.x && afterObj.y && (preObj.x != afterObj.x || preObj.y != afterObj.y)){
+                    if (afterObj.x && afterObj.y && (preObj.x != afterObj.x || preObj.y != afterObj.y)) {
                         _initialStates[afterObj.id] = afterObj;
                         stack.push(afterObj);
                     }
@@ -1629,7 +1635,7 @@ var Transformer = (function () {
                     }));
                     let preObj = arr[0];
                     let afterObj = _predicates[effs[e].name].false(arr[0].id, ...arr);
-                    if (afterObj.x && afterObj.y && (preObj.x != afterObj.x || preObj.y != afterObj.y)){
+                    if (afterObj.x && afterObj.y && (preObj.x != afterObj.x || preObj.y != afterObj.y)) {
                         _initialStates[afterObj.id] = afterObj;
                         stack.push(afterObj);
                     }
