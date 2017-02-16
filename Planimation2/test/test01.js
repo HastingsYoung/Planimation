@@ -5,7 +5,7 @@
 var assert = require('assert');
 describe('Data Mapping Layer', function () {
     describe('#DataSchema', function () {
-        it('should throw error when no argument is presented', function () {
+        it('should throw error when no argument is present', function () {
             try {
                 let ds = new DataSchema();
             } catch (err) {

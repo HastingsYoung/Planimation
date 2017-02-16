@@ -101,7 +101,7 @@ const blocksWorldMappings = defaultSettings.domains && defaultSettings.domains.B
     true_func: function (id, o1) {
         return {
             id: id,
-            x: 50 + Math.floor(Math.random() * 5) * 50,
+            x: 50 + Math.floor(Math.random() * 8) * 50,
             y: 400
         }
     },
@@ -139,8 +139,8 @@ const blocksWorldMappings = defaultSettings.domains && defaultSettings.domains.B
     true_func: function (id, o1) {
         return {
             id: id,
-            x: 700,
-            y: 450
+            x: 400,
+            y: 100
         }
     },
     false_func: function (id, o1) {
@@ -947,7 +947,7 @@ class Predicate extends Component {
             "<span class='modal-btns'>" +
             "<button id='modal-predicate-confirm' class='btn-confirm'>Confirm</button><button class='btn-cancel'>Cancel</button></span>" + "</div><div class='modal-divider'></div><div class='description'><h4>Example</h4>" +
             "<p>If we've got variable (?a,?b) then the input should be x:a.x+b.x+10;y:a.y*10-b.y</p>" +
-            "<h4>Initial Formula</h4><p><b>True</b>: " + predicateFuncs[0].true_func.toString() + "</p><p><b>False</b>: " + predicateFuncs[0].false_func.toString() + "</p></div></div></div>";
+            "<h4>Initial Formula</h4><p><b>True</b>:" + predicateFuncs[0].true_func.toString() + "</p><p><b>False</b>:" + predicateFuncs[0].false_func.toString() + "</p></div></div></div>";
         if (parentNode)
             parentNode.appendChild(nodeContent);
         else if (this.modalSelector)
