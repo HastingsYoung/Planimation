@@ -61,6 +61,23 @@ const argsToPriorityMapping = defaultSettings.argsToPriorityMapping ? defaultSet
     "?gripper": 2
 };
 
+
+/**
+ * @constructor constructor of Rule, e.g. let rule = new Rule({func:function(a,b,c){},name:"rule1"});
+ * */
+class Rule {
+    constructor(props) {
+        if (!props || !props.func || !props.name)
+            throw new Error("No arguments or unrecognized argument input in class Rule");
+        this.rule = props;
+    }
+
+    apply(...args) {
+        let result = this.rule.func(...args);
+        return result;
+    }
+}
+
 let animationFuncs = [];
 /**
  * Blocks World
@@ -77,8 +94,6 @@ const blocksWorldMappings = defaultSettings.domains && defaultSettings.domains.B
     false_func: function (id, o1, o2) {
         return {
             id: id,
-            x: o1.x,
-            y: o1.y
         }
     }
 }, {
@@ -86,15 +101,13 @@ const blocksWorldMappings = defaultSettings.domains && defaultSettings.domains.B
     true_func: function (id, o1) {
         return {
             id: id,
-            x: 600 + Math.random() * 100,
-            y: 50 + Math.random() * 100
+            x: 50 + Math.floor(Math.random() * 5) * 50,
+            y: 400
         }
     },
     false_func: function (id, o1) {
         return {
             id: id,
-            x: o1.x,
-            y: o1.y
         }
     }
 }, {
@@ -102,15 +115,11 @@ const blocksWorldMappings = defaultSettings.domains && defaultSettings.domains.B
     true_func: function (id, o1) {
         return {
             id: id,
-            x: o1.x,
-            y: o1.y
         }
     },
     false_func: function (id, o1) {
         return {
             id: id,
-            x: o1.x,
-            y: o1.y
         }
     }
 }, {
@@ -118,15 +127,11 @@ const blocksWorldMappings = defaultSettings.domains && defaultSettings.domains.B
     true_func: function (id, o1) {
         return {
             id: id,
-            x: o1.x,
-            y: o1.y
         }
     },
     false_func: function (id, o1) {
         return {
             id: id,
-            x: o1.x,
-            y: o1.y
         }
     }
 }, {
@@ -141,8 +146,8 @@ const blocksWorldMappings = defaultSettings.domains && defaultSettings.domains.B
     false_func: function (id, o1) {
         return {
             id: id,
-            x: o1.x,
-            y: o1.y
+            //x: o1.x,
+            //y: o1.y
         }
     }
 }];
@@ -264,12 +269,58 @@ const gripperMappings = defaultSettings.domains && defaultSettings.domains.GRIPP
     }
 }];
 
+const blocksWorldRules = {
+    initRule: new Rule({
+        name: "CHECK_ONTABLE",
+        func: function (_initialStates, init, _predicates) {
+            for (var i in init) {
+                if (init[i].args.length >= 1) {
+                    if (init[i].name == "ontable")
+                        if (init[i].truthiness == "true") {
+                            let temp = _predicates[init[i].name].true(init[i].args[0], ...(init[i].args.map((p, index)=> {
+                                return _initialStates[p];
+                            })));
+                            _initialStates[init[i].args[0]] = temp.x && temp.y ? temp : _initialStates[init[i].args[0]];
+                        } else {
+                            let temp = _predicates[init[i].name].false(init[i].args[0], ...(init[i].args.map((p, index)=> {
+                                return _initialStates[p];
+                            })));
+                            _initialStates[init[i].args[0]] = temp.x && temp.y ? temp : _initialStates[init[i].args[0]];
+                        }
+                }
+            }
+            for (var i in init) {
+                if (init[i].args.length >= 1) {
+                    if (init[i].name != "ontable")
+                        if (init[i].truthiness == "true") {
+                            let temp = _predicates[init[i].name].true(init[i].args[0], ...(init[i].args.map((p, index)=> {
+                                return _initialStates[p];
+                            })));
+                            _initialStates[init[i].args[0]] = temp.x && temp.y ? temp : _initialStates[init[i].args[0]];
+                        } else {
+                            let temp = _predicates[init[i].name].false(init[i].args[0], ...(init[i].args.map((p, index)=> {
+                                return _initialStates[p];
+                            })));
+                            _initialStates[init[i].args[0]] = temp.x && temp.y ? temp : _initialStates[init[i].args[0]];
+                        }
+                }
+            }
+            return _initialStates;
+        }
+    })
+};
+
 /**
  * Map Domain to Default Settings
  * */
 const domainMappings = {
-    "BLOCKSWORLD": blocksWorldMappings,
-    "GRIPPER": gripperMappings
+    "BLOCKSWORLD": {
+        mappings: blocksWorldMappings,
+        rules: blocksWorldRules
+    },
+    "GRIPPER": {
+        mappings: gripperMappings
+    }
 }
 
 const selectMapping = (domain)=> {
@@ -277,7 +328,7 @@ const selectMapping = (domain)=> {
 }
 
 let initialMappings = [];
-initialMappings = selectMapping(defaultSettings.currentDomain ? defaultSettings.currentDomain : "BLOCKSWORLD");
+initialMappings = selectMapping(defaultSettings.currentDomain ? defaultSettings.currentDomain : "BLOCKSWORLD").mappings;
 
 /**
  * A simple schema for data validation.
@@ -403,6 +454,8 @@ class DataSchema {
         return typeof arr == "object" && arr.length >= 0;
     }
 }
+
+
 /**
  * let priorQueue = new PriorityQueue([3,2,1,4,5]);
  * let priorQueue = new PriorityQueue([[1,2],[3,1],[2,5]]);
@@ -671,7 +724,7 @@ var TemplateFactory = (function () {
  * */
 class Component {
     constructor(props) {
-        if(!props)
+        if (!props)
             throw new Error("Unrecognized argument input.");
         var keys = Object.keys(props);
         for (var k in keys) {
@@ -909,7 +962,6 @@ class Predicate extends Component {
                 true_func: eval(funcBodyT),
                 false_func: eval(funcBodyF)
             });
-            console.log(animationFuncs);
             $(".modal").removeClass("active");
         });
     }
@@ -1219,7 +1271,7 @@ var Animation = (function () {
         "FONT_SMALL": "15px",
         "PLAY_FAST": 200,
         "PLAY_MEDIUM": 500,
-        "PLAY_SLOW": 1000,
+        "PLAY_SLOW": 2000,
         "TRANSITION_EASE_LINEAR": d3.easeLinear,
         "TRANSITION_EASE_CUBIC": d3.easeCubic,
         "TRANSITION_EASE_POLYOUT": d3.easePolyOut,
@@ -1313,6 +1365,7 @@ var Animation = (function () {
     }
 
     function _register(initials, options) {
+        console.log(initials);
         if (!(initials.length > 0))
             throw "Initial states not correct!";
         else {
@@ -1344,14 +1397,16 @@ var Animation = (function () {
     }
 
     function _play(steps, options) {
+        console.log(steps);
         let sts = _applySettings(options);
         for (var s in steps) {
             if (steps[s].length > 0) {
                 for (var o in steps[s]) {
-                    d3.select("#" + steps[s][o].id).transition().attr("transform", function (d, i) {
-                        return "translate(" + steps[s][o].x + "," + steps[s][o].y + ")";
-                    }).delay(s * sts.speed)
-                        .ease(sts.transition);
+                    if (o)
+                        d3.select("#" + steps[s][o].id).transition().attr("transform", function (d, i) {
+                            return "translate(" + steps[s][o].x + "," + steps[s][o].y + ")";
+                        }).delay(s * sts.speed)
+                            .ease(sts.transition);
                 }
             } else {
                 //d3.select("#" + steps[s].id).transition().attr("transform", function (d, i) {
@@ -1371,6 +1426,7 @@ var Animation = (function () {
         settings: _settings
     }
 }());
+
 
 let animationOptions = defaultSettings.animationOptions ? defaultSettings.animationOptions : {
     width: Animation.settings.MEDIUM,
@@ -1427,7 +1483,7 @@ var Transformer = (function () {
      * @solutions solutions
      * @actions domain action definitions
      * */
-    function _initiate(predicates, init, solutions, actions) {
+    function _initiate(predicates, init, solutions, actions, rules) {
         _clear();
         if (!init || !solutions || !predicates || !actions) {
             throw "Arguments Not Correct!"
@@ -1451,49 +1507,54 @@ var Transformer = (function () {
 
         // base cases
         for (var i in init) {
-            //if (init[i].args.length == 1) {
             if (init[i].args[0])
                 _initialStates[init[i].args[0]] = {
                     id: init[i].args[0],
                     x: animationOptions.basePosition.x + animationOptions.basePosition.marginX * i,
                     y: animationOptions.basePosition.y + animationOptions.basePosition.marginY * i
                 };
-            //}
         }
 
         // derivative cases
         var loopStack = [];
-        for (var i in init) {
-            if (init[i].args.length >= 1) {
-                var b = true;
-                /** as the input order of arguments are now in dependent order, we don't need a loopStack to handle non-existence dependencies
-                 * but would be useful in the future ⤵
-                 */
-                for (var arg = 1; arg < init[i].args.length; arg++) {
-                    // if any dependent argument does not exist(the first one is variable to be calculated)
-                    if (!_initialStates[init[i].args[arg]]) {
-                        loopStack.push({
-                            args: init[i].args,
-                            name: init[i].name
-                        });
-                        b = false;
-                        break;
+        if (rules && rules.initRule && rules.initRule instanceof Rule)
+            _initialStates = rules.initRule.apply(_initialStates, init, _predicates);
+        else
+            for (var i in init) {
+                if (init[i].args.length >= 1) {
+                    var b = true;
+                    /** as the input order of arguments are now in dependent order, we don't need a loopStack to handle non-existence dependencies
+                     * but would be useful in the future ⤵
+                     */
+                    //for (var arg = 1; arg < init[i].args.length; arg++) {
+                    //    // if any dependent argument does not exist(the first one is variable to be calculated)
+                    //    if (!_initialStates[init[i].args[arg]]) {
+                    //        loopStack.push({
+                    //            args: init[i].args,
+                    //            name: init[i].name
+                    //        });
+                    //        b = false;
+                    //        break;
+                    //    }
+                    //}
+                    // if every dependencies is able to be found, set a mapping between first argument and its dependencies
+                    if (b) {
+                        if (init[i].truthiness == "true") {
+                            // init[i].args[0]: the first argument is always the argument to be operated on
+                            let temp = _predicates[init[i].name].true(init[i].args[0], ...(init[i].args.map((p, index)=> {
+                                return _initialStates[p];
+                            })));
+                            _initialStates[init[i].args[0]] = temp.x && temp.y ? temp : _initialStates[init[i].args[0]];
+                        } else {
+                            let temp = _predicates[init[i].name].false(init[i].args[0], ...(init[i].args.map((p, index)=> {
+                                return _initialStates[p];
+                            })));
+                            _initialStates[init[i].args[0]] = temp.x && temp.y ? temp : _initialStates[init[i].args[0]];
+                        }
+
                     }
                 }
-                // if every dependencies is able to be found, set a mapping between first argument and its dependencies
-                if (b) {
-                    if (init[i].truthiness == "true")
-                    // init[i].args[0]: the first argument is always the argument to be operated on
-                        _initialStates[init[i].args[0]] = _predicates[init[i].name].true(init[i].args[0], ...(init[i].args.map((p, index)=> {
-                            return _initialStates[p];
-                        })));
-                    else
-                        _initialStates[init[i].args[0]] = _predicates[init[i].name].false(init[i].args[0], ...(init[i].args.map((p, index)=> {
-                            return _initialStates[p];
-                        })));
-                }
             }
-        }
         /** as the input order of arguments are now in dependent order, we don't need a loopStack to handle non-existence dependencies
          * but would be useful in the future ⤵
          */
@@ -1544,7 +1605,7 @@ var Transformer = (function () {
                 // specify which parameter should be map to which argument(in index)
                 let priorities = effs[e].parameters ? effs[e].parameters.map((prs)=>(PriorityQueue.ArgsToPriorityMapper(prs.name))) : [];
                 let indices = new PriorityQueue(priorities).indices;
-                // 1. map arguments in solution to function in initialStates
+                // 1. map arguments in solution to functions in initialStates
                 // 2. expand initialStates array as arguments from the 2nd to last at predicate function
                 // 3. the first argument of predicate function is object id/name
                 if (effs[e].truthiness == "true") {
@@ -1555,8 +1616,10 @@ var Transformer = (function () {
                     }));
                     let preObj = arr[0];
                     let afterObj = _predicates[effs[e].name].true(arr[0].id, ...arr);
-                    if (preObj.x != afterObj.x || preObj.y != afterObj.y)
+                    if (afterObj.x && afterObj.y && (preObj.x != afterObj.x || preObj.y != afterObj.y)){
+                        _initialStates[afterObj.id] = afterObj;
                         stack.push(afterObj);
+                    }
                 }
                 else {
                     let arr = (_solutions[s].args.map((sol, index)=> {
@@ -1566,8 +1629,10 @@ var Transformer = (function () {
                     }));
                     let preObj = arr[0];
                     let afterObj = _predicates[effs[e].name].false(arr[0].id, ...arr);
-                    if (preObj.x != afterObj.x || preObj.y != afterObj.y)
+                    if (afterObj.x && afterObj.y && (preObj.x != afterObj.x || preObj.y != afterObj.y)){
+                        _initialStates[afterObj.id] = afterObj;
                         stack.push(afterObj);
+                    }
                 }
             }
             _dataArray.push(stack);
@@ -1660,7 +1725,7 @@ var Infrastructure = (function () {
                         truthiness: o.truthiness
                     });
                 }
-                let trans = Transformer.initiate(predicateMappings(animationFuncs), init, solution, domain[3]);
+                let trans = Transformer.initiate(predicateMappings(animationFuncs), init, solution, domain[3], selectMapping(defaultSettings.currentDomain ? defaultSettings.currentDomain : "BLOCKSWORLD").rules);
                 // enter initial condition
                 let anime = Animation.register(trans.getInit(), animationOptions);
                 // play steps
