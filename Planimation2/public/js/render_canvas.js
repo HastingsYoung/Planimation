@@ -71,7 +71,7 @@ const blocksWorldMappings = defaultSettings.domains && defaultSettings.domains.B
         return {
             id: id,
             x: o2.x,
-            y: o2.y + 40
+            y: o2.y - 40
         }
     },
     false_func: function (id, o1, o2) {
@@ -134,7 +134,7 @@ const blocksWorldMappings = defaultSettings.domains && defaultSettings.domains.B
     true_func: function (id, o1) {
         return {
             id: id,
-            x: 300,
+            x: 700,
             y: 450
         }
     },
@@ -1354,10 +1354,10 @@ var Animation = (function () {
                         .ease(sts.transition);
                 }
             } else {
-                d3.select("#" + steps[s].id).transition().attr("transform", function (d, i) {
-                    return "translate(" + steps[s].x + "," + steps[s].y + ")";
-                }).delay(s * sts.speed)
-                    .ease(sts.transition);
+                //d3.select("#" + steps[s].id).transition().attr("transform", function (d, i) {
+                //    return "translate(" + steps[s].x + "," + steps[s].y + ")";
+                //}).delay(s * sts.speed)
+                //    .ease(sts.transition);
             }
         }
         AxisPlayer.play(sts.speed);
@@ -1380,8 +1380,8 @@ let animationOptions = defaultSettings.animationOptions ? defaultSettings.animat
     dy: Animation.settings.MEDIUM + 20,
     speed: Animation.settings.PLAY_MEDIUM,
     basePosition: {
-        x: -300,
-        y: 50,
+        x: -400,
+        y: 500,
         marginX: 50,
         marginY: 0
     },

@@ -2,7 +2,7 @@
 	"domains": {
 		"BLOCKSWORLD": [{
 			"name": "on",
-			"true_func": "function (id, o1, o2) {        return {            id: id,            x: o2.x,            y: o2.y + 40        }    }",
+			"true_func": "function (id, o1, o2) {        return {            id: id,            x: o2.x,            y: o2.y - 40        }    }",
 			"false_func": "function (id, o1, o2) {        return {            id: id,            x: o1.x,            y: o1.y        }    }"
 		}, {
 			"name": "ontable",
@@ -18,7 +18,7 @@
 			"false_func": "function (id, o1) {        return {            id: id,            x: o1.x,            y: o1.y        }    }"
 		}, {
 			"name": "holding",
-			"true_func": "function (id, o1) {        return {            id: id,            x: 300,            y: 450        }    }",
+			"true_func": "function (id, o1) {        return {            id: id,            x: 700,            y: 450        }    }",
 			"false_func": "function (id, o1) {        return {            id: id,            x: o1.x,            y: o1.y        }    }"
 		}],
 		"GRIPPER": [{
@@ -59,8 +59,8 @@
 		"dy": 70,
 		"speed": 500,
 		"basePosition": {
-			"x": -300,
-			"y": 50,
+			"x": -400,
+			"y": 500,
 			"marginX": 50,
 			"marginY": 0
 		},
