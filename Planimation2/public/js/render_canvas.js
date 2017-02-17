@@ -1051,9 +1051,12 @@ class Image extends Component {
             event.target.className = event.target.className.replace(reg, ' ');
 
             d3.select(".canvas > svg").append("image").attr("id", _id).classed("drag-ele", true).attr("width", obj.data.width).attr("height", obj.data.height).attr("href", obj.data.logo).attr("transform", function () {
-                return "translate(" + (event.x - offsetWidth) + "," + (event.y - offsetHeight) + ")";
+                return "translate(" + (event.x - offsetWidth) + "," + (event.y - obj.data.height * 1.5) + ")";
             }).attr("fill", "#eee");
-            d3.select("#" + _id).data([{x: event.x - offsetWidth, y: event.y - offsetHeight}]).call(drag);
+            d3.select("#" + _id).data([{
+                x: event.x - offsetWidth,
+                y: event.y - offsetHeight
+            }]).call(drag);
             event.stopPropagation();
         }, false);
 
