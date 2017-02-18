@@ -101,7 +101,7 @@ const blocksWorldMappings = defaultSettings.domains && defaultSettings.domains.B
     true_func: function (id, o1) {
         return {
             id: id,
-            x: 50 + Math.floor(Math.random() * 8) * 50,
+            x: 50 + Math.floor(Math.random() * 10) * 50,
             y: 400
         }
     },
@@ -1055,7 +1055,7 @@ class Image extends Component {
             }).attr("fill", "#eee");
             d3.select("#" + _id).data([{
                 x: event.x - offsetWidth,
-                y: event.y - offsetHeight
+                y: event.y - obj.data.height * 1.5
             }]).call(drag);
             event.stopPropagation();
         }, false);
@@ -1388,11 +1388,11 @@ var Animation = (function () {
                 var obj = models[i].obj;
                 return obj.data.logo;
             });
-            group.append("text").attr("dx", function (d, i) {
+            group.append("text").attr("class","animated-text").attr("dx", function (d, i) {
                 return sts.dx;
             }).attr("dy", function (d, i) {
                 return sts.dy;
-            }).attr("font-size", sts.fontSize).text(function (d, i) {
+            }).attr("font-size", sts.fontSize).attr("font-family","Verdana").text(function (d, i) {
                 return "Object-" + d.id;
             });
         }
