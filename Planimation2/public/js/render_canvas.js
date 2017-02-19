@@ -99,9 +99,10 @@ const blocksWorldMappings = defaultSettings.domains && defaultSettings.domains.B
 }, {
     name: "ontable",
     true_func: function (id, o1) {
+        const idToOrder = {"a": 1, "b": 2, "c": 3, "d": 4, "e": 5, "f": 6, "g": 7, "h": 8, "i": 9, "j": 10}
         return {
             id: id,
-            x: 50 + Math.floor(Math.random() * 10) * 50,
+            x: 40 + (idToOrder[id] ? idToOrder[id] : Math.floor(Math.random() * 5)) * 40,
             y: 400
         }
     },
@@ -139,7 +140,7 @@ const blocksWorldMappings = defaultSettings.domains && defaultSettings.domains.B
     true_func: function (id, o1) {
         return {
             id: id,
-            x: 400,
+            x: 600,
             y: 100
         }
     },
@@ -1260,8 +1261,8 @@ var Animation = (function () {
     let colors = ["red", "blue", "purple", "gray", "brown", "green", "skyblue", "black", "silver", "pink", "yellow", "darkgoldenrod"]
     let _settings = {
         "LARGE": 100,
-        "MEDIUM": 50,
-        "SMALL": 30,
+        "MEDIUM": 40,
+        "SMALL": 20,
         "RED": 0,
         "BLUE": 1,
         "PURPLE": 2,
@@ -1388,11 +1389,11 @@ var Animation = (function () {
                 var obj = models[i].obj;
                 return obj.data.logo;
             });
-            group.append("text").attr("class","animated-text").attr("dx", function (d, i) {
+            group.append("text").attr("class", "animated-text").attr("dx", function (d, i) {
                 return sts.dx;
             }).attr("dy", function (d, i) {
                 return sts.dy;
-            }).attr("font-size", sts.fontSize).attr("font-family","Verdana").text(function (d, i) {
+            }).attr("font-size", sts.fontSize).attr("font-family", "Verdana").text(function (d, i) {
                 return "Object-" + d.id;
             });
         }
