@@ -16,7 +16,7 @@
 
 
    (:action pick
-       :parameters (?obj ?room ?gripper)
+       :parameters (?obj ?gripper ?room)
        :precondition  (and  (ball ?obj) (room ?room) (gripper ?gripper)
 			    (at ?obj ?room) (at-robby ?room) (free ?gripper))
        :effect (and (carry ?obj ?gripper)
@@ -25,10 +25,11 @@
 
 
    (:action drop
-       :parameters  (?obj  ?room ?gripper)
+       :parameters  (?obj ?gripper ?room)
        :precondition  (and  (ball ?obj) (room ?room) (gripper ?gripper)
 			    (carry ?obj ?gripper) (at-robby ?room))
        :effect (and (at ?obj ?room)
+            (at ?gripper ?room)
 		    (free ?gripper)
 		    (not (carry ?obj ?gripper)))))
 

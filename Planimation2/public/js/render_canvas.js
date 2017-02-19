@@ -57,8 +57,8 @@ const argsToPriorityMapping = defaultSettings.argsToPriorityMapping ? defaultSet
     "?from": 0,
     "?to": 1,
     "?obj": 0,
-    "?room": 1,
-    "?gripper": 2
+    "?gripper": 1,
+    "?room": 2
 };
 
 
@@ -93,13 +93,13 @@ const blocksWorldMappings = defaultSettings.domains && defaultSettings.domains.B
     },
     false_func: function (id, o1, o2) {
         return {
-            id: id,
+            id: id
         }
     }
 }, {
     name: "ontable",
     true_func: function (id, o1) {
-        const idToOrder = {"a": 1, "b": 2, "c": 3, "d": 4, "e": 5, "f": 6, "g": 7, "h": 8, "i": 9, "j": 10}
+        const idToOrder = {"a": 1, "b": 2, "c": 3, "d": 4, "e": 5, "f": 6, "g": 7, "h": 8, "i": 9, "j": 10};
         return {
             id: id,
             x: 40 + (idToOrder[id] ? idToOrder[id] : Math.floor(Math.random() * 5)) * 40,
@@ -108,31 +108,31 @@ const blocksWorldMappings = defaultSettings.domains && defaultSettings.domains.B
     },
     false_func: function (id, o1) {
         return {
-            id: id,
+            id: id
         }
     }
 }, {
     name: "clear",
     true_func: function (id, o1) {
         return {
-            id: id,
+            id: id
         }
     },
     false_func: function (id, o1) {
         return {
-            id: id,
+            id: id
         }
     }
 }, {
     name: "handempty",
     true_func: function (id, o1) {
         return {
-            id: id,
+            id: id
         }
     },
     false_func: function (id, o1) {
         return {
-            id: id,
+            id: id
         }
     }
 }, {
@@ -146,9 +146,7 @@ const blocksWorldMappings = defaultSettings.domains && defaultSettings.domains.B
     },
     false_func: function (id, o1) {
         return {
-            id: id,
-            //x: o1.x,
-            //y: o1.y
+            id: id
         }
     }
 }];
@@ -159,33 +157,28 @@ const blocksWorldMappings = defaultSettings.domains && defaultSettings.domains.B
 const gripperMappings = defaultSettings.domains && defaultSettings.domains.GRIPPER ? defaultSettings.domains.GRIPPER : [{
     name: "room",
     true_func: function (id, o1) {
+        const rooms = {"a": 1, "b": 2};
         return {
             id: id,
-            x: 100,
-            y: 50 + Math.random() * 400
+            x: 100 + rooms[id] ? (rooms[id]) * 200 : Math.random() * 200,
+            y: 500
         }
     },
     false_func: function (id, o1) {
         return {
-            id: id,
-            x: o1.x,
-            y: o1.y
+            id: id
         }
     }
 }, {
     name: "ball",
     true_func: function (id, o1) {
         return {
-            id: id,
-            x: o1.x,
-            y: o1.y
+            id: id
         }
     },
     false_func: function (id, o1, o2) {
         return {
-            id: id,
-            x: o1.x,
-            y: o1.y
+            id: id
         }
     }
 }, {
@@ -199,73 +192,64 @@ const gripperMappings = defaultSettings.domains && defaultSettings.domains.GRIPP
     },
     false_func: function (id, o1, o2) {
         return {
-            id: id,
-            x: o1.x,
-            y: o1.y
+            id: id
         }
     }
 }, {
     name: "gripper",
     true_func: function (id, o1) {
+        const grippers = {"left": 1, "right": 2};
         return {
             id: id,
-            x: 400 + (Math.random() * 300),
+            x: 400 + grippers[id] ? grippers[id] * 100 : (Math.random() * 300),
             y: 100
         }
     },
     false_func: function (id, o1) {
         return {
-            id: id,
-            x: o1.x,
-            y: o1.y
+            id: id
         }
     }
 }, {
     name: "free",
     true_func: function (id, o1) {
         return {
-            id: id,
-            x: o1.x,
-            y: o1.y
+            id: id
         }
     },
     false_func: function (id, o1) {
         return {
-            id: id,
-            x: o1.x,
-            y: o1.y
+            id: id
         }
     }
 }, {
     name: "at-robby",
     true_func: function (id, o1) {
         return {
-            id: id,
-            x: o1.x,
-            y: o1.y
+            id: id
         }
     },
     false_func: function (id, o1) {
         return {
-            id: id,
-            x: o1.x,
-            y: o1.y
+            id: id
         }
     }
 }, {
     name: "carry",
     true_func: function (id, o1, o2) {
-        return {
+        return [{
             id: id,
-            x: o2.x - 20,
-            y: o2.y + 100
-        }
+            x: o1.x,
+            y: o1.y - 100
+        }, {
+            id: o2.id,
+            x: o1.x,
+            y: o1.y - 150
+        }]
     },
     false_func: function (id, o1, o2) {
         return {
-            id: id,
-            x: o1.x,
-            y: o1.y
+            id: id
         }
     }
 }];
@@ -562,8 +546,8 @@ class PriorityQueue {
             "?from": 0,
             "?to": 1,
             "?obj": 0,
-            "?room": 1,
-            "?gripper": 2
+            "?gripper": 1,
+            "?room": 2
         };
         if (mapper[arg] || mapper[arg] == 0)
             return mapper[arg];
@@ -1446,7 +1430,7 @@ let animationOptions = defaultSettings.animationOptions ? defaultSettings.animat
     dy: Animation.settings.MEDIUM + 20,
     speed: Animation.settings.PLAY_MEDIUM,
     basePosition: {
-        x: -400,
+        x: -2000,
         y: 500,
         marginX: 50,
         marginY: 0
@@ -1554,12 +1538,22 @@ var Transformer = (function () {
                             let temp = _predicates[init[i].name].true(init[i].args[0], ...(init[i].args.map((p, index)=> {
                                 return _initialStates[p];
                             })));
-                            _initialStates[init[i].args[0]] = temp.x && temp.y ? temp : _initialStates[init[i].args[0]];
+                            if (Array.isArray(temp)) {
+                                temp.forEach((obj, index)=> {
+                                    _initialStates[obj.id] = obj.x && obj.y ? obj : _initialStates[obj.id];
+                                });
+                            } else
+                                _initialStates[init[i].args[0]] = temp.x && temp.y ? temp : _initialStates[init[i].args[0]];
                         } else {
                             let temp = _predicates[init[i].name].false(init[i].args[0], ...(init[i].args.map((p, index)=> {
                                 return _initialStates[p];
                             })));
-                            _initialStates[init[i].args[0]] = temp.x && temp.y ? temp : _initialStates[init[i].args[0]];
+                            if (Array.isArray(temp)) {
+                                temp.forEach((obj, index)=> {
+                                    _initialStates[obj.id] = obj.x && obj.y ? obj : _initialStates[obj.id];
+                                });
+                            } else
+                                _initialStates[init[i].args[0]] = temp.x && temp.y ? temp : _initialStates[init[i].args[0]];
                         }
 
                     }
@@ -1614,6 +1608,7 @@ var Transformer = (function () {
             for (var e in effs) {
                 // specify which parameter should be map to which argument(in index)
                 let priorities = effs[e].parameters ? effs[e].parameters.map((prs)=>(PriorityQueue.ArgsToPriorityMapper(prs.name))) : [];
+                // todo modify PriorityQueue until it suits correct order mapping in gripper, currently room is mapped to the index of gripper
                 let indices = new PriorityQueue(priorities).indices;
                 // 1. map arguments in solution to functions in initialStates
                 // 2. expand initialStates array as arguments from the 2nd to last at predicate function
@@ -1626,9 +1621,22 @@ var Transformer = (function () {
                     }));
                     let preObj = arr[0];
                     let afterObj = _predicates[effs[e].name].true(arr[0].id, ...arr);
-                    if (afterObj.x && afterObj.y && (preObj.x != afterObj.x || preObj.y != afterObj.y)) {
-                        _initialStates[afterObj.id] = afterObj;
-                        stack.push(afterObj);
+                    if (Array.isArray(afterObj)) {
+                        afterObj = _flatten(afterObj);
+                        if (afterObj[0].x && afterObj[0].y && (preObj.x != afterObj.x || preObj.y != afterObj.y)) {
+                            // compare the first return object with previous state, where previous state must be an object from initialStates, if the
+                            // first object is identical to the previous one even if the rest return objects differ from their corresponding "previous"
+                            // the change still will not be applied (we set this intentionally to reduce complexity of comparison)
+                            afterObj.forEach((obj, index)=> {
+                                _initialStates[obj.id] = obj;
+                                stack.push(obj);
+                            });
+                        }
+                    } else {
+                        if (afterObj.x && afterObj.y && (preObj.x != afterObj.x || preObj.y != afterObj.y)) {
+                            _initialStates[afterObj.id] = afterObj;
+                            stack.push(afterObj);
+                        }
                     }
                 }
                 else {
@@ -1639,15 +1647,37 @@ var Transformer = (function () {
                     }));
                     let preObj = arr[0];
                     let afterObj = _predicates[effs[e].name].false(arr[0].id, ...arr);
-                    if (afterObj.x && afterObj.y && (preObj.x != afterObj.x || preObj.y != afterObj.y)) {
-                        _initialStates[afterObj.id] = afterObj;
-                        stack.push(afterObj);
+                    if (Array.isArray(afterObj)) {
+                        afterObj = _flatten(afterObj);
+                        if (afterObj[0].x && afterObj[0].y && (preObj.x != afterObj.x || preObj.y != afterObj.y)) {
+                            afterObj.forEach((obj, index)=> {
+                                _initialStates[obj.id] = obj;
+                                stack.push(obj);
+                            });
+                        }
+                    } else {
+                        if (afterObj.x && afterObj.y && (preObj.x != afterObj.x || preObj.y != afterObj.y)) {
+                            _initialStates[afterObj.id] = afterObj;
+                            stack.push(afterObj);
+                        }
                     }
                 }
             }
             _dataArray.push(stack);
         }
         return _dataArray;
+    }
+
+    function _flatten(preArr) {
+        return preArr.reduce((pre, next)=> {
+            return Array.isArray(pre) ? pre.concat(Array.isArray(next) ? _flatten(next) : next) : [pre].concat(Array.isArray(next) ? _flatten(next) : next);
+        });
+    }
+
+    function _isIdentical(arrA, arrB) {
+        if (!Array.isArray(arrA) || !Array.isArray(arrB))
+            return false;
+        return arrA.length == arrB.length && arrA.every((val, index)=>(val == arrB[index]));
     }
 
     function _getInitialStates() {
