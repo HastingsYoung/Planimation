@@ -1430,7 +1430,7 @@ let animationOptions = defaultSettings.animationOptions ? defaultSettings.animat
     dy: Animation.settings.MEDIUM + 20,
     speed: Animation.settings.PLAY_MEDIUM,
     basePosition: {
-        x: -2000,
+        x: -400,
         y: 500,
         marginX: 50,
         marginY: 0
